@@ -1,0 +1,7 @@
+package com.ivyts.backend.config.properties;
+
+import org.springframework.boot.context.properties.ConfigurationProperties;
+
+@ConfigurationProperties(prefix = "app.cors")
+public record AppCorsProperties(String allowedOrigins) {
+}

@@ -1,0 +1,30 @@
+server:
+  port: ${PORT:5000}
+  forward-headers-strategy: framework
+
+spring:
+  application:
+    name: backend-spring
+  data:
+    mongodb:
+      uri: ${MONGO_URI:mongodb://127.0.0.1:27017/ivyts-1997}
+  servlet:
+    multipart:
+      max-file-size: 20MB
+      max-request-size: 20MB
+
+app:
+  cors:
+    allowed-origins: ${CLIENT_URL:http://localhost:5173,http://localhost:5174,http://localhost:5175,http://localhost}
+  security:
+    jwt-access-secret: ${JWT_ACCESS_SECRET:replace-me}
+    jwt-refresh-secret: ${JWT_REFRESH_SECRET:replace-me}
+  media:
+    cloudinary-cloud-name: ${CLOUDINARY_CLOUD_NAME:}
+    cloudinary-api-key: ${CLOUDINARY_API_KEY:}
+    cloudinary-api-secret: ${CLOUDINARY_API_SECRET:}
+
+logging:
+  level:
+    org.springframework.security: INFO
+    org.springframework.data.mongodb.core.MongoTemplate: INFO

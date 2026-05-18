@@ -12,23 +12,22 @@ services:
     networks:
       - app
 
-  # Production backend: compiled Node.js API with MongoDB connectivity.
+  # Production backend: Spring Boot API with MongoDB connectivity.
   backend:
     profiles: ["prod"]
     build:
       context: .
-      dockerfile: backend/Dockerfile
+      dockerfile: backend-spring/Dockerfile
       target: production
-    env_file:
-      - ./backend/.env
     environment:
       PORT: 5000
-      USE_IN_MEMORY_DB: "false"
-      # Override localhost for containers while still allowing the host-side .env file to exist.
       MONGO_URI: ${MONGO_URI:-mongodb://mongo:27017/ivyts-1997}
       CLIENT_URL: ${CLIENT_URL:-http://localhost,http://localhost:80,http://localhost:8080}
-    volumes:
-      - ./backend/.env:/app/backend/.env:ro
+      JWT_ACCESS_SECRET: ${JWT_ACCESS_SECRET:-replace-me1}
+      JWT_REFRESH_SECRET: ${JWT_REFRESH_SECRET:-replace-me}
+      CLOUDINARY_CLOUD_NAME: ${CLOUDINARY_CLOUD_NAME:-}
+      CLOUDINARY_API_KEY: ${CLOUDINARY_API_KEY:-}
+      CLOUDINARY_API_SECRET: ${CLOUDINARY_API_SECRET:-}
     expose:
       - "5000"
     depends_on:
@@ -102,24 +101,26 @@ services:
     networks:
       - app
 
-  # Development backend with tsx watch-based hot reload.
+  # Development backend with Spring Boot devtools + Maven run.
   backend-dev:
     profiles: ["dev"]
     build:
       context: .
-      dockerfile: backend/Dockerfile
+      dockerfile: backend-spring/Dockerfile
       target: development
-    env_file:
-      - ./backend/.env
     environment:
       PORT: 5000
-      USE_IN_MEMORY_DB: "false"
       MONGO_URI: ${DEV_MONGO_URI:-mongodb://mongo:27017/ivyts-1997}
       CLIENT_URL: ${DEV_CLIENT_URL:-http://localhost:5173,http://localhost:5174,http://localhost:5175}
-    command: npm run dev
+      JWT_ACCESS_SECRET: ${JWT_ACCESS_SECRET:-replace-me1}
+      JWT_REFRESH_SECRET: ${JWT_REFRESH_SECRET:-replace-me}
+      CLOUDINARY_CLOUD_NAME: ${CLOUDINARY_CLOUD_NAME:-}
+      CLOUDINARY_API_KEY: ${CLOUDINARY_API_KEY:-}
+      CLOUDINARY_API_SECRET: ${CLOUDINARY_API_SECRET:-}
+    command: mvn -B spring-boot:run
     volumes:
-      - ./backend:/app/backend
-      - ./backend/.env:/app/backend/.env:ro
+      - ./backend-spring/src:/app/src
+      - ./backend-spring/pom.xml:/app/pom.xml:ro
     ports:
       - "${BACKEND_DEV_PORT:-5000}:5000"
     depends_on:
