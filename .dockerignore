@@ -1,0 +1,23 @@
+# Keep Docker build contexts lean and avoid copying local artifacts.
+node_modules
+frontend/node_modules
+backend/node_modules
+
+# Build outputs can always be regenerated inside the image.
+frontend/dist
+backend/dist
+
+# Local TypeScript caches and logs are not needed in container builds.
+*.log
+frontend/*.log
+backend/*.log
+*.tsbuildinfo
+
+# VCS and editor noise.
+.git
+.github
+.vscode
+
+# Local environment files should stay on the host and be mounted/injected.
+frontend/.env
+backend/.env
