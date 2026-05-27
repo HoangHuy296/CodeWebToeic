@@ -2,7 +2,10 @@ package com.ivyts.backend.domain.message;
 
 import com.ivyts.backend.domain.user.UserRole;
 import java.time.Instant;
+import java.util.Locale;
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.index.CompoundIndexes;
 import org.springframework.data.mongodb.core.index.Indexed;
@@ -23,16 +26,18 @@ public class Message {
     private String content;
     private String summary;
     @Indexed
-    private MessageStatus status = MessageStatus.UNREAD;
+    private String status = "unread";
     @Indexed
-    private MessageType messageType = MessageType.CONTACT;
-    private UserRole recipientRole;
+    private String messageType = "contact";
+    private String recipientRole;
     private String recipientUser;
     private String senderUser;
     private Instant readAt;
     private Instant repliedAt;
     private String assignedTo;
+    @CreatedDate
     private Instant createdAt;
+    @LastModifiedDate
     private Instant updatedAt;
 
     public String getId() { return id; }
@@ -49,12 +54,12 @@ public class Message {
     public void setContent(String content) { this.content = content; }
     public String getSummary() { return summary; }
     public void setSummary(String summary) { this.summary = summary; }
-    public MessageStatus getStatus() { return status; }
-    public void setStatus(MessageStatus status) { this.status = status; }
-    public MessageType getMessageType() { return messageType; }
-    public void setMessageType(MessageType messageType) { this.messageType = messageType; }
-    public UserRole getRecipientRole() { return recipientRole; }
-    public void setRecipientRole(UserRole recipientRole) { this.recipientRole = recipientRole; }
+    public MessageStatus getStatus() { return MessageStatus.valueOf(normalizeEnum(status, "unread")); }
+    public void setStatus(MessageStatus status) { this.status = status.name().toLowerCase(Locale.ROOT); }
+    public MessageType getMessageType() { return MessageType.valueOf(normalizeEnum(messageType, "contact")); }
+    public void setMessageType(MessageType messageType) { this.messageType = messageType.name().toLowerCase(Locale.ROOT); }
+    public UserRole getRecipientRole() { return recipientRole == null ? null : UserRole.valueOf(normalizeEnum(recipientRole, "student")); }
+    public void setRecipientRole(UserRole recipientRole) { this.recipientRole = recipientRole == null ? null : recipientRole.name().toLowerCase(Locale.ROOT); }
     public String getRecipientUser() { return recipientUser; }
     public void setRecipientUser(String recipientUser) { this.recipientUser = recipientUser; }
     public String getSenderUser() { return senderUser; }
@@ -69,4 +74,8 @@ public class Message {
     public void setCreatedAt(Instant createdAt) { this.createdAt = createdAt; }
     public Instant getUpdatedAt() { return updatedAt; }
     public void setUpdatedAt(Instant updatedAt) { this.updatedAt = updatedAt; }
+
+    private String normalizeEnum(String value, String fallback) {
+        return (value == null ? fallback : value).replace('-', '_').toUpperCase(Locale.ROOT);
+    }
 }

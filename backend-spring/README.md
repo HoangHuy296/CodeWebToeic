@@ -30,6 +30,32 @@ cd backend-spring
 mvn spring-boot:run
 ```
 
+If you only run `mvn`, Maven will fail with:
+
+```text
+No goals have been specified for this build
+```
+
+because Maven always needs an explicit lifecycle phase or plugin goal.
+
+Common commands:
+
+```bash
+mvn spring-boot:run
+mvn clean package
+```
+
+## Run with Docker from repo root
+
+This is the safer path on this repo because the container already uses Java 21 even if your host machine does not.
+
+```bash
+npm run dev:backend-spring
+npm run logs:backend-spring
+npm run build:backend-spring
+npm run up:spring-stack
+```
+
 ## Key environment values
 
 See `src/main/resources/application.yml`.

@@ -3,7 +3,10 @@ package com.ivyts.backend.domain.course;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.index.CompoundIndexes;
 import org.springframework.data.mongodb.core.index.Indexed;
@@ -24,7 +27,7 @@ public class Course {
     private String description;
     private String category;
     @Indexed
-    private CourseLevel level = CourseLevel.BEGINNER;
+    private String level = "beginner";
     private double price;
     private Double salePrice;
     private String thumbnail;
@@ -39,10 +42,12 @@ public class Course {
     @Indexed
     private boolean isPublished;
     @Indexed
-    private CourseReviewStatus reviewStatus = CourseReviewStatus.PENDING_REVIEW;
+    private String reviewStatus = "pending_review";
     private String reviewNote;
     private Instant publishedAt;
+    @CreatedDate
     private Instant createdAt;
+    @LastModifiedDate
     private Instant updatedAt;
 
     public String getId() { return id; }
@@ -57,8 +62,8 @@ public class Course {
     public void setDescription(String description) { this.description = description; }
     public String getCategory() { return category; }
     public void setCategory(String category) { this.category = category; }
-    public CourseLevel getLevel() { return level; }
-    public void setLevel(CourseLevel level) { this.level = level; }
+    public CourseLevel getLevel() { return CourseLevel.valueOf(normalizeEnum(level)); }
+    public void setLevel(CourseLevel level) { this.level = level.name().toLowerCase(Locale.ROOT); }
     public double getPrice() { return price; }
     public void setPrice(double price) { this.price = price; }
     public Double getSalePrice() { return salePrice; }
@@ -81,8 +86,8 @@ public class Course {
     public void setBenefits(List<String> benefits) { this.benefits = benefits; }
     public boolean isPublished() { return isPublished; }
     public void setPublished(boolean published) { isPublished = published; }
-    public CourseReviewStatus getReviewStatus() { return reviewStatus; }
-    public void setReviewStatus(CourseReviewStatus reviewStatus) { this.reviewStatus = reviewStatus; }
+    public CourseReviewStatus getReviewStatus() { return CourseReviewStatus.valueOf(normalizeEnum(reviewStatus)); }
+    public void setReviewStatus(CourseReviewStatus reviewStatus) { this.reviewStatus = reviewStatus.name().toLowerCase(Locale.ROOT); }
     public String getReviewNote() { return reviewNote; }
     public void setReviewNote(String reviewNote) { this.reviewNote = reviewNote; }
     public Instant getPublishedAt() { return publishedAt; }
@@ -91,4 +96,8 @@ public class Course {
     public void setCreatedAt(Instant createdAt) { this.createdAt = createdAt; }
     public Instant getUpdatedAt() { return updatedAt; }
     public void setUpdatedAt(Instant updatedAt) { this.updatedAt = updatedAt; }
+
+    private String normalizeEnum(String value) {
+        return (value == null ? "beginner" : value).replace('-', '_').toUpperCase(Locale.ROOT);
+    }
 }

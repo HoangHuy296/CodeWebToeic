@@ -1,7 +1,11 @@
 package com.ivyts.backend.web.admin;
 
-import com.ivyts.backend.web.shared.MigrationPlaceholderController;
-import java.util.Map;
+import com.ivyts.backend.common.api.ApiSuccessResponse;
+import com.ivyts.backend.security.RequestAuthService;
+import com.ivyts.backend.service.AdminService;
+import com.ivyts.backend.web.admin.dto.UpdateAdminUserRequest;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,26 +18,48 @@ import org.springframework.web.bind.annotation.RestController;
 @Validated
 @RestController
 @RequestMapping("/api/admin")
-public class AdminController extends MigrationPlaceholderController {
+public class AdminController {
+
+    private final AdminService adminService;
+    private final RequestAuthService requestAuthService;
+
+    public AdminController(AdminService adminService, RequestAuthService requestAuthService) {
+        this.adminService = adminService;
+        this.requestAuthService = requestAuthService;
+    }
 
     @GetMapping("/stats")
-    public Object stats() { return notImplemented("admin.stats"); }
+    public ApiSuccessResponse<?> stats(HttpServletRequest request) {
+        return ApiSuccessResponse.of("Admin stats fetched successfully", adminService.getStats(requestAuthService.requireUser(request)));
+    }
 
     @GetMapping("/charts/revenue")
-    public Object revenueChart() { return notImplemented("admin.charts.revenue"); }
+    public ApiSuccessResponse<?> revenueChart(HttpServletRequest request) {
+        return ApiSuccessResponse.of("Revenue chart fetched successfully", adminService.getRevenueChart(requestAuthService.requireUser(request)));
+    }
 
     @GetMapping("/charts/enrollments")
-    public Object enrollmentChart() { return notImplemented("admin.charts.enrollments"); }
+    public ApiSuccessResponse<?> enrollmentChart(HttpServletRequest request) {
+        return ApiSuccessResponse.of("Enrollment chart fetched successfully", adminService.getEnrollmentChart(requestAuthService.requireUser(request)));
+    }
 
     @GetMapping("/users")
-    public Object listUsers() { return notImplemented("admin.users.list"); }
+    public ApiSuccessResponse<?> listUsers(HttpServletRequest request) {
+        return ApiSuccessResponse.of("Admin users fetched successfully", adminService.listUsers(requestAuthService.requireUser(request)));
+    }
 
     @GetMapping("/users/{id}")
-    public Object getUser(@PathVariable String id) { return notImplemented("admin.users.detail"); }
+    public ApiSuccessResponse<?> getUser(@PathVariable String id, HttpServletRequest request) {
+        return ApiSuccessResponse.of("Admin user fetched successfully", adminService.getUser(id, requestAuthService.requireUser(request)));
+    }
 
     @PatchMapping("/users/{id}")
-    public Object updateUser(@PathVariable String id, @RequestBody Map<String, Object> body) { return notImplemented("admin.users.update"); }
+    public ApiSuccessResponse<?> updateUser(@PathVariable String id, HttpServletRequest request, @Valid @RequestBody UpdateAdminUserRequest body) {
+        return ApiSuccessResponse.of("Admin user updated successfully", adminService.updateUser(id, body, requestAuthService.requireUser(request)));
+    }
 
     @DeleteMapping("/users/{id}")
-    public Object deactivateUser(@PathVariable String id) { return notImplemented("admin.users.delete"); }
+    public ApiSuccessResponse<?> deactivateUser(@PathVariable String id, HttpServletRequest request) {
+        return ApiSuccessResponse.of("Admin user deactivated successfully", adminService.deactivateUser(id, requestAuthService.requireUser(request)));
+    }
 }

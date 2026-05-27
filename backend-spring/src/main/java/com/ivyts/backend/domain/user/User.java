@@ -3,7 +3,10 @@ package com.ivyts.backend.domain.user;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -16,7 +19,7 @@ public class User {
     @Indexed(unique = true)
     private String email;
     private String passwordHash;
-    private UserRole role = UserRole.STUDENT;
+    private String role = "student";
     private String avatarUrl;
     private String phone;
     private String bio;
@@ -25,7 +28,9 @@ public class User {
     private List<String> ownedCourseIds = new ArrayList<>();
     private PendingEmailChange pendingEmailChange;
     private PendingPhoneChange pendingPhoneChange;
+    @CreatedDate
     private Instant createdAt;
+    @LastModifiedDate
     private Instant updatedAt;
 
     public String getId() { return id; }
@@ -36,8 +41,8 @@ public class User {
     public void setEmail(String email) { this.email = email; }
     public String getPasswordHash() { return passwordHash; }
     public void setPasswordHash(String passwordHash) { this.passwordHash = passwordHash; }
-    public UserRole getRole() { return role; }
-    public void setRole(UserRole role) { this.role = role; }
+    public UserRole getRole() { return UserRole.valueOf(normalizeEnum(role)); }
+    public void setRole(UserRole role) { this.role = role.name().toLowerCase(Locale.ROOT); }
     public String getAvatarUrl() { return avatarUrl; }
     public void setAvatarUrl(String avatarUrl) { this.avatarUrl = avatarUrl; }
     public String getPhone() { return phone; }
@@ -58,4 +63,8 @@ public class User {
     public void setCreatedAt(Instant createdAt) { this.createdAt = createdAt; }
     public Instant getUpdatedAt() { return updatedAt; }
     public void setUpdatedAt(Instant updatedAt) { this.updatedAt = updatedAt; }
+
+    private String normalizeEnum(String value) {
+        return (value == null ? "student" : value).replace('-', '_').toUpperCase(Locale.ROOT);
+    }
 }

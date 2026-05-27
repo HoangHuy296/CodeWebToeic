@@ -9,9 +9,13 @@
   "scripts": {
     "dev:frontend": "npm run dev --workspace frontend",
     "dev:backend": "npm run dev --workspace backend",
+    "dev:backend-spring": "docker compose --profile dev up -d mongo backend-dev",
+    "logs:backend-spring": "docker compose --profile dev logs -f backend-dev",
+    "build:backend-spring": "docker compose --profile prod build backend",
+    "up:spring-stack": "docker compose --profile prod up -d",
+    "logs:spring-stack": "docker compose --profile prod logs -f",
     "build:frontend": "npm run build --workspace frontend",
     "build:backend": "npm run build --workspace backend",
     "seed": "npm run seed --workspace backend"
   }
 }
-

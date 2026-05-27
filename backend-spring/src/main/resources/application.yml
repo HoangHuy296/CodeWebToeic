@@ -5,6 +5,9 @@ server:
 spring:
   application:
     name: backend-spring
+  jackson:
+    mapper:
+      accept-case-insensitive-enums: true
   data:
     mongodb:
       uri: ${MONGO_URI:mongodb://127.0.0.1:27017/ivyts-1997}
