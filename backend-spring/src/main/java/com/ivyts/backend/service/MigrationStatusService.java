@@ -8,11 +8,11 @@ public class MigrationStatusService {
 
     public Map<String, Object> overview() {
         return Map.of(
-            "status", "in_progress",
-            "sourceBackend", "backend/",
+            "status", "spring-production-default",
+            "sourceBackend", "backend-spring/",
             "targetBackend", "backend-spring/",
-            "implemented", new String[]{"system", "configuration", "mongodb-foundation", "security-foundation", "route-skeletons"},
-            "next", new String[]{"auth-service", "course-service", "enrollment-service", "mock-test-service", "message-service"}
+            "implemented", new String[]{"auth", "courses", "lessons", "enrollments", "learning", "mock-tests", "messages", "posts", "admin", "websocket", "notification-inbox", "flyway-seed"},
+            "next", new String[]{"archive-backend-node", "admin-role-hardening", "ci-smoke-automation"}
         );
     }
 }

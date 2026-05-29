@@ -4,25 +4,10 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.mongodb.core.index.CompoundIndex;
-import org.springframework.data.mongodb.core.index.CompoundIndexes;
-import org.springframework.data.mongodb.core.index.Indexed;
-import org.springframework.data.mongodb.core.mapping.Document;
-
-@Document("enrollments")
-@CompoundIndexes({
-    @CompoundIndex(name = "enrollment_student_course_idx", def = "{'student': 1, 'course': 1}", unique = true)
-})
 public class Enrollment {
 
-    @Id
     private String id;
-    @Indexed
     private String student;
-    @Indexed
     private String course;
     private String status = "active";
     private int progressPercent;
@@ -32,9 +17,7 @@ public class Enrollment {
     private Instant enrolledAt;
     private Instant startedAt;
     private Instant completedAt;
-    @CreatedDate
     private Instant createdAt;
-    @LastModifiedDate
     private Instant updatedAt;
 
     public String getId() { return id; }

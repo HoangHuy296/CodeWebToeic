@@ -4,19 +4,10 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.mongodb.core.index.Indexed;
-import org.springframework.data.mongodb.core.mapping.Document;
-
-@Document("users")
 public class User {
 
-    @Id
     private String id;
     private String fullName;
-    @Indexed(unique = true)
     private String email;
     private String passwordHash;
     private String role = "student";
@@ -28,9 +19,7 @@ public class User {
     private List<String> ownedCourseIds = new ArrayList<>();
     private PendingEmailChange pendingEmailChange;
     private PendingPhoneChange pendingPhoneChange;
-    @CreatedDate
     private Instant createdAt;
-    @LastModifiedDate
     private Instant updatedAt;
 
     public String getId() { return id; }

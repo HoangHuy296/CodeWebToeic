@@ -3,25 +3,10 @@ package com.ivyts.backend.domain.mocktest;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.mongodb.core.index.CompoundIndex;
-import org.springframework.data.mongodb.core.index.CompoundIndexes;
-import org.springframework.data.mongodb.core.index.Indexed;
-import org.springframework.data.mongodb.core.mapping.Document;
-
-@Document("testsubmissions")
-@CompoundIndexes({
-    @CompoundIndex(name = "submission_student_mock_test_submitted_idx", def = "{'student': 1, 'mockTest': 1, 'submittedAt': -1}")
-})
 public class TestSubmission {
 
-    @Id
     private String id;
-    @Indexed
     private String student;
-    @Indexed
     private String mockTest;
     private List<SubmissionAnswer> answers = new ArrayList<>();
     private int score;
@@ -29,9 +14,7 @@ public class TestSubmission {
     private int correctAnswers;
     private int durationSeconds;
     private Instant submittedAt;
-    @CreatedDate
     private Instant createdAt;
-    @LastModifiedDate
     private Instant updatedAt;
 
     public String getId() { return id; }

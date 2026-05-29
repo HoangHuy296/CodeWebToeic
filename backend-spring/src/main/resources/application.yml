@@ -1,5 +1,6 @@
 server:
   port: ${PORT:5000}
+  address: ${SERVER_ADDRESS:0.0.0.0}
   forward-headers-strategy: framework
 
 spring:
@@ -8,9 +9,24 @@ spring:
   jackson:
     mapper:
       accept-case-insensitive-enums: true
-  data:
-    mongodb:
-      uri: ${MONGO_URI:mongodb://127.0.0.1:27017/ivyts-1997}
+  datasource:
+    url: ${MYSQL_URL:jdbc:mysql://127.0.0.1:3306/ivyts_1997?createDatabaseIfNotExist=true&useUnicode=true&characterEncoding=utf8&serverTimezone=UTC}
+    username: ${MYSQL_USERNAME:root}
+    password: ${MYSQL_PASSWORD:root}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        format_sql: true
+        jdbc:
+          time_zone: UTC
+  flyway:
+    enabled: true
+    locations: classpath:db/migration/mysql
+    baseline-on-migrate: true
   servlet:
     multipart:
       max-file-size: 20MB
@@ -30,4 +46,3 @@ app:
 logging:
   level:
     org.springframework.security: INFO
-    org.springframework.data.mongodb.core.MongoTemplate: INFO

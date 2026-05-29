@@ -5,24 +5,9 @@ import com.ivyts.backend.domain.course.VideoMetadata;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.mongodb.core.index.CompoundIndex;
-import org.springframework.data.mongodb.core.index.CompoundIndexes;
-import org.springframework.data.mongodb.core.index.Indexed;
-import org.springframework.data.mongodb.core.mapping.Document;
-
-@Document("lessons")
-@CompoundIndexes({
-    @CompoundIndex(name = "lesson_course_order_idx", def = "{'course': 1, 'order': 1}", unique = true),
-    @CompoundIndex(name = "lesson_course_slug_idx", def = "{'course': 1, 'slug': 1}", unique = true)
-})
 public class Lesson {
 
-    @Id
     private String id;
-    @Indexed
     private String course;
     private String title;
     private String slug;
@@ -32,9 +17,7 @@ public class Lesson {
     private int order;
     private boolean isPreview;
     private List<MaterialItem> materials = new ArrayList<>();
-    @CreatedDate
     private Instant createdAt;
-    @LastModifiedDate
     private Instant updatedAt;
 
     public String getId() { return id; }

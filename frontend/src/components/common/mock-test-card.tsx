@@ -13,8 +13,11 @@ export function MockTestCard({ mockTest }: { mockTest: MockTest }) {
   const location = useLocation();
   const isTeacherOwner = role === 'teacher' && user?.id === mockTest.createdBy.id;
   const isTeacherPreviewPlay = role === 'teacher' && !isTeacherOwner;
+  const isPublicExerciseFlow =
+    location.pathname === '/mock-test' ||
+    location.pathname.startsWith('/exercises');
   const studentMockTestPath =
-    location.pathname === '/mock-test'
+    isPublicExerciseFlow
       ? `/student/mock-tests/${mockTest.id}?from=public`
       : `/student/mock-tests/${mockTest.id}`;
   const isOwner = (role === 'teacher' || role === 'admin') && user?.id === mockTest.createdBy.id;

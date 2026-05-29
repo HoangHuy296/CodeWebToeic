@@ -6,11 +6,11 @@ import { CourseCard } from '../../components/common/course-card';
 import { MockTestCard } from '../../components/common/mock-test-card';
 import { PageHero } from '../../components/common/page-hero';
 import { QueryErrorState, QueryLoadingState } from '../../components/common/query-state';
-import { blogArticles } from '../../lib/blog-content';
 import { courseApi } from '../../lib/course-api';
 import { getApiErrorMessage } from '../../lib/api';
 import { enrollmentApi, enrollmentQueryKeys } from '../../lib/enrollment-api';
 import { mockTestApi } from '../../lib/mock-test-api';
+import { postApi } from '../../lib/post-api';
 
 const featureCards = [
   {
@@ -42,10 +42,14 @@ export function HomePage() {
     queryFn: enrollmentApi.mine,
     enabled: isAuthenticated && role === 'student',
   });
+  const postsQuery = useQuery({
+    queryKey: ['posts', 'home'],
+    queryFn: postApi.list,
+  });
 
   const featuredCourses = useMemo(() => (coursesQuery.data ?? []).slice(0, 3), [coursesQuery.data]);
   const featuredMockTests = useMemo(() => (mockTestsQuery.data ?? []).slice(0, 2), [mockTestsQuery.data]);
-  const featuredPosts = blogArticles.slice(0, 3);
+  const featuredPosts = useMemo(() => (postsQuery.data ?? []).slice(0, 3), [postsQuery.data]);
   const enrolledCourseIds = useMemo(
     () => new Set((enrollmentsQuery.data ?? []).map((enrollment) => enrollment.course.id)),
     [enrollmentsQuery.data],
@@ -108,6 +112,9 @@ export function HomePage() {
       {mockTestsQuery.error ? (
         <QueryErrorState title="Khong tai duoc du lieu bai thi" description={getApiErrorMessage(mockTestsQuery.error)} />
       ) : null}
+      {postsQuery.error ? (
+        <QueryErrorState title="Khong tai duoc du lieu bai viet" description={getApiErrorMessage(postsQuery.error)} />
+      ) : null}
 
       <section className="space-y-5">
         <div className="flex items-end justify-between gap-4">
@@ -169,7 +176,7 @@ export function HomePage() {
             <article key={article.slug} className="overflow-hidden rounded-[1.8rem] border border-stroke bg-white shadow-[0_18px_55px_rgba(15,23,42,0.06)]">
               <img src={article.coverImage} alt={article.title} className="h-44 w-full object-cover" />
               <div className="p-6">
-                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-teal-700">{article.category}</p>
+                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-teal-700">{article.tags[0] ?? 'Blog'}</p>
                 <h3 className="mt-3 text-2xl font-black tracking-tight text-slate-950">{article.title}</h3>
                 <p className="mt-3 text-sm leading-7 text-slate-600">{article.excerpt}</p>
                 <Link to={`/blog/${article.slug}`} className="mt-5 inline-flex text-sm font-semibold text-teal-700">

@@ -30,9 +30,26 @@ const AuthContext = createContext<AuthContextValue | null>(null);
 
 const AUTH_ME_QUERY_KEY = ['auth', 'me'];
 
+function normalizeRole(role: string | undefined | null): AppRole {
+  const normalizedRole = role?.toLowerCase();
+
+  if (normalizedRole === 'student' || normalizedRole === 'teacher' || normalizedRole === 'admin') {
+    return normalizedRole;
+  }
+
+  return 'guest';
+}
+
+function normalizeUser(user: PublicUser): PublicUser {
+  return {
+    ...user,
+    role: normalizeRole(user.role) as PublicUser['role'],
+  };
+}
+
 function persistAuth(payload: AuthPayload): PublicUser {
   storeAuthTokens(payload.accessToken, payload.refreshToken);
-  return payload.user;
+  return normalizeUser(payload.user);
 }
 
 export function AuthProvider({ children }: { children: ReactNode }) {
@@ -46,7 +63,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     retry: false,
     queryFn: async () => {
       try {
-        return await authApi.me();
+        const currentUser = await authApi.me();
+        return normalizeUser(currentUser);
       } catch (error) {
         if (isUnauthorizedError(error)) {
           const refreshToken = getStoredRefreshToken();
@@ -120,7 +138,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
         const user = await queryClient.fetchQuery({
           queryKey: AUTH_ME_QUERY_KEY,
-          queryFn: () => authApi.me(),
+          queryFn: async () => normalizeUser(await authApi.me()),
         });
 
         queryClient.setQueryData(AUTH_ME_QUERY_KEY, user);
@@ -130,7 +148,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       syncCurrentUser: (user) => {
         setHasSession(true);
         setAuthError(null);
-        queryClient.setQueryData(AUTH_ME_QUERY_KEY, user);
+        queryClient.setQueryData(AUTH_ME_QUERY_KEY, normalizeUser(user));
       },
     }),
     [authError, hasSession, meQuery.data, meQuery.isPending, queryClient],

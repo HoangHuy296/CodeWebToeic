@@ -4,10 +4,11 @@ import com.ivyts.backend.common.exception.ApiException;
 import com.ivyts.backend.domain.user.PendingEmailChange;
 import com.ivyts.backend.domain.user.PendingPhoneChange;
 import com.ivyts.backend.domain.user.User;
-import com.ivyts.backend.domain.user.UserRepository;
 import com.ivyts.backend.domain.user.UserRole;
+import com.ivyts.backend.notification.NotificationEventsService;
 import com.ivyts.backend.security.AuthUser;
 import com.ivyts.backend.security.JwtService;
+import com.ivyts.backend.service.userstore.UserStore;
 import com.ivyts.backend.web.auth.dto.AuthResponse;
 import com.ivyts.backend.web.auth.dto.ChangePasswordRequest;
 import com.ivyts.backend.web.auth.dto.ConfirmEmailChangeRequest;
@@ -32,18 +33,20 @@ import org.springframework.stereotype.Service;
 public class AuthService {
 
     private static final BCryptPasswordEncoder PASSWORD_ENCODER = new BCryptPasswordEncoder(10);
-    private final UserRepository userRepository;
+    private final UserStore userStore;
     private final JwtService jwtService;
+    private final NotificationEventsService notificationEventsService;
     private final Random random = new Random();
 
-    public AuthService(UserRepository userRepository, JwtService jwtService) {
-        this.userRepository = userRepository;
+    public AuthService(UserStore userStore, JwtService jwtService, NotificationEventsService notificationEventsService) {
+        this.userStore = userStore;
         this.jwtService = jwtService;
+        this.notificationEventsService = notificationEventsService;
     }
 
     public AuthResponse register(RegisterRequest request) {
         String normalizedEmail = normalizeEmail(request.email());
-        if (userRepository.findByEmail(normalizedEmail).isPresent()) {
+        if (userStore.findByEmail(normalizedEmail).isPresent()) {
             throw new ApiException(HttpStatus.CONFLICT, "Email already exists");
         }
 
@@ -54,13 +57,14 @@ public class AuthService {
         user.setPhone(blankToNull(request.phone()));
         user.setRole(UserRole.STUDENT);
         user.setActive(true);
-        userRepository.save(user);
+        user = userStore.save(user);
+        notificationEventsService.emitNewUserRegistered(user.getId(), user.getEmail(), user.getFullName());
 
         return buildAuthResponse(user);
     }
 
     public AuthResponse login(LoginRequest request) {
-        User user = userRepository.findByEmail(normalizeEmail(request.email()))
+        User user = userStore.findByEmail(normalizeEmail(request.email()))
             .orElseThrow(() -> new ApiException(HttpStatus.UNAUTHORIZED, "Email or password is incorrect"));
 
         ensureActive(user);
@@ -72,14 +76,10 @@ public class AuthService {
         return buildAuthResponse(user);
     }
 
-    public void logout(RefreshTokenRequest request) {
-        userRepository.findAll().stream()
-            .filter(user -> request.refreshToken().equals(user.getRefreshToken()))
-            .findFirst()
-            .ifPresent(user -> {
-                user.setRefreshToken(null);
-                userRepository.save(user);
-            });
+    public void logout(AuthUser authUser) {
+        User user = findUserByIdOrThrow(authUser.userId());
+        user.setRefreshToken(null);
+        userStore.save(user);
     }
 
     public PublicUserResponse me(AuthUser authUser) {
@@ -118,7 +118,7 @@ public class AuthService {
             user.setBio(blankToNull(request.bio()));
         }
 
-        userRepository.save(user);
+        userStore.save(user);
         return toPublicUser(user);
     }
 
@@ -134,7 +134,7 @@ public class AuthService {
         }
 
         user.setPasswordHash(PASSWORD_ENCODER.encode(request.newPassword()));
-        userRepository.save(user);
+        userStore.save(user);
     }
 
     public VerificationResponse requestEmailChange(AuthUser authUser, RequestEmailChangeRequest request) {
@@ -145,14 +145,14 @@ public class AuthService {
         if (newEmail.equals(user.getEmail())) {
             throw new ApiException(HttpStatus.BAD_REQUEST, "New email must be different from current email");
         }
-        userRepository.findByEmail(newEmail)
+        userStore.findByEmail(newEmail)
             .filter(existing -> !existing.getId().equals(user.getId()))
             .ifPresent(existing -> { throw new ApiException(HttpStatus.CONFLICT, "Email already exists"); });
 
         String code = generateSixDigitCode();
         Instant expiresAt = Instant.now().plusSeconds(10 * 60);
         user.setPendingEmailChange(new PendingEmailChange(newEmail, code, expiresAt));
-        userRepository.save(user);
+        userStore.save(user);
 
         return new VerificationResponse(newEmail, expiresAt, code);
     }
@@ -177,13 +177,13 @@ public class AuthService {
             throw new ApiException(HttpStatus.BAD_REQUEST, "Email verification code is incorrect");
         }
 
-        userRepository.findByEmail(newEmail)
+        userStore.findByEmail(newEmail)
             .filter(existing -> !existing.getId().equals(user.getId()))
             .ifPresent(existing -> { throw new ApiException(HttpStatus.CONFLICT, "Email already exists"); });
 
         user.setEmail(newEmail);
         user.setPendingEmailChange(null);
-        userRepository.save(user);
+        userStore.save(user);
         return buildAuthResponse(user);
     }
 
@@ -199,7 +199,7 @@ public class AuthService {
         String code = generateSixDigitCode();
         Instant expiresAt = Instant.now().plusSeconds(10 * 60);
         user.setPendingPhoneChange(new PendingPhoneChange(newPhone, code, expiresAt));
-        userRepository.save(user);
+        userStore.save(user);
 
         return new VerificationResponse(newPhone, expiresAt, code);
     }
@@ -224,7 +224,7 @@ public class AuthService {
 
         user.setPhone(request.newPhone().trim());
         user.setPendingPhoneChange(null);
-        userRepository.save(user);
+        userStore.save(user);
         return toPublicUser(user);
     }
 
@@ -233,8 +233,8 @@ public class AuthService {
         String accessToken = jwtService.signAccessToken(payload);
         String refreshToken = jwtService.signRefreshToken(payload);
         user.setRefreshToken(refreshToken);
-        userRepository.save(user);
-        return new AuthResponse(toPublicUser(user), accessToken, refreshToken);
+        User persistedUser = userStore.save(user);
+        return new AuthResponse(toPublicUser(persistedUser), accessToken, refreshToken);
     }
 
     private PublicUserResponse toPublicUser(User user) {
@@ -242,7 +242,7 @@ public class AuthService {
             user.getId(),
             user.getFullName(),
             user.getEmail(),
-            user.getRole(),
+            user.getRole().name().toLowerCase(Locale.ROOT),
             user.getAvatarUrl(),
             user.getPhone(),
             user.getBio(),
@@ -252,7 +252,7 @@ public class AuthService {
     }
 
     private User findUserByIdOrThrow(String userId) {
-        return userRepository.findById(userId)
+        return userStore.findById(userId)
             .orElseThrow(() -> new ApiException(HttpStatus.NOT_FOUND, "User not found"));
     }
 

@@ -13,6 +13,15 @@ const adminNav = [
     to: '/admin/mock-tests',
     children: [{ label: 'Tao bai thi', to: '/admin/mock-tests/create' }],
   },
+  {
+    label: 'Bai tap',
+    to: '/admin/exercises',
+    children: [
+      { label: 'Chu de on tap', to: '/admin/exercises' },
+      { label: 'Workspace bai tap', to: '/admin/exercises/items' },
+    ],
+  },
+  { label: 'Bang diem', to: '/admin/results' },
   { label: 'Posts', to: '/admin/posts' },
   { label: 'Messages', to: '/admin/messages' },
   { label: 'Settings', to: '/admin/settings' },

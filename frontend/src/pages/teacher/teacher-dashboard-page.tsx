@@ -88,6 +88,9 @@ export function TeacherDashboardPage() {
         <article className="rounded-[2rem] border border-stroke bg-white p-8 shadow-[0_18px_55px_rgba(15,23,42,0.06)]">
           <p className="text-xs font-semibold uppercase tracking-[0.3em] text-teal-700">student health</p>
           <h2 className="mt-2 text-3xl font-black tracking-tight text-slate-950">Tien do hoc vien</h2>
+          <Link to="/teacher/results" className="mt-4 inline-flex text-sm font-semibold text-cyan-700">
+            Xem bang diem bai lam
+          </Link>
           <div className="mt-6 grid gap-4">
             <div className="rounded-[1.5rem] bg-slate-50 px-5 py-5">
               <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Dang hoc</p>
@@ -106,7 +109,52 @@ export function TeacherDashboardPage() {
           </div>
         </article>
       </section>
+
+      <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+        <Link
+          to="/teacher/profile"
+          className="rounded-[1.6rem] border border-stroke bg-white p-5 shadow-[0_16px_50px_rgba(15,23,42,0.06)] transition hover:-translate-y-0.5"
+        >
+          <p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-500">teacher tools</p>
+          <h3 className="mt-3 text-2xl font-black tracking-tight text-slate-950">Ho so giang vien</h3>
+          <p className="mt-2 text-sm leading-7 text-slate-600">
+            CRUD thong tin giang vien, doi mat khau, email va so dien thoai ngay trong workspace.
+          </p>
+        </Link>
+
+        <Link
+          to="/teacher/courses"
+          className="rounded-[1.6rem] border border-stroke bg-white p-5 shadow-[0_16px_50px_rgba(15,23,42,0.06)] transition hover:-translate-y-0.5"
+        >
+          <p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-500">teacher tools</p>
+          <h3 className="mt-3 text-2xl font-black tracking-tight text-slate-950">Quan ly khoa hoc</h3>
+          <p className="mt-2 text-sm leading-7 text-slate-600">
+            Mo danh sach khoa hoc, vao lesson list workspace va theo doi review status cua tung khoa hoc.
+          </p>
+        </Link>
+
+        <Link
+          to="/teacher/exercises/items"
+          className="rounded-[1.6rem] border border-stroke bg-white p-5 shadow-[0_16px_50px_rgba(15,23,42,0.06)] transition hover:-translate-y-0.5"
+        >
+          <p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-500">teacher tools</p>
+          <h3 className="mt-3 text-2xl font-black tracking-tight text-slate-950">Bai tap ca nhan hoa</h3>
+          <p className="mt-2 text-sm leading-7 text-slate-600">
+            Tao va quan ly bai tap on tap rieng cho hoc vien, tach khoi luong luyen thi de phat trien ca nhan hoa lau dai.
+          </p>
+        </Link>
+
+        <Link
+          to="/teacher/results"
+          className="rounded-[1.6rem] border border-stroke bg-white p-5 shadow-[0_16px_50px_rgba(15,23,42,0.06)] transition hover:-translate-y-0.5"
+        >
+          <p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-500">teacher tools</p>
+          <h3 className="mt-3 text-2xl font-black tracking-tight text-slate-950">Ket qua bai lam</h3>
+          <p className="mt-2 text-sm leading-7 text-slate-600">
+            Xem diem va bai nop cua hoc vien tren cac bai luyen thi va bai tap do ban tao.
+          </p>
+        </Link>
+      </section>
     </div>
   );
 }
-

@@ -1,17 +1,20 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useAuth } from '../../app/providers/auth-provider';
 import { MockTestCard } from '../../components/common/mock-test-card';
 import { PageHero } from '../../components/common/page-hero';
+import { PaginationControls } from '../../components/common/pagination-controls';
 import { QueryErrorState, QueryLoadingState } from '../../components/common/query-state';
 import { getApiErrorMessage } from '../../lib/api';
 import { mockTestApi } from '../../lib/mock-test-api';
 
 export function MockTestLandingPage() {
   const { role, user } = useAuth();
+  const pageSize = 6;
   const [typeFilter, setTypeFilter] = useState<'all' | 'mini-test' | 'full-test' | 'practice-set'>('all');
   const [levelFilter, setLevelFilter] = useState<'all' | 'beginner' | 'intermediate' | 'advanced'>('all');
   const [statusFilter, setStatusFilter] = useState<'all' | 'published' | 'draft' | 'archived'>('all');
+  const [currentPage, setCurrentPage] = useState(1);
 
   const mockTestsQuery = useQuery({
     queryKey: ['mock-tests', 'public-list'],
@@ -27,6 +30,23 @@ export function MockTestLandingPage() {
       return matchType && matchLevel && matchStatus;
     });
   }, [levelFilter, mockTestsQuery.data, statusFilter, typeFilter]);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [levelFilter, statusFilter, typeFilter]);
+
+  const totalPages = Math.max(1, Math.ceil(filteredTests.length / pageSize));
+  const paginatedTests = useMemo(
+    () => filteredTests.slice((currentPage - 1) * pageSize, currentPage * pageSize),
+    [currentPage, filteredTests],
+  );
+
+  useEffect(() => {
+    if (currentPage > totalPages) {
+      setCurrentPage(totalPages);
+    }
+  }, [currentPage, totalPages]);
+
   const teacherOwnedCount =
     role === 'teacher'
       ? filteredTests.filter((item) => item.createdBy.id === user?.id).length
@@ -118,10 +138,21 @@ export function MockTestLandingPage() {
       ) : null}
 
       <section className="grid gap-6 lg:grid-cols-2">
-        {filteredTests.map((mockTest) => (
+        {paginatedTests.map((mockTest) => (
           <MockTestCard key={mockTest.id} mockTest={mockTest} />
         ))}
       </section>
+
+      {filteredTests.length > 0 ? (
+        <PaginationControls
+          currentPage={currentPage}
+          totalPages={totalPages}
+          pageSize={pageSize}
+          totalItems={filteredTests.length}
+          itemLabel="bai thi"
+          onPageChange={setCurrentPage}
+        />
+      ) : null}
     </div>
   );
 }

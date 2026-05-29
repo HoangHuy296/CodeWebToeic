@@ -1,139 +1,161 @@
-# IVYTS 1997 CRM / E-Learning System
+# IVYTS 1997 E-Learning CRM
 
-Monorepo cho website CRM + LMS tiếng Anh `IVYTS 1997`, tập trung vào:
+Luong chay production hien tai cua repo la:
 
-- bán và quản lý khóa học TOEIC / IELTS
-- học online theo lesson + progress
-- mock-test có chấm điểm server-side
-- inbox nội bộ giữa admin / teacher / student
-- dashboard quản trị, teacher workspace và student workspace
-- realtime `notification-bell` qua WebSocket
+- `frontend/`: Vite + React + TypeScript
+- `backend-spring/`: Spring Boot backend chinh
+- `MySQL + Flyway`: schema, seed va runtime data mac dinh
+- `nginx`: public entrypoint qua Docker
 
-## 1. Repo structure
+## Repo structure
 
 ```text
 .
-├─ frontend/
-├─ backend/
-└─ README.md
+|-- frontend/
+|-- archive/
+|-- backend-spring/
+|-- docs/
+|-- nginx/
+|-- scripts/
+`-- docker-compose.yml
 ```
 
-## 2. Tech stack
+## Roles
 
-### Frontend
+- `student`
+- `teacher`
+- `admin`
 
-- React
-- TypeScript
-- Vite
-- Tailwind CSS
-- React Router
-- TanStack Query
-- Axios
-
-### Backend
-
-- Node.js
-- Express
-- TypeScript
-- MongoDB
-- Mongoose
-- JWT access token + refresh token
-- bcrypt
-- Zod
-- Helmet
-- CORS
-- express-rate-limit
-- WebSocket gateway nội bộ cho notification
-
-## 3. Current product overview
-
-Hệ thống hiện đã có đủ các lớp chính cho một MVP LMS/CRM:
+## Main product areas
 
 - public marketing pages
-- auth cho `student`, `teacher`, `admin`
-- admin login riêng tại `/admin/login`
-- course review workflow giữa `teacher` và `admin`
-- lesson management workspace riêng theo course
-- enrollments + learning progress
-- mock-test public / assigned / managed theo role
-- blog / post management
+- admin login rieng
+- courses / lessons / review workflow
+- learning progress
+- exercises
+- mock-tests + grading
 - internal messages
-- admin analytics
+- notification bell realtime + unread persistence
 
-## 4. Roles and main workflows
+## Production path
 
-### Guest
+Neu muon chay dung luong moi, dung:
 
-- xem homepage, course listing, course detail, blog, portfolio
-- xem mock-test public miễn phí do admin publish
-- đăng nhập / đăng ký
+- `frontend + backend-spring + MySQL + Flyway`
 
-### Student
+## Main commands
 
-- đăng ký khóa học đã publish
-- vào trang học full-screen
-- theo dõi progress theo lesson
-- làm mock-test:
-  - bài free do admin publish
-  - bài được assign theo course đã enroll
-- nhắn tin cho admin
-- nhắn tin cho teacher sở hữu course đã enroll
-- cập nhật profile, đổi email / phone / password
-
-### Teacher
-
-- tạo course của riêng mình
-- course mới luôn đi theo luồng review
-- nhận notification khi admin:
-  - yêu cầu chỉnh sửa
-  - từ chối
-  - publish
-- quản lý lesson trong workspace riêng theo course
-- tạo mock-test cho student của mình
-- xem bài thi free do admin publish như một user
-- xem roster học viên và progress
-- nhắn tin với admin và student thuộc course của mình
-
-### Admin
-
-- đăng nhập riêng tại `/admin/login`
-- quản lý users / courses / mock-tests / posts / messages
-- review course của teacher:
-  - approve + publish
-  - yêu cầu chỉnh sửa
-  - từ chối
-- tạo mock-test free cho toàn hệ thống
-- theo dõi revenue / enrollments / stats
-
-## 5. Local setup
-
-## Install
+Run the main app stack:
 
 ```bash
-npm install
+npm run dev
 ```
 
-## Create env files
+Lenh nay la luong chay chinh hien tai. No boot dung 4 container:
+
+- `frontend-1`
+- `backend-dev-1`
+- `mysql-1`
+- `nginx-1`
+
+URLs:
+
+- web app: `http://localhost`
+- backend direct: `http://localhost:5000`
+- MySQL host: `3307`
+
+Neu can reset sach DB va boot lai toan bo stack:
 
 ```bash
-copy backend\.env.example backend\.env
-copy frontend\.env.example frontend\.env
+npm run dev:clean
 ```
 
-### Recommended local env
+Xem log cac container trong luong chinh:
 
-`backend/.env`
-
-```env
-PORT=5000
-MONGO_URI=mongodb://127.0.0.1:27017/ivyts-1997
-JWT_ACCESS_SECRET=ivyts-access-secret-dev
-JWT_REFRESH_SECRET=ivyts-refresh-secret-dev
-CLIENT_URL=http://localhost:5173,http://localhost:5174,http://localhost:5175
-CLOUDINARY_CLOUD_NAME=
-CLOUDINARY_API_KEY=
-CLOUDINARY_API_SECRET=
+```bash
+npm run logs
 ```
+
+Neu can chay rieng Vite local khong qua Docker:
+
+```bash
+npm run dev:frontend
+```
+
+Build frontend:
+
+```bash
+npm run build:frontend
+```
+
+Build backend image:
+
+```bash
+npm run build:backend-spring
+```
+
+## Seed, cleanup, smoke tests
+
+Seed native qua Flyway + startup:
+
+```bash
+npm run seed
+```
+
+Lenh nay reset va seed theo dung luong chinh:
+
+- `mysql`
+- `backend-dev`
+- `frontend`
+- `nginx`
+
+Cleanup regression data chu dong trong MySQL:
+
+```bash
+npm run cleanup:regression
+```
+
+Regression tong hop theo role:
+
+```bash
+npm run regression:spring-stack
+```
+
+Smoke test rieng cho `student`:
+
+```bash
+npm run smoke:student
+```
+
+Smoke test rieng cho `teacher`:
+
+```bash
+npm run smoke:teacher
+```
+
+Smoke test rieng cho `admin`:
+
+```bash
+npm run smoke:admin
+```
+
+## Docker runtime
+
+Stack mac dinh:
+
+- `frontend`
+- `backend`
+- `mysql`
+- `nginx`
+
+Fallback/tooling:
+
+- `frontend-dev`
+- `backend-dev`
+
+## Environment
+
+### Frontend
 
 `frontend/.env`
 
@@ -141,77 +163,86 @@ CLOUDINARY_API_SECRET=
 VITE_API_URL=http://localhost:5000/api
 ```
 
-## Run backend
+Khi chay qua Docker/Nginx, frontend co the dung `/api`.
 
-```bash
-npm run dev:backend
+### Spring backend
+
+`backend-spring/.env.example`
+
+```env
+PORT=5000
+MYSQL_URL=jdbc:mysql://127.0.0.1:3307/ivyts_1997?createDatabaseIfNotExist=true&useUnicode=true&characterEncoding=utf8&serverTimezone=UTC
+MYSQL_USERNAME=root
+MYSQL_PASSWORD=root
+CLIENT_URL=http://localhost:5173,http://localhost:5174,http://localhost:5175,http://localhost
+JWT_ACCESS_SECRET=replace-me1
+JWT_REFRESH_SECRET=replace-me
 ```
 
-Backend mặc định:
+Luu y:
 
-```text
-http://localhost:5000
-```
+- `application.yml` hien tai la MySQL runtime mac dinh
 
-Health check:
+## Notification bell
 
-```text
-GET http://localhost:5000/api/health
-```
+Notification bell hien tai hoat dong theo 2 lop:
 
-## Run frontend
+- realtime qua WebSocket
+- unread persistence trong MySQL
 
-```bash
-npm run dev:frontend
-```
+Nghia la:
 
-Frontend thường chạy ở:
+- neu user online, bell nhan event realtime ngay
+- neu user offline, unread van duoc luu vao MySQL
+- khi user mo lai tab, focus lai tab, hoac reconnect websocket, frontend se sync lai inbox tu server
 
-- `http://localhost:5173`
-- hoặc `http://localhost:5174`
-- hoặc `http://localhost:5175`
+## Role smoke coverage
 
-do Vite sẽ tự tăng port nếu port trước đã bị chiếm.
+Hien repo da co smoke scripts rieng theo role:
 
-## Build
+- `npm run smoke:student`
+- `npm run smoke:teacher`
+- `npm run smoke:admin`
 
-```bash
-npm run build:backend
-npm run build:frontend
-```
+Va mot regression tong hop:
 
-## Seed data
+- `npm run regression:spring-stack`
 
-```bash
-npm run seed
-```
+Tat ca smoke/regression scripts gio deu check `http://localhost/api/health` truoc. Neu stack chua len, script se dung som voi huong dan ro rang thay vi fail mo ho.
 
-Seed hiện tại tạo:
+## Flyway
 
-- `1 admin`
-- `2 teachers`
-- `3 students`
-- `5 courses`
-  - published
-  - pending review
-  - changes requested
-- lessons cho TOEIC / IELTS
-- enrollments + learning progress
-- orders cho revenue chart
-- `2 mock-tests` x `10 questions`
-- blog posts
-- public contact messages
+Migrations nam tai:
+
+- [backend-spring/src/main/resources/db/migration/mysql](D:/CodeWebToeic/backend-spring/src/main/resources/db/migration/mysql)
+
+Hien dang cover:
+
+- `users`
+- `courses`
+- `lessons`
+- `enrollments`
+- `enrollment_lesson_progress`
+- `mock_tests`
+- `mock_test_questions`
+- `mock_test_question_options`
+- `test_submissions`
+- `test_submission_answers`
+- `blog_posts`
+- `messages`
+- `orders`
+- `notifications`
 
 ## Sample accounts
 
-- Admin: `admin@ivyts.dev` / `Password@123`
-- Teacher 1: `teacher@ivyts.dev` / `Password@123`
-- Teacher 2: `teacher2@ivyts.dev` / `Password@123`
-- Student 1: `student1@ivyts.dev` / `Password@123`
-- Student 2: `student2@ivyts.dev` / `Password@123`
-- Student 3: `student3@ivyts.dev` / `Password@123`
+- Admin: `admin@ivyts.dev / Password@123`
+- Teacher 1: `teacher@ivyts.dev / Password@123`
+- Teacher 2: `teacher2@ivyts.dev / Password@123`
+- Student 1: `student1@ivyts.dev / Password@123`
+- Student 2: `student2@ivyts.dev / Password@123`
+- Student 3: `student3@ivyts.dev / Password@123`
 
-## 6. Main routes
+## Route groups
 
 ### Public
 
@@ -219,8 +250,9 @@ Seed hiện tại tạo:
 - `/courses`
 - `/courses/:slug`
 - `/mock-test`
+- `/exercises`
+- `/exercises/:topicSlug`
 - `/blog`
-- `/blog/:slug`
 - `/portfolio`
 - `/login`
 - `/register`
@@ -244,6 +276,7 @@ Seed hiện tại tạo:
 - `/teacher/mock-tests`
 - `/teacher/mock-tests/create`
 - `/teacher/mock-tests/:slug`
+- `/teacher/results`
 - `/teacher/students`
 - `/teacher/messages`
 
@@ -261,250 +294,37 @@ Seed hiện tại tạo:
 - `/admin/messages`
 - `/admin/settings`
 
-## 7. Backend architecture review
+## Current backend-spring status
 
-Phần backend đang đi theo hướng:
+Da qua smoke test tren luong `Spring + MySQL + Flyway`:
 
-- `route` nhận request và gắn middleware
-- `controller` nhận input đã validate, gọi service
-- `service` chứa business logic
-- `model` là schema / persistence layer
-- `utils` chứa transform, JWT, response helpers
+- `auth/users`
+- `courses/lessons`
+- `enrollments/learning`
+- `mock-tests`
+- `messages`
+- `posts`
+- `admin stats/users/charts`
+- `notification websocket`
+- `notification inbox persistence`
 
-### `backend/src/constants`
+## Retire backend/ Node
 
-Chứa constants dùng chung cho toàn API.
+`backend/` da duoc dua sang `archive/backend-node/` de tham chieu legacy, va khong con nam trong root scripts chinh.
 
-Hiện tại quan trọng nhất:
+Checklist retire dan:
 
-- `http-status.ts`
-  dùng làm nguồn HTTP code thống nhất để tránh hardcode số trong service/controller.
+- [docs/retire-backend-node-checklist.md](D:/CodeWebToeic/docs/retire-backend-node-checklist.md)
 
-### `backend/src/middlewares`
+## Smoke automation
 
-Đây là lớp cross-cutting cho toàn API:
+Repo da co workflow:
 
-- `auth.middleware.ts`
-  parse Bearer token và gắn `req.user`
-- `role.middleware.ts`
-  RBAC theo role
-- `validate.middleware.ts`
-  validate request bằng Zod
-- `security.middleware.ts`
-  `helmet`, `cors`, `rate-limit`, `morgan`
-- `error-handler.middleware.ts`
-  convert mọi lỗi về format API chuẩn
-- `not-found.middleware.ts`
-  fallback 404 thống nhất
+- `.github/workflows/spring-stack-smoke.yml`
 
-### `backend/src/models`
+Workflow nay build `backend-spring`, build `frontend`, boot stack `Spring + MySQL`, sau do chay:
 
-Đây là lớp domain persistence. Các model chính:
-
-- `user.model.ts`
-  auth + profile + pending email/phone verification
-- `course.model.ts`
-  khóa học, media metadata, pricing, review status, publish status
-- `lesson.model.ts`
-  lesson thuộc course
-- `enrollment.model.ts`
-  quan hệ student-course + progress
-- `mock-test.model.ts`
-  container của đề thi
-- `question.model.ts`
-  câu hỏi + đáp án đúng + giải thích
-- `test-submission.model.ts`
-  lần nộp bài đã chấm điểm
-- `blog-post.model.ts`
-  bài viết
-- `message.model.ts`
-  public contact + internal inbox
-- `order.model.ts`
-  order / revenue
-
-### `backend/src/services`
-
-Đây là nơi chứa business logic chính của hệ thống:
-
-- `auth.service.ts`
-  register, login, refresh, logout, me, profile self-service
-- `course.service.ts`
-  course CRUD, lesson CRUD, review workflow teacher/admin
-- `enrollment.service.ts`
-  enroll + progress update + roster
-- `learning.service.ts`
-  payload tổng hợp cho learning page
-- `mock-test.service.ts`
-  visibility, manage permission, grading
-- `message.service.ts`
-  inbox, recipients, internal messaging permission
-- `post.service.ts`
-  blog CRUD
-- `admin.service.ts`
-  stats, charts, user management
-- `notification.service.ts`
-  WebSocket gateway
-- `notification-events.service.ts`
-  mapping business event -> bell notification
-
-## 8. Notification system review
-
-Hệ thống notification hiện dùng:
-
-- backend WebSocket gateway `/ws/notifications`
-- frontend `notification-bell`
-- phân phối theo:
-  - `roles`
-  - `userIds`
-  - `excludeUserIds`
-
-Các event đang có:
-
-- đăng ký user mới
-- cập nhật profile thành công / thất bại
-- create / update / review / publish course
-- enrollment mới
-- post mới
-- internal message gửi / nhận
-
-## 9. Course review workflow
-
-### Teacher create / update course
-
-- teacher tạo course
-- backend ép course về `draft`
-- `reviewStatus` đi theo luồng review
-- admin nhận notification
-
-### Admin review
-
-Admin có thể:
-
-- approve + publish
-- yêu cầu chỉnh sửa
-- từ chối
-
-### Teacher resubmit
-
-- teacher vào `/courses/:slug`
-- chỉnh sửa course draft của chính mình
-- bấm lưu
-- backend tự đưa về:
-  - `reviewStatus = pending_review`
-  - `isPublished = false`
-- admin nhận notification để review lại
-
-## 10. Mock-test visibility rules
-
-### Student
-
-Student thấy:
-
-- bài free do admin publish
-- bài assign cho course mà student đã enroll
-
-### Teacher
-
-Teacher thấy:
-
-- bài free published của admin
-- bài do chính teacher tạo
-
-### Admin
-
-Admin thấy và quản lý toàn bộ mock-tests.
-
-## 11. Messaging rules
-
-### Admin
-
-- nhắn cho teacher
-- nhắn cho student
-
-### Teacher
-
-- nhắn cho admin
-- nhắn cho student đang enroll course của teacher
-
-### Student
-
-- nhắn cho admin
-- nhắn cho teacher sở hữu course mà student đã enroll
-
-## 12. Student profile workflow
-
-`/student/profile` hiện có:
-
-- update `fullName`
-- update `avatarUrl`
-- upload avatar local -> lưu chuỗi vào `avatarUrl`
-- update `bio`
-- đổi `password`
-- đổi `email` qua verify workflow
-- đổi `phone` qua OTP workflow
-- hiển thị khóa học đã enroll
-
-Lưu ý:
-
-- hiện tại email/phone verification đang dùng `verificationPreviewCode`
-- đây là workflow local/dev
-- chưa nối provider email hoặc SMS thật
-
-## 13. Quick smoke checklist
-
-1. Seed data
-
-```bash
-npm run seed
-```
-
-2. Run backend
-
-```bash
-npm run dev:backend
-```
-
-3. Run frontend
-
-```bash
-npm run dev:frontend
-```
-
-4. Test public area
-
-- `/`
-- `/courses`
-- `/mock-test`
-
-5. Test admin
-
-- `/admin/login`
-- `/admin/dashboard`
-- `/admin/courses`
-- `/admin/mock-tests`
-- `/admin/messages`
-
-6. Test teacher
-
-- `/teacher/courses`
-- `/teacher/mock-tests`
-- `/teacher/students`
-- `/teacher/messages`
-
-7. Test student
-
-- `/student/my-courses`
-- `/student/learn/:courseId`
-- `/student/mock-tests`
-- `/student/messages`
-- `/student/profile`
-
-## 14. Notes for future extension
-
-Các điểm đã được mở đường để mở rộng:
-
-- video storage hiện chỉ lưu metadata/url, chưa lưu binary
-- `course` / `lesson` đã sẵn field để nâng cấp lên Cloudinary / S3 / Bunny / Vimeo private
-- mock-test workspace đã đủ nền cho quiz/assignment phức tạp hơn
-- inbox hiện đủ cho CRM nội bộ, có thể mở rộng thread hoặc attachment
-- notification gateway hiện là in-process, có thể tách sang Redis/pub-sub nếu scale lớn hơn
+- `smoke:admin`
+- `smoke:teacher`
+- `smoke:student`
+- `regression:spring-stack`

@@ -4,23 +4,9 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.mongodb.core.index.CompoundIndex;
-import org.springframework.data.mongodb.core.index.CompoundIndexes;
-import org.springframework.data.mongodb.core.index.Indexed;
-import org.springframework.data.mongodb.core.mapping.Document;
-
-@Document("questions")
-@CompoundIndexes({
-    @CompoundIndex(name = "question_mock_test_order_idx", def = "{'mockTest': 1, 'order': 1}", unique = true)
-})
 public class Question {
 
-    @Id
     private String id;
-    @Indexed
     private String mockTest;
     private String section = "mixed";
     private String prompt;
@@ -32,9 +18,7 @@ public class Question {
     private int points = 1;
     private int order;
     private String level = "medium";
-    @CreatedDate
     private Instant createdAt;
-    @LastModifiedDate
     private Instant updatedAt;
 
     public String getId() { return id; }

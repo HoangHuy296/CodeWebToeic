@@ -81,10 +81,10 @@ export function AdminDashboardPage() {
               Quan ly mock tests
             </Link>
             <Link
-              to="/admin/posts"
+              to="/admin/results"
               className="rounded-2xl border border-stroke bg-white px-5 py-3 text-sm font-semibold text-slate-900 transition hover:bg-slate-50"
             >
-              Quan ly bai viet
+              Xem bang diem
             </Link>
           </div>
         </div>

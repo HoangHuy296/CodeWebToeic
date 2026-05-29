@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useAuth } from '../../app/providers/auth-provider';
 import { PageHero } from '../../components/common/page-hero';
 import { QueryErrorState, QueryLoadingState } from '../../components/common/query-state';
@@ -8,7 +8,7 @@ import {
   courseApi,
   type CreateCoursePayload,
 } from '../../lib/course-api';
-import { enrollmentApi } from '../../lib/enrollment-api';
+import { enrollmentApi, enrollmentQueryKeys } from '../../lib/enrollment-api';
 import { getApiErrorMessage } from '../../lib/api';
 import { formatCurrency, formatDurationMinutes, toYouTubeEmbed } from '../../lib/media';
 
@@ -70,6 +70,7 @@ function resolveTeacherSubmitCopy(isAdmin: boolean): string {
 
 export function CourseDetailPage() {
   const { slug } = useParams();
+  const navigate = useNavigate();
   const queryClient = useQueryClient();
   const { isAuthenticated, role, user } = useAuth();
   const [enrollMessage, setEnrollMessage] = useState<string | null>(null);
@@ -82,6 +83,11 @@ export function CourseDetailPage() {
     enabled: Boolean(slug),
     queryFn: () => courseApi.detail(slug!),
   });
+  const enrollmentsQuery = useQuery({
+    queryKey: enrollmentQueryKeys.mine,
+    queryFn: enrollmentApi.mine,
+    enabled: isAuthenticated && role === 'student',
+  });
 
   useEffect(() => {
     if (courseQuery.data) {
@@ -90,6 +96,14 @@ export function CourseDetailPage() {
   }, [courseQuery.data]);
 
   const course = courseQuery.data;
+  const studentEnrollment = useMemo(() => {
+    if (role !== 'student' || !course) {
+      return null;
+    }
+
+    return (enrollmentsQuery.data ?? []).find((enrollment) => enrollment.course.id === course.id) ?? null;
+  }, [course, enrollmentsQuery.data, role]);
+  const isStudentEnrolled = Boolean(studentEnrollment);
   const isAdmin = role === 'admin';
   const isTeacherOwner = role === 'teacher' && Boolean(course && user?.id === course.owner.id);
   const canManageCourse = Boolean(course && (isAdmin || isTeacherOwner));
@@ -110,7 +124,10 @@ export function CourseDetailPage() {
     mutationFn: (courseId: string) => enrollmentApi.enroll(courseId),
     onSuccess: () => {
       setEnrollMessage('Dang ky khoa hoc thanh cong.');
-      void queryClient.invalidateQueries({ queryKey: ['enrollments', 'mine'] });
+      void queryClient.invalidateQueries({ queryKey: enrollmentQueryKeys.mine });
+      if (course) {
+        navigate(`/student/learn/${course.id}`);
+      }
     },
     onError: (error) => {
       setEnrollMessage(getApiErrorMessage(error));
@@ -149,7 +166,9 @@ export function CourseDetailPage() {
   const sidebarActionLabel = !isAuthenticated
     ? 'Dang nhap de dang ky'
     : role === 'student'
-      ? enrollMutation.isPending
+      ? isStudentEnrolled
+        ? 'Vao hoc'
+        : enrollMutation.isPending
         ? 'Dang xu ly...'
         : 'Dang ky khoa hoc'
       : isTeacherOwner
@@ -487,6 +506,11 @@ export function CourseDetailPage() {
                   disabled={!isAuthenticated || role !== 'student' || enrollMutation.isPending}
                   onClick={() => {
                     setEnrollMessage(null);
+                    if (isStudentEnrolled) {
+                      navigate(`/student/learn/${course.id}`);
+                      return;
+                    }
+
                     void enrollMutation.mutate(course.id);
                   }}
                   className="mt-6 w-full rounded-2xl bg-[linear-gradient(135deg,var(--color-brand),var(--color-brand-deep))] px-5 py-4 text-sm font-semibold text-white shadow-[0_16px_40px_rgba(13,148,136,0.24)] transition disabled:cursor-not-allowed disabled:opacity-60"

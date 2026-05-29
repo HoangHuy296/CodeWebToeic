@@ -2,17 +2,18 @@ package com.ivyts.backend.service;
 
 import com.ivyts.backend.common.exception.ApiException;
 import com.ivyts.backend.domain.course.Course;
-import com.ivyts.backend.domain.course.CourseRepository;
 import com.ivyts.backend.domain.enrollment.Enrollment;
-import com.ivyts.backend.domain.enrollment.EnrollmentRepository;
 import com.ivyts.backend.domain.enrollment.EnrollmentStatus;
 import com.ivyts.backend.domain.enrollment.LessonProgressItem;
 import com.ivyts.backend.domain.lesson.Lesson;
-import com.ivyts.backend.domain.lesson.LessonRepository;
 import com.ivyts.backend.domain.user.User;
-import com.ivyts.backend.domain.user.UserRepository;
 import com.ivyts.backend.domain.user.UserRole;
+import com.ivyts.backend.notification.NotificationEventsService;
 import com.ivyts.backend.security.AuthUser;
+import com.ivyts.backend.service.coursestore.CourseStore;
+import com.ivyts.backend.service.coursestore.LessonStore;
+import com.ivyts.backend.service.enrollmentstore.EnrollmentStore;
+import com.ivyts.backend.service.userstore.UserStore;
 import com.ivyts.backend.web.enrollment.EnrollmentMapper;
 import com.ivyts.backend.web.enrollment.dto.CreateEnrollmentRequest;
 import com.ivyts.backend.web.enrollment.dto.UpdateProgressRequest;
@@ -26,31 +27,34 @@ import org.springframework.stereotype.Service;
 @Service
 public class EnrollmentService {
 
-    private final EnrollmentRepository enrollmentRepository;
-    private final CourseRepository courseRepository;
-    private final LessonRepository lessonRepository;
-    private final UserRepository userRepository;
+    private final EnrollmentStore enrollmentStore;
+    private final CourseStore courseStore;
+    private final LessonStore lessonStore;
+    private final UserStore userStore;
     private final EnrollmentMapper enrollmentMapper;
+    private final NotificationEventsService notificationEventsService;
 
     public EnrollmentService(
-        EnrollmentRepository enrollmentRepository,
-        CourseRepository courseRepository,
-        LessonRepository lessonRepository,
-        UserRepository userRepository,
-        EnrollmentMapper enrollmentMapper
+        EnrollmentStore enrollmentStore,
+        CourseStore courseStore,
+        LessonStore lessonStore,
+        UserStore userStore,
+        EnrollmentMapper enrollmentMapper,
+        NotificationEventsService notificationEventsService
     ) {
-        this.enrollmentRepository = enrollmentRepository;
-        this.courseRepository = courseRepository;
-        this.lessonRepository = lessonRepository;
-        this.userRepository = userRepository;
+        this.enrollmentStore = enrollmentStore;
+        this.courseStore = courseStore;
+        this.lessonStore = lessonStore;
+        this.userStore = userStore;
         this.enrollmentMapper = enrollmentMapper;
+        this.notificationEventsService = notificationEventsService;
     }
 
     public Map<String, Object> enrollCourse(CreateEnrollmentRequest request, AuthUser authUser) {
         ensureStudent(authUser);
         Course course = findPublishedCourseOrThrow(request.courseId());
 
-        enrollmentRepository.findByCourseAndStudent(course.getId(), authUser.userId())
+        enrollmentStore.findByCourseAndStudent(course.getId(), authUser.userId())
             .ifPresent(existing -> {
                 throw new ApiException(HttpStatus.CONFLICT, "You are already enrolled in this course");
             });
@@ -63,14 +67,26 @@ public class EnrollmentService {
         enrollment.setCompletedLessonIds(new ArrayList<>());
         enrollment.setLessonProgress(new ArrayList<>());
         enrollment.setEnrolledAt(Instant.now());
-        enrollmentRepository.save(enrollment);
+        enrollment = enrollmentStore.save(enrollment);
+        User student = userStore.findById(authUser.userId())
+            .orElseThrow(() -> new ApiException(HttpStatus.NOT_FOUND, "Student not found"));
+        User owner = userStore.findById(course.getOwner())
+            .orElseThrow(() -> new ApiException(HttpStatus.NOT_FOUND, "Course owner not found"));
+        notificationEventsService.emitEnrollmentCreated(
+            student.getId(),
+            student.getFullName(),
+            course.getId(),
+            course.getTitle(),
+            owner.getId(),
+            owner.getRole().name().toLowerCase()
+        );
 
         return toEnrollmentView(enrollment);
     }
 
     public List<Map<String, Object>> getMyEnrollments(AuthUser authUser) {
         ensureStudent(authUser);
-        return enrollmentRepository.findByStudentAndStatusInOrderByCreatedAtDesc(
+        return enrollmentStore.findByStudentAndStatusInOrderByCreatedAtDesc(
                 authUser.userId(),
                 List.of(EnrollmentStatus.ACTIVE, EnrollmentStatus.COMPLETED)
             )
@@ -85,7 +101,7 @@ public class EnrollmentService {
             throw new ApiException(HttpStatus.FORBIDDEN, "You do not have permission to view these enrollments");
         }
 
-        return enrollmentRepository.findByCourseOrderByCreatedAtDesc(courseId).stream()
+        return enrollmentStore.findByCourseOrderByCreatedAtDesc(courseId).stream()
             .map(this::toEnrollmentView)
             .toList();
     }
@@ -93,24 +109,25 @@ public class EnrollmentService {
     public Map<String, Object> updateLearningProgress(String courseId, UpdateProgressRequest request, AuthUser authUser) {
         ensureStudent(authUser);
         Enrollment enrollment = findEnrollmentOrThrow(courseId, authUser.userId());
-        Lesson lesson = lessonRepository.findById(request.lessonId())
+        Lesson lesson = lessonStore.findById(request.lessonId())
             .filter(current -> current.getCourse().equals(courseId))
             .orElseThrow(() -> new ApiException(HttpStatus.NOT_FOUND, "Lesson not found in this course"));
 
-        int totalLessons = lessonRepository.findByCourseOrderByOrderAsc(courseId).size();
+        int totalLessons = lessonStore.findByCourseOrderByOrderAsc(courseId).size();
         Instant nextAccessedAt = request.lastAccessedAt() != null ? request.lastAccessedAt() : Instant.now();
 
         LessonProgressItem progressItem = enrollment.getLessonProgress().stream()
             .filter(item -> item.getLesson().equals(request.lessonId()))
             .findFirst()
-            .orElseGet(() -> {
-                LessonProgressItem created = new LessonProgressItem();
-                created.setLesson(request.lessonId());
-                created.setWatchedSeconds(0);
-                created.setCompleted(false);
-                enrollment.getLessonProgress().add(created);
-                return created;
-            });
+            .orElse(null);
+
+        if (progressItem == null) {
+            progressItem = new LessonProgressItem();
+            progressItem.setLesson(request.lessonId());
+            progressItem.setWatchedSeconds(0);
+            progressItem.setCompleted(false);
+            enrollment.getLessonProgress().add(progressItem);
+        }
 
         if (request.watchedSeconds() != null) {
             progressItem.setWatchedSeconds(Math.max(progressItem.getWatchedSeconds(), request.watchedSeconds()));
@@ -138,7 +155,7 @@ public class EnrollmentService {
             ? enrollment.getCompletedAt() != null ? enrollment.getCompletedAt() : Instant.now()
             : null);
 
-        enrollmentRepository.save(enrollment);
+        enrollment = enrollmentStore.save(enrollment);
         return toEnrollmentView(enrollment);
     }
 
@@ -151,17 +168,17 @@ public class EnrollmentService {
     }
 
     private Course findCourseOrThrow(String courseId) {
-        return courseRepository.findById(courseId)
+        return courseStore.findById(courseId)
             .orElseThrow(() -> new ApiException(HttpStatus.NOT_FOUND, "Course not found"));
     }
 
     private Enrollment findEnrollmentOrThrow(String courseId, String studentId) {
-        return enrollmentRepository.findByCourseAndStudent(courseId, studentId)
+        return enrollmentStore.findByCourseAndStudent(courseId, studentId)
             .orElseThrow(() -> new ApiException(HttpStatus.NOT_FOUND, "Enrollment not found"));
     }
 
     private Map<String, Object> toEnrollmentView(Enrollment enrollment) {
-        User student = userRepository.findById(enrollment.getStudent())
+        User student = userStore.findById(enrollment.getStudent())
             .orElseThrow(() -> new ApiException(HttpStatus.NOT_FOUND, "Student not found"));
         Course course = findCourseOrThrow(enrollment.getCourse());
         return enrollmentMapper.toEnrollmentView(enrollment, student, course);

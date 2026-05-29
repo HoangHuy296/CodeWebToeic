@@ -11,17 +11,24 @@ import { RegisterPage } from '../pages/auth/register-page';
 import { AdminCourseCreatePage } from '../pages/admin/admin-course-create-page';
 import { AdminCoursesPage } from '../pages/admin/admin-courses-page';
 import { AdminDashboardPage } from '../pages/admin/admin-dashboard-page';
+import { AdminExerciseItemCreatePage } from '../pages/admin/admin-exercise-item-create-page';
+import { AdminExerciseItemEditorPage } from '../pages/admin/admin-exercise-item-editor-page';
+import { AdminExerciseItemsPage } from '../pages/admin/admin-exercise-items-page';
+import { AdminExerciseTopicsPage } from '../pages/admin/admin-exercise-topics-page';
 import { AdminMessagesPage } from '../pages/admin/admin-messages-page';
 import { AdminMockTestCreatePage } from '../pages/admin/admin-mock-test-create-page';
 import { AdminMockTestEditorPage } from '../pages/admin/admin-mock-test-editor-page';
 import { AdminMockTestsPage } from '../pages/admin/admin-mock-tests-page';
 import { AdminPostsPage } from '../pages/admin/admin-posts-page';
+import { AdminResultsPage } from '../pages/admin/admin-results-page';
 import { AdminSettingsPage } from '../pages/admin/admin-settings-page';
 import { AdminUsersPage } from '../pages/admin/admin-users-page';
 import { BlogDetailPage } from '../pages/public/blog-detail-page';
 import { BlogListPage } from '../pages/public/blog-list-page';
 import { CourseDetailPage } from '../pages/public/course-detail-page';
 import { CourseListPage } from '../pages/public/course-list-page';
+import { ExerciseHubPage } from '../pages/public/exercise-hub-page';
+import { ExerciseTopicPage } from '../pages/public/exercise-topic-page';
 import { HomePage } from '../pages/public/home-page';
 import { MockTestLandingPage } from '../pages/public/mock-test-landing-page';
 import { PortfolioPage } from '../pages/public/portfolio-page';
@@ -33,12 +40,18 @@ import { StudentMockTestSessionPage } from '../pages/student/student-mock-test-s
 import { StudentMessagesPage } from '../pages/student/student-messages-page';
 import { StudentMyCoursesPage } from '../pages/student/student-my-courses-page';
 import { StudentProfilePage } from '../pages/student/student-profile-page';
+import { StudentResultsPage } from '../pages/student/student-results-page';
 import { TeacherCoursesPage } from '../pages/teacher/teacher-courses-page';
 import { TeacherDashboardPage } from '../pages/teacher/teacher-dashboard-page';
+import { TeacherExerciseItemCreatePage } from '../pages/teacher/teacher-exercise-item-create-page';
+import { TeacherExerciseItemEditorPage } from '../pages/teacher/teacher-exercise-item-editor-page';
+import { TeacherExerciseItemsPage } from '../pages/teacher/teacher-exercise-items-page';
 import { TeacherMessagesPage } from '../pages/teacher/teacher-messages-page';
 import { TeacherMockTestCreatePage } from '../pages/teacher/teacher-mock-test-create-page';
 import { TeacherMockTestEditorPage } from '../pages/teacher/teacher-mock-test-editor-page';
 import { TeacherMockTestsPage } from '../pages/teacher/teacher-mock-tests-page';
+import { TeacherProfilePage } from '../pages/teacher/teacher-profile-page';
+import { TeacherResultsPage } from '../pages/teacher/teacher-results-page';
 import { TeacherStudentsPage } from '../pages/teacher/teacher-students-page';
 import { NotFoundPage } from '../pages/system/not-found-page';
 import { AdminAuthRedirectRoute } from './admin-auth-redirect';
@@ -68,6 +81,8 @@ export const router = createBrowserRouter([
           { index: true, Component: HomePage },
           { path: 'courses', Component: CourseListPage },
           { path: 'courses/:slug', Component: CourseDetailPage },
+          { path: 'exercises', Component: ExerciseHubPage },
+          { path: 'exercises/:topicSlug', Component: ExerciseTopicPage },
           { path: 'mock-test', Component: MockTestLandingPage },
           { path: 'blog', Component: BlogListPage },
           { path: 'blog/:slug', Component: BlogDetailPage },
@@ -100,6 +115,7 @@ export const router = createBrowserRouter([
                       { path: 'profile', Component: StudentProfilePage },
                       { path: 'messages', Component: StudentMessagesPage },
                       { path: 'my-courses', Component: StudentMyCoursesPage },
+                      { path: 'results', Component: StudentResultsPage },
                       { path: 'mock-tests', Component: StudentMockTestsPage },
                     ],
                   },
@@ -111,14 +127,19 @@ export const router = createBrowserRouter([
                   { path: 'teacher/courses/:slug/lessons', Component: CourseLessonsManagePage },
                   { path: 'teacher/mock-tests/create', Component: TeacherMockTestCreatePage },
                   { path: 'teacher/mock-tests/:slug', Component: TeacherMockTestEditorPage },
+                  { path: 'teacher/exercises/items/create', Component: TeacherExerciseItemCreatePage },
+                  { path: 'teacher/exercises/items/:slug', Component: TeacherExerciseItemEditorPage },
                   { path: 'teacher/mock-tests/play/:slug', Component: StudentMockTestSessionPage },
                   {
                     path: 'teacher',
                     Component: TeacherLayout,
                     children: [
                       { path: 'dashboard', Component: TeacherDashboardPage },
+                      { path: 'profile', Component: TeacherProfilePage },
                       { path: 'courses', Component: TeacherCoursesPage },
+                      { path: 'exercises/items', Component: TeacherExerciseItemsPage },
                       { path: 'mock-tests', Component: TeacherMockTestsPage },
+                      { path: 'results', Component: TeacherResultsPage },
                       { path: 'students', Component: TeacherStudentsPage },
                       { path: 'messages', Component: TeacherMessagesPage },
                     ],
@@ -131,6 +152,8 @@ export const router = createBrowserRouter([
                   { path: 'admin/courses/:slug/lessons', Component: CourseLessonsManagePage },
                   { path: 'admin/mock-tests/create', Component: AdminMockTestCreatePage },
                   { path: 'admin/mock-tests/:slug', Component: AdminMockTestEditorPage },
+                  { path: 'admin/exercises/items/create', Component: AdminExerciseItemCreatePage },
+                  { path: 'admin/exercises/items/:slug', Component: AdminExerciseItemEditorPage },
                   {
                     path: 'admin',
                     Component: AdminLayout,
@@ -139,7 +162,10 @@ export const router = createBrowserRouter([
                       { path: 'users', Component: AdminUsersPage },
                       { path: 'courses', Component: AdminCoursesPage },
                       { path: 'courses/create', Component: AdminCourseCreatePage },
+                      { path: 'exercises', Component: AdminExerciseTopicsPage },
+                      { path: 'exercises/items', Component: AdminExerciseItemsPage },
                       { path: 'mock-tests', Component: AdminMockTestsPage },
+                      { path: 'results', Component: AdminResultsPage },
                       { path: 'posts', Component: AdminPostsPage },
                       { path: 'messages', Component: AdminMessagesPage },
                       { path: 'settings', Component: AdminSettingsPage },

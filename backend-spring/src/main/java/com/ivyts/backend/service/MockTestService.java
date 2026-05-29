@@ -2,26 +2,27 @@ package com.ivyts.backend.service;
 
 import com.ivyts.backend.common.exception.ApiException;
 import com.ivyts.backend.domain.course.Course;
-import com.ivyts.backend.domain.course.CourseRepository;
-import com.ivyts.backend.domain.enrollment.EnrollmentRepository;
 import com.ivyts.backend.domain.enrollment.EnrollmentStatus;
 import com.ivyts.backend.domain.mocktest.MockTest;
 import com.ivyts.backend.domain.mocktest.MockTestLevel;
-import com.ivyts.backend.domain.mocktest.MockTestRepository;
 import com.ivyts.backend.domain.mocktest.MockTestStatus;
 import com.ivyts.backend.domain.mocktest.MockTestType;
 import com.ivyts.backend.domain.mocktest.Question;
 import com.ivyts.backend.domain.mocktest.QuestionLevel;
 import com.ivyts.backend.domain.mocktest.QuestionOption;
-import com.ivyts.backend.domain.mocktest.QuestionRepository;
 import com.ivyts.backend.domain.mocktest.QuestionSection;
 import com.ivyts.backend.domain.mocktest.SubmissionAnswer;
 import com.ivyts.backend.domain.mocktest.TestSubmission;
-import com.ivyts.backend.domain.mocktest.TestSubmissionRepository;
 import com.ivyts.backend.domain.user.User;
-import com.ivyts.backend.domain.user.UserRepository;
 import com.ivyts.backend.domain.user.UserRole;
 import com.ivyts.backend.security.AuthUser;
+import com.ivyts.backend.service.exercise.ExerciseTopicService;
+import com.ivyts.backend.service.coursestore.CourseStore;
+import com.ivyts.backend.service.enrollmentstore.EnrollmentStore;
+import com.ivyts.backend.service.mockteststore.MockTestStore;
+import com.ivyts.backend.service.mockteststore.QuestionStore;
+import com.ivyts.backend.service.mockteststore.SubmissionStore;
+import com.ivyts.backend.service.userstore.UserStore;
 import com.ivyts.backend.web.mocktest.MockTestMapper;
 import com.ivyts.backend.web.mocktest.dto.CreateMockTestRequest;
 import com.ivyts.backend.web.mocktest.dto.QuestionRequest;
@@ -40,39 +41,46 @@ import org.springframework.stereotype.Service;
 @Service
 public class MockTestService {
 
-    private final MockTestRepository mockTestRepository;
-    private final QuestionRepository questionRepository;
-    private final TestSubmissionRepository submissionRepository;
-    private final EnrollmentRepository enrollmentRepository;
-    private final CourseRepository courseRepository;
-    private final UserRepository userRepository;
+    private final MockTestStore mockTestStore;
+    private final QuestionStore questionStore;
+    private final SubmissionStore submissionStore;
+    private final EnrollmentStore enrollmentStore;
+    private final CourseStore courseStore;
+    private final UserStore userStore;
     private final MockTestMapper mapper;
+    private final ExerciseTopicService exerciseTopicService;
 
     public MockTestService(
-        MockTestRepository mockTestRepository,
-        QuestionRepository questionRepository,
-        TestSubmissionRepository submissionRepository,
-        EnrollmentRepository enrollmentRepository,
-        CourseRepository courseRepository,
-        UserRepository userRepository,
-        MockTestMapper mapper
+        MockTestStore mockTestStore,
+        QuestionStore questionStore,
+        SubmissionStore submissionStore,
+        EnrollmentStore enrollmentStore,
+        CourseStore courseStore,
+        UserStore userStore,
+        MockTestMapper mapper,
+        ExerciseTopicService exerciseTopicService
     ) {
-        this.mockTestRepository = mockTestRepository;
-        this.questionRepository = questionRepository;
-        this.submissionRepository = submissionRepository;
-        this.enrollmentRepository = enrollmentRepository;
-        this.courseRepository = courseRepository;
-        this.userRepository = userRepository;
+        this.mockTestStore = mockTestStore;
+        this.questionStore = questionStore;
+        this.submissionStore = submissionStore;
+        this.enrollmentStore = enrollmentStore;
+        this.courseStore = courseStore;
+        this.userStore = userStore;
         this.mapper = mapper;
+        this.exerciseTopicService = exerciseTopicService;
     }
 
-    public List<Map<String, Object>> listMockTests(AuthUser authUser) {
-        List<MockTest> all = mockTestRepository.findAll();
+    public List<Map<String, Object>> listMockTests(AuthUser authUser, String kind, String topicSlug, String packSlug) {
+        List<MockTest> all = mockTestStore.findAll();
         List<String> accessibleCourseIds = authUser != null && authUser.role() == UserRole.STUDENT
             ? getStudentAccessibleCourseIds(authUser.userId())
             : List.of();
+        String normalizedKind = normalizeCatalogKind(kind);
 
         return all.stream()
+            .filter(mockTest -> normalizedKind.equals(mockTest.getCatalogKind()))
+            .filter(mockTest -> topicSlug == null || topicSlug.isBlank() || topicSlug.equals(mockTest.getExerciseTopicSlug()))
+            .filter(mockTest -> packSlug == null || packSlug.isBlank() || packSlug.equals(mockTest.getExercisePackSlug()))
             .filter(mockTest -> canViewMockTest(authUser, mockTest, accessibleCourseIds))
             .sorted((left, right) -> {
                 int featureCompare = Boolean.compare(right.isFeatured(), left.isFeatured());
@@ -87,9 +95,15 @@ public class MockTestService {
             .toList();
     }
 
-    public List<Map<String, Object>> listManagedMockTests(AuthUser authUser) {
+    public List<Map<String, Object>> listExerciseItems(AuthUser authUser, String topicSlug) {
+        return listMockTests(authUser, "exercise", topicSlug, null);
+    }
+
+    public List<Map<String, Object>> listManagedMockTests(AuthUser authUser, String kind) {
         ensureWorkspaceUser(authUser);
-        return mockTestRepository.findAll().stream()
+        String normalizedKind = normalizeCatalogKind(kind);
+        return mockTestStore.findAll().stream()
+            .filter(mockTest -> normalizedKind.equals(mockTest.getCatalogKind()))
             .filter(mockTest -> authUser.role() == UserRole.ADMIN || authUser.userId().equals(mockTest.getCreatedBy()))
             .sorted((left, right) -> {
                 Instant leftUpdated = left.getUpdatedAt() != null ? left.getUpdatedAt() : Instant.EPOCH;
@@ -98,6 +112,10 @@ public class MockTestService {
             })
             .map(mockTest -> mapper.toMockTestView(mockTest, findUserOrThrow(mockTest.getCreatedBy()), null, false))
             .toList();
+    }
+
+    public List<Map<String, Object>> listManagedExerciseItems(AuthUser authUser) {
+        return listManagedMockTests(authUser, "exercise");
     }
 
     public Map<String, Object> getMockTestDetail(String mockTestId, AuthUser authUser) {
@@ -111,8 +129,59 @@ public class MockTestService {
             throw new ApiException(HttpStatus.NOT_FOUND, "Mock test not found");
         }
 
-        List<Question> questions = questionRepository.findByMockTestOrderByOrderAsc(mockTestId);
+        List<Question> questions = questionStore.findByMockTestOrderByOrderAsc(mockTestId);
         return mapper.toMockTestView(mockTest, findUserOrThrow(mockTest.getCreatedBy()), questions, isManager);
+    }
+
+    public Map<String, Object> getExerciseItemDetail(String itemId, AuthUser authUser) {
+        Map<String, Object> detail = getMockTestDetail(itemId, authUser);
+        MockTest mockTest = findMockTestOrThrow(itemId);
+        if (!"exercise".equals(mockTest.getCatalogKind())) {
+            throw new ApiException(HttpStatus.NOT_FOUND, "Exercise item not found");
+        }
+        return detail;
+    }
+
+    public List<Map<String, Object>> listSubmissionResults(AuthUser authUser) {
+        List<TestSubmission> submissions = switch (authUser.role()) {
+            case ADMIN -> submissionStore.findAllOrderBySubmittedAtDesc();
+            case STUDENT -> submissionStore.findByStudentOrderBySubmittedAtDesc(authUser.userId());
+            case TEACHER -> {
+                List<String> managedMockTestIds = mockTestStore.findAll().stream()
+                    .filter(mockTest -> authUser.userId().equals(mockTest.getCreatedBy()))
+                    .map(MockTest::getId)
+                    .toList();
+                yield submissionStore.findByMockTestIdsOrderBySubmittedAtDesc(managedMockTestIds);
+            }
+        };
+
+        return submissions.stream()
+            .map(submission -> toSubmissionSummary(submission, authUser))
+            .toList();
+    }
+
+    public List<Map<String, Object>> listExerciseSubmissionResults(AuthUser authUser) {
+        return listSubmissionResults(authUser).stream()
+            .filter(submission -> "exercise".equals(((Map<String, Object>) submission.get("mockTest")).get("catalogKind")))
+            .toList();
+    }
+
+    public Map<String, Object> getSubmissionDetail(String submissionId, AuthUser authUser) {
+        TestSubmission submission = submissionStore.findById(submissionId)
+            .orElseThrow(() -> new ApiException(HttpStatus.NOT_FOUND, "Submission not found"));
+        MockTest mockTest = findMockTestOrThrow(submission.getMockTest());
+        ensureSubmissionAccess(authUser, submission, mockTest);
+        return buildSubmissionDetail(submission, mockTest, authUser.role() != UserRole.STUDENT);
+    }
+
+    public Map<String, Object> getExerciseSubmissionDetail(String submissionId, AuthUser authUser) {
+        Map<String, Object> detail = getSubmissionDetail(submissionId, authUser);
+        @SuppressWarnings("unchecked")
+        Map<String, Object> mockTest = (Map<String, Object>) detail.get("mockTest");
+        if (!"exercise".equals(mockTest.get("catalogKind"))) {
+            throw new ApiException(HttpStatus.NOT_FOUND, "Exercise submission not found");
+        }
+        return detail;
     }
 
     public Map<String, Object> createMockTest(CreateMockTestRequest request, AuthUser authUser) {
@@ -131,11 +200,34 @@ public class MockTestService {
         mockTest.setFeatured(Boolean.TRUE.equals(request.isFeatured()));
         mockTest.setCreatedBy(authUser.userId());
         mockTest.setAssignedCourses(request.assignedCourseIds() == null ? List.of() : request.assignedCourseIds());
+        mockTest.setCatalogKind(normalizeCatalogKind(request.catalogKind()));
+        mockTest.setExerciseTopicSlug(blankToNull(request.exerciseTopicSlug()));
+        mockTest.setExercisePackSlug(blankToNull(request.exercisePackSlug()));
         mockTest.setQuestionCount(request.questions().size());
-        mockTestRepository.save(mockTest);
+        validateExerciseMetadata(mockTest);
+        mockTest = mockTestStore.save(mockTest);
 
         replaceQuestions(mockTest.getId(), request.questions());
         return getMockTestDetail(mockTest.getId(), authUser);
+    }
+
+    public Map<String, Object> createExerciseItem(CreateMockTestRequest request, AuthUser authUser) {
+        CreateMockTestRequest normalized = new CreateMockTestRequest(
+            request.title(),
+            request.description(),
+            request.type(),
+            request.level(),
+            request.durationMinutes(),
+            request.status(),
+            request.instructions(),
+            request.isFeatured(),
+            request.assignedCourseIds(),
+            "exercise",
+            request.exerciseTopicSlug(),
+            request.exercisePackSlug(),
+            request.questions()
+        );
+        return createMockTest(normalized, authUser);
     }
 
     public Map<String, Object> updateMockTest(String mockTestId, UpdateMockTestRequest request, AuthUser authUser) {
@@ -144,6 +236,15 @@ public class MockTestService {
         if (request.assignedCourseIds() != null) {
             validateAssignedCourses(request.assignedCourseIds(), authUser);
             mockTest.setAssignedCourses(request.assignedCourseIds());
+        }
+        if (request.catalogKind() != null) {
+            mockTest.setCatalogKind(normalizeCatalogKind(request.catalogKind()));
+        }
+        if (request.exerciseTopicSlug() != null) {
+            mockTest.setExerciseTopicSlug(blankToNull(request.exerciseTopicSlug()));
+        }
+        if (request.exercisePackSlug() != null) {
+            mockTest.setExercisePackSlug(blankToNull(request.exercisePackSlug()));
         }
         if (request.title() != null) {
             mockTest.setTitle(request.title().trim());
@@ -174,7 +275,8 @@ public class MockTestService {
             validateQuestionOrders(request.questions());
             mockTest.setQuestionCount(request.questions().size());
         }
-        mockTestRepository.save(mockTest);
+        validateExerciseMetadata(mockTest);
+        mockTestStore.save(mockTest);
 
         if (request.questions() != null) {
             replaceQuestions(mockTestId, request.questions());
@@ -182,11 +284,38 @@ public class MockTestService {
         return getMockTestDetail(mockTestId, authUser);
     }
 
+    public Map<String, Object> updateExerciseItem(String itemId, UpdateMockTestRequest request, AuthUser authUser) {
+        UpdateMockTestRequest normalized = new UpdateMockTestRequest(
+            request.title(),
+            request.description(),
+            request.type(),
+            request.level(),
+            request.durationMinutes(),
+            request.status(),
+            request.instructions(),
+            request.isFeatured(),
+            request.assignedCourseIds(),
+            "exercise",
+            request.exerciseTopicSlug(),
+            request.exercisePackSlug(),
+            request.questions()
+        );
+        return updateMockTest(itemId, normalized, authUser);
+    }
+
     public void deleteMockTest(String mockTestId, AuthUser authUser) {
         MockTest mockTest = ensureManagePermission(mockTestId, authUser);
-        questionRepository.deleteByMockTest(mockTestId);
-        submissionRepository.deleteByMockTest(mockTestId);
-        mockTestRepository.delete(mockTest);
+        submissionStore.deleteByMockTest(mockTestId);
+        questionStore.deleteByMockTest(mockTestId);
+        mockTestStore.delete(mockTest);
+    }
+
+    public void deleteExerciseItem(String itemId, AuthUser authUser) {
+        MockTest mockTest = ensureManagePermission(itemId, authUser);
+        if (!"exercise".equals(mockTest.getCatalogKind())) {
+            throw new ApiException(HttpStatus.NOT_FOUND, "Exercise item not found");
+        }
+        deleteMockTest(itemId, authUser);
     }
 
     public Map<String, Object> submitMockTest(String mockTestId, SubmitMockTestRequest request, AuthUser authUser) {
@@ -204,7 +333,7 @@ public class MockTestService {
             throw new ApiException(HttpStatus.FORBIDDEN, "You do not have access to this mock test");
         }
 
-        List<Question> questions = questionRepository.findByMockTestOrderByOrderAsc(mockTestId);
+        List<Question> questions = questionStore.findByMockTestOrderByOrderAsc(mockTestId);
         if (questions.isEmpty()) {
             throw new ApiException(HttpStatus.BAD_REQUEST, "Mock test has no questions");
         }
@@ -242,27 +371,20 @@ public class MockTestService {
         submission.setScore(score);
         submission.setTotalQuestions(questions.size());
         submission.setCorrectAnswers(correctAnswers);
-        submission.setDurationSeconds(request.durationSeconds());
+        submission.setDurationSeconds(request.durationSeconds() == null ? 0 : request.durationSeconds());
         submission.setSubmittedAt(Instant.now());
-        submissionRepository.save(submission);
+        submissionStore.save(submission);
 
-        Map<String, Object> data = new LinkedHashMap<>(mapper.toSubmissionView(submission));
-        data.put("review", questions.stream().map(question -> {
-            SubmissionAnswer answer = gradedAnswers.stream()
-                .filter(current -> current.getQuestion().equals(question.getId()))
-                .findFirst()
-                .orElse(null);
-            Map<String, Object> current = new LinkedHashMap<>();
-            current.put("questionId", question.getId());
-            current.put("prompt", question.getPrompt());
-            current.put("selectedOption", answer != null ? answer.getSelectedOption() : "");
-            current.put("correctAnswer", question.getCorrectAnswer());
-            current.put("isCorrect", answer != null && answer.isCorrect());
-            current.put("explanation", question.getExplanation());
-            current.put("points", question.getPoints());
-            return current;
-        }).toList());
-        return data;
+        return buildSubmissionDetail(submission, mockTest, false);
+    }
+
+    public Map<String, Object> submitExerciseItem(String itemId, SubmitMockTestRequest request, AuthUser authUser) {
+        Map<String, Object> detail = submitMockTest(itemId, request, authUser);
+        MockTest mockTest = findMockTestOrThrow(itemId);
+        if (!"exercise".equals(mockTest.getCatalogKind())) {
+            throw new ApiException(HttpStatus.NOT_FOUND, "Exercise item not found");
+        }
+        return detail;
     }
 
     private boolean canViewMockTest(AuthUser authUser, MockTest mockTest, List<String> accessibleCourseIds) {
@@ -292,6 +414,19 @@ public class MockTestService {
             || (authUser.role() == UserRole.TEACHER && authUser.userId().equals(mockTest.getCreatedBy()));
     }
 
+    private void ensureSubmissionAccess(AuthUser authUser, TestSubmission submission, MockTest mockTest) {
+        if (authUser.role() == UserRole.ADMIN) {
+            return;
+        }
+        if (authUser.role() == UserRole.STUDENT && authUser.userId().equals(submission.getStudent())) {
+            return;
+        }
+        if (authUser.role() == UserRole.TEACHER && authUser.userId().equals(mockTest.getCreatedBy())) {
+            return;
+        }
+        throw new ApiException(HttpStatus.FORBIDDEN, "You do not have permission to view this submission");
+    }
+
     private MockTest ensureManagePermission(String mockTestId, AuthUser authUser) {
         ensureWorkspaceUser(authUser);
         MockTest mockTest = findMockTestOrThrow(mockTestId);
@@ -308,17 +443,17 @@ public class MockTestService {
     }
 
     private MockTest findMockTestOrThrow(String mockTestId) {
-        return mockTestRepository.findById(mockTestId)
+        return mockTestStore.findById(mockTestId)
             .orElseThrow(() -> new ApiException(HttpStatus.NOT_FOUND, "Mock test not found"));
     }
 
     private User findUserOrThrow(String userId) {
-        return userRepository.findById(userId)
+        return userStore.findById(userId)
             .orElseThrow(() -> new ApiException(HttpStatus.NOT_FOUND, "User not found"));
     }
 
     private List<String> getStudentAccessibleCourseIds(String userId) {
-        return enrollmentRepository.findByStudentAndStatusInOrderByCreatedAtDesc(
+        return enrollmentStore.findByStudentAndStatusInOrderByCreatedAtDesc(
                 userId,
                 List.of(EnrollmentStatus.ACTIVE, EnrollmentStatus.COMPLETED)
             )
@@ -328,12 +463,116 @@ public class MockTestService {
             .toList();
     }
 
+    private Map<String, Object> toSubmissionSummary(TestSubmission submission, AuthUser authUser) {
+        MockTest mockTest = findMockTestOrThrow(submission.getMockTest());
+        ensureSubmissionAccess(authUser, submission, mockTest);
+
+        User student = findUserOrThrow(submission.getStudent());
+        User creator = findUserOrThrow(mockTest.getCreatedBy());
+        List<Course> assignedCourses = mockTest.getAssignedCourses().isEmpty()
+            ? List.of()
+            : courseStore.findAllByIds(mockTest.getAssignedCourses());
+
+        Map<String, Object> data = new LinkedHashMap<>();
+        data.put("id", submission.getId());
+        data.put("score", submission.getScore());
+        data.put("totalQuestions", submission.getTotalQuestions());
+        data.put("correctAnswers", submission.getCorrectAnswers());
+        data.put("durationSeconds", submission.getDurationSeconds());
+        data.put("submittedAt", submission.getSubmittedAt());
+        data.put("sourceKind", assignedCourses.isEmpty() ? "free" : "assigned");
+        data.put("student", toUserSummary(student, false));
+        data.put("mockTest", toMockTestSummary(mockTest, true));
+        data.put("creator", toUserSummary(creator, true));
+        data.put("assignedCourses", assignedCourses.stream().map(course -> {
+            User owner = findUserOrThrow(course.getOwner());
+            Map<String, Object> current = new LinkedHashMap<>();
+            current.put("id", course.getId());
+            current.put("title", course.getTitle());
+            current.put("slug", course.getSlug());
+            current.put("ownerId", owner.getId());
+            current.put("ownerName", owner.getFullName());
+            return current;
+        }).toList());
+        return data;
+    }
+
+    private Map<String, Object> buildSubmissionDetail(TestSubmission submission, MockTest mockTest, boolean includeCorrectAnswer) {
+        List<Question> questions = questionStore.findByMockTestOrderByOrderAsc(mockTest.getId());
+        User student = findUserOrThrow(submission.getStudent());
+        User creator = findUserOrThrow(mockTest.getCreatedBy());
+        List<Course> assignedCourses = mockTest.getAssignedCourses().isEmpty()
+            ? List.of()
+            : courseStore.findAllByIds(mockTest.getAssignedCourses());
+
+        Map<String, Object> data = new LinkedHashMap<>(mapper.toSubmissionView(submission));
+        data.put("student", toUserSummary(student, false));
+        data.put("mockTest", toMockTestSummary(mockTest, false));
+        data.put("creator", toUserSummary(creator, true));
+        data.put("assignedCourses", assignedCourses.stream().map(course -> {
+            User owner = findUserOrThrow(course.getOwner());
+            Map<String, Object> current = new LinkedHashMap<>();
+            current.put("id", course.getId());
+            current.put("title", course.getTitle());
+            current.put("slug", course.getSlug());
+            current.put("ownerId", owner.getId());
+            current.put("ownerName", owner.getFullName());
+            return current;
+        }).toList());
+        data.put("review", questions.stream().map(question -> {
+            SubmissionAnswer answer = submission.getAnswers().stream()
+                .filter(current -> current.getQuestion().equals(question.getId()))
+                .findFirst()
+                .orElse(null);
+            Map<String, Object> current = new LinkedHashMap<>();
+            current.put("questionId", question.getId());
+            current.put("prompt", question.getPrompt());
+            current.put("selectedOption", answer != null ? answer.getSelectedOption() : "");
+            if (includeCorrectAnswer) {
+                current.put("correctAnswer", question.getCorrectAnswer());
+            }
+            current.put("isCorrect", answer != null && answer.isCorrect());
+            current.put("explanation", question.getExplanation());
+            current.put("points", question.getPoints());
+            return current;
+        }).toList());
+        return data;
+    }
+
+    private Map<String, Object> toUserSummary(User user, boolean includeRole) {
+        Map<String, Object> data = new LinkedHashMap<>();
+        data.put("id", user.getId());
+        data.put("fullName", user.getFullName());
+        data.put("email", user.getEmail());
+        if (includeRole) {
+            data.put("role", user.getRole().name().toLowerCase(Locale.ROOT));
+        }
+        return data;
+    }
+
+    private Map<String, Object> toMockTestSummary(MockTest mockTest, boolean includeStatus) {
+        Map<String, Object> data = new LinkedHashMap<>();
+        data.put("id", mockTest.getId());
+        data.put("title", mockTest.getTitle());
+        data.put("catalogKind", mockTest.getCatalogKind());
+        data.put("exerciseTopicSlug", mockTest.getExerciseTopicSlug());
+        data.put("exercisePackSlug", mockTest.getExercisePackSlug());
+        data.put("type", mockTest.getType().name().toLowerCase(Locale.ROOT).replace('_', '-'));
+        data.put("level", mockTest.getLevel().name().toLowerCase(Locale.ROOT));
+        data.put("questionCount", mockTest.getQuestionCount());
+        data.put("durationMinutes", mockTest.getDurationMinutes());
+        if (includeStatus) {
+            data.put("status", mockTest.getStatus().name().toLowerCase(Locale.ROOT));
+        }
+        return data;
+    }
+
     private void validateAssignedCourses(List<String> assignedCourseIds, AuthUser authUser) {
         if (assignedCourseIds == null || assignedCourseIds.isEmpty()) {
             return;
         }
 
-        List<Course> courses = courseRepository.findAllById(assignedCourseIds);
+        List<Course> courses = courseStore.findAllByIds(assignedCourseIds);
         if (courses.size() != assignedCourseIds.size()) {
             throw new ApiException(HttpStatus.FORBIDDEN, "Assigned courses must exist");
         }
@@ -344,6 +583,37 @@ public class MockTestService {
         if (invalid) {
             throw new ApiException(HttpStatus.FORBIDDEN, "Assigned courses must belong to the current workspace");
         }
+    }
+
+    private void validateExerciseMetadata(MockTest mockTest) {
+        if (!"exercise".equals(mockTest.getCatalogKind())) {
+            mockTest.setExerciseTopicSlug(null);
+            mockTest.setExercisePackSlug(null);
+            return;
+        }
+
+        if (mockTest.getExerciseTopicSlug() == null || mockTest.getExerciseTopicSlug().isBlank()) {
+            throw new ApiException(HttpStatus.BAD_REQUEST, "Exercise topic is required for exercise items");
+        }
+
+        exerciseTopicService.findBySlug(mockTest.getExerciseTopicSlug());
+        mockTest.setExercisePackSlug(blankToNull(mockTest.getExercisePackSlug()));
+    }
+
+    private String normalizeCatalogKind(String value) {
+        String normalized = value == null || value.isBlank() ? "mock-test" : value.trim().toLowerCase(Locale.ROOT);
+        if (!normalized.equals("mock-test") && !normalized.equals("exercise")) {
+            throw new ApiException(HttpStatus.BAD_REQUEST, "Unsupported catalog kind");
+        }
+        return normalized;
+    }
+
+    private String blankToNull(String value) {
+        if (value == null) {
+            return null;
+        }
+        String trimmed = value.trim();
+        return trimmed.isEmpty() ? null : trimmed;
     }
 
     private void validateQuestionOrders(List<QuestionRequest> questions) {
@@ -364,7 +634,7 @@ public class MockTestService {
     }
 
     private void replaceQuestions(String mockTestId, List<QuestionRequest> questions) {
-        questionRepository.deleteByMockTest(mockTestId);
+        questionStore.deleteByMockTest(mockTestId);
         List<Question> entities = questions.stream().map(request -> {
             Question question = new Question();
             question.setMockTest(mockTestId);
@@ -386,10 +656,10 @@ public class MockTestService {
             question.setLevel(parseQuestionLevel(request.level()));
             return question;
         }).toList();
-        questionRepository.saveAll(entities);
+        questionStore.saveAll(entities);
         MockTest mockTest = findMockTestOrThrow(mockTestId);
         mockTest.setQuestionCount(entities.size());
-        mockTestRepository.save(mockTest);
+        mockTestStore.save(mockTest);
     }
 
     private MockTestType parseMockTestType(String value) {

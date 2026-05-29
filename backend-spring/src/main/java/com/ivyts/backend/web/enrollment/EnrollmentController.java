@@ -7,6 +7,7 @@ import com.ivyts.backend.web.enrollment.dto.CreateEnrollmentRequest;
 import com.ivyts.backend.web.enrollment.dto.UpdateProgressRequest;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @Validated
@@ -30,8 +32,9 @@ public class EnrollmentController {
     }
 
     @PostMapping("/enrollments")
+    @ResponseStatus(HttpStatus.CREATED)
     public ApiSuccessResponse<?> enroll(HttpServletRequest request, @Valid @RequestBody CreateEnrollmentRequest body) {
-        return ApiSuccessResponse.of("Enrolled successfully", enrollmentService.enrollCourse(body, requestAuthService.requireUser(request)));
+        return ApiSuccessResponse.of("Enrollment created successfully", enrollmentService.enrollCourse(body, requestAuthService.requireUser(request)));
     }
 
     @GetMapping("/enrollments/me")
@@ -46,6 +49,6 @@ public class EnrollmentController {
 
     @PatchMapping("/enrollments/{courseId}/progress")
     public ApiSuccessResponse<?> updateProgress(@PathVariable String courseId, HttpServletRequest request, @Valid @RequestBody UpdateProgressRequest body) {
-        return ApiSuccessResponse.of("Progress updated successfully", enrollmentService.updateLearningProgress(courseId, body, requestAuthService.requireUser(request)));
+        return ApiSuccessResponse.of("Learning progress updated successfully", enrollmentService.updateLearningProgress(courseId, body, requestAuthService.requireUser(request)));
     }
 }

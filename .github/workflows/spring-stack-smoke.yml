@@ -1,0 +1,76 @@
+name: Spring Stack Smoke
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - "backend-spring/**"
+      - "frontend/**"
+      - "scripts/**"
+      - "docker-compose.yml"
+      - "package.json"
+      - "package-lock.json"
+      - ".github/workflows/spring-stack-smoke.yml"
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+
+      - name: Install root dependencies
+        run: npm ci
+
+      - name: Compile backend-spring
+        run: mvn -f backend-spring/pom.xml -DskipTests compile
+
+      - name: Build frontend
+        run: npm run build:frontend
+
+      - name: Start Spring + MySQL stack
+        run: docker compose --profile prod --profile mysql up -d mysql backend frontend nginx
+
+      - name: Wait for stack
+        shell: pwsh
+        run: ./scripts/assert-spring-stack-ready.ps1
+
+      - name: Smoke admin role
+        shell: pwsh
+        run: ./scripts/smoke-admin-role.ps1
+
+      - name: Smoke teacher role
+        shell: pwsh
+        run: ./scripts/smoke-teacher-role.ps1
+
+      - name: Smoke student role
+        shell: pwsh
+        run: ./scripts/smoke-student-role.ps1
+
+      - name: Run regression
+        shell: pwsh
+        run: ./scripts/regression-spring-mysql.ps1
+
+      - name: Show backend logs on failure
+        if: failure()
+        run: docker compose --profile prod --profile mysql logs backend --tail 200
+
+      - name: Tear down stack
+        if: always()
+        run: docker compose --profile prod --profile mysql down -v

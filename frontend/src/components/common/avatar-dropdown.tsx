@@ -15,26 +15,26 @@ const roleLinks: Record<"student" | "teacher" | "admin", RoleNavItem[]> = {
     { label: "Ho so", to: "/student/profile" },
     { label: "Tin nhan", to: "/student/messages" },
     { label: "Khoa hoc cua toi", to: "/student/my-courses" },
+    { label: "Ket qua bai lam", to: "/student/results" },
     { label: "Luyen thi", to: "/student/mock-tests" },
   ],
   teacher: [
     { label: "Dashboard", to: "/teacher/dashboard" },
+    { label: "Ho so", to: "/teacher/profile" },
     { label: "Khoa hoc", to: "/teacher/courses" },
+    { label: "Bai tap", to: "/teacher/exercises/items" },
     { label: "Mock tests", to: "/teacher/mock-tests" },
+    { label: "Ket qua bai lam", to: "/teacher/results" },
     { label: "Hoc vien", to: "/teacher/students" },
     { label: "Tin nhan", to: "/teacher/messages" },
   ],
   admin: [
     { label: "Dashboard", to: "/admin/dashboard" },
     { label: "Nguoi dung", to: "/admin/users" },
-    {
-      label: "Khoa hoc",
-      to: "/admin/courses",
-    },
-    {
-      label: "Mock tests",
-      to: "/admin/mock-tests",
-    },
+    { label: "Khoa hoc", to: "/admin/courses" },
+    { label: "Mock tests", to: "/admin/mock-tests" },
+    { label: "Bai tap", to: "/admin/exercises" },
+    { label: "Bang diem", to: "/admin/results" },
     { label: "Posts", to: "/admin/posts" },
     { label: "Messages", to: "/admin/messages" },
     { label: "Settings", to: "/admin/settings" },
@@ -62,7 +62,8 @@ export function AvatarDropdown() {
     return null;
   }
 
-  const workspaceLinks = roleLinks[user.role];
+  const normalizedRole = user.role.toLowerCase() as keyof typeof roleLinks;
+  const workspaceLinks = roleLinks[normalizedRole] ?? [];
 
   return (
     <div className="relative" {...wrapperProps}>
@@ -135,7 +136,7 @@ export function AvatarDropdown() {
               </div>
             </div>
             <p className="mt-3 text-[11px] uppercase tracking-[0.22em] text-slate-500">
-              {user.role}
+              {normalizedRole}
             </p>
           </div>
 

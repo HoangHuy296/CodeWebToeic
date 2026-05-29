@@ -9,10 +9,16 @@ services:
       args:
         VITE_API_URL: ${VITE_API_URL:-/api}
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "test -f /usr/share/nginx/html/index.html || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
     networks:
       - app
 
-  # Production backend: Spring Boot API with MongoDB connectivity.
+  # Production backend: Spring Boot API running on MySQL + Flyway by default.
   backend:
     profiles: ["prod"]
     build:
@@ -21,7 +27,10 @@ services:
       target: production
     environment:
       PORT: 5000
-      MONGO_URI: ${MONGO_URI:-mongodb://mongo:27017/ivyts-1997}
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE:-}
+      MYSQL_URL: ${MYSQL_URL:-jdbc:mysql://mysql:3306/ivyts_1997?createDatabaseIfNotExist=true&useUnicode=true&characterEncoding=utf8&serverTimezone=UTC}
+      MYSQL_USERNAME: ${MYSQL_USERNAME:-ivyts}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-ivyts}
       CLIENT_URL: ${CLIENT_URL:-http://localhost,http://localhost:80,http://localhost:8080}
       JWT_ACCESS_SECRET: ${JWT_ACCESS_SECRET:-replace-me1}
       JWT_REFRESH_SECRET: ${JWT_REFRESH_SECRET:-replace-me}
@@ -31,52 +40,61 @@ services:
     expose:
       - "5000"
     depends_on:
-      - mongo
+      mysql:
+        condition: service_healthy
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:5000/api/health >/dev/null 2>&1 || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 15
+      start_period: 20s
     networks:
-      - app
+      app:
+        aliases:
+          - backend-app
 
   # Edge Nginx: public entrypoint that routes web traffic and API/WebSocket traffic.
   nginx:
     profiles: ["prod"]
     image: nginx:1.27-alpine
     depends_on:
-      - frontend
-      - backend
+      frontend:
+        condition: service_healthy
     ports:
       - "${NGINX_PORT:-80}:80"
     volumes:
       - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost/api/health >/dev/null 2>&1 || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
     networks:
       - app
 
-  # MongoDB persistence layer.
-  mongo:
-    image: mongo:7.0
+  # Primary relational runtime for the Spring backend.
+  mysql:
+    profiles: ["mysql"]
+    image: mysql:8.4
     environment:
-      MONGO_INITDB_DATABASE: ivyts-1997
-    volumes:
-      - mongo_data:/data/db
-    expose:
-      - "27017"
-    restart: unless-stopped
-    networks:
-      - app
-
-  # Optional MongoDB UI for local inspection.
-  mongo-express:
-    profiles: ["tools"]
-    image: mongo-express:1.0.2-20-alpine3.19
-    depends_on:
-      - mongo
-    environment:
-      ME_CONFIG_MONGODB_URL: mongodb://mongo:27017/
-      ME_CONFIG_BASICAUTH_USERNAME: ${MONGO_EXPRESS_USERNAME:-admin}
-      ME_CONFIG_BASICAUTH_PASSWORD: ${MONGO_EXPRESS_PASSWORD:-admin}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-ivyts_1997}
+      MYSQL_USER: ${MYSQL_USER:-ivyts}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-ivyts}
     ports:
-      - "${MONGO_EXPRESS_PORT:-8081}:8081"
+      - "${MYSQL_PORT:-3307}:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -uroot -p$$MYSQL_ROOT_PASSWORD --silent"]
+      interval: 10s
+      timeout: 5s
+      retries: 20
+      start_period: 20s
     networks:
       - app
 
@@ -96,7 +114,8 @@ services:
     ports:
       - "${FRONTEND_DEV_PORT:-5173}:5173"
     depends_on:
-      - backend-dev
+      backend-dev:
+        condition: service_started
     restart: unless-stopped
     networks:
       - app
@@ -110,7 +129,10 @@ services:
       target: development
     environment:
       PORT: 5000
-      MONGO_URI: ${DEV_MONGO_URI:-mongodb://mongo:27017/ivyts-1997}
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE:-}
+      MYSQL_URL: ${MYSQL_URL:-jdbc:mysql://mysql:3306/ivyts_1997?createDatabaseIfNotExist=true&useUnicode=true&characterEncoding=utf8&serverTimezone=UTC}
+      MYSQL_USERNAME: ${MYSQL_USERNAME:-ivyts}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-ivyts}
       CLIENT_URL: ${DEV_CLIENT_URL:-http://localhost:5173,http://localhost:5174,http://localhost:5175}
       JWT_ACCESS_SECRET: ${JWT_ACCESS_SECRET:-replace-me1}
       JWT_REFRESH_SECRET: ${JWT_REFRESH_SECRET:-replace-me}
@@ -124,14 +146,17 @@ services:
     ports:
       - "${BACKEND_DEV_PORT:-5000}:5000"
     depends_on:
-      - mongo
+      mysql:
+        condition: service_healthy
     restart: unless-stopped
     networks:
-      - app
+      app:
+        aliases:
+          - backend-app
 
 networks:
   app:
     driver: bridge
 
 volumes:
-  mongo_data:
+  mysql_data:

@@ -2,37 +2,19 @@ package com.ivyts.backend.domain.order;
 
 import java.time.Instant;
 import java.util.Locale;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.mongodb.core.index.CompoundIndex;
-import org.springframework.data.mongodb.core.index.CompoundIndexes;
-import org.springframework.data.mongodb.core.index.Indexed;
-import org.springframework.data.mongodb.core.mapping.Document;
-
-@Document("orders")
-@CompoundIndexes({
-    @CompoundIndex(name = "order_student_course_created_idx", def = "{'student': 1, 'course': 1, 'createdAt': -1}")
-})
 public class Order {
 
-    @Id
     private String id;
-    @Indexed
     private String student;
-    @Indexed
     private String course;
     private double amount;
     private String currency;
-    @Indexed
     private String status = "pending";
     private String paymentMethod;
     private String paymentProvider;
     private String transactionId;
     private Instant paidAt;
-    @CreatedDate
     private Instant createdAt;
-    @LastModifiedDate
     private Instant updatedAt;
 
     public String getId() { return id; }

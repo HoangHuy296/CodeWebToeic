@@ -62,4 +62,72 @@ export const blogArticles: BlogArticle[] = [
       'Buoc 3 la loai tru dap an dua tren bang chung trong van ban, khong dua tren cam giac. Neu bo dap an ma khong co ly do ro, kha nang sai van con rat cao.',
     ],
   },
+  {
+    slug: 'business-email-tone-checklist',
+    title: 'Checklist giu tone email chuyen nghiep trong moi truong CRM',
+    excerpt:
+      'Mot khung nhanh de kiem tra tone, do ro y va call-to-action trong email cong viec bang tieng Anh.',
+    category: 'Business English',
+    author: 'IVYTS Coaching Team',
+    readMinutes: 5,
+    publishedAt: '2026-05-03',
+    coverImage:
+      'https://images.unsplash.com/photo-1455390582262-044cdead277a',
+    content: [
+      'Email cong viec tot khong can qua hoa my. Dieu quan trong la nguoi nhan hieu ban muon gi, can hanh dong gi va khi nao can phan hoi.',
+      'Hay kiem tra lai subject line, opening line va cau ket. Neu ba diem nay ro rang, kha nang email bi hieu sai se giam rat nhieu.',
+      'Cuoi cung, dung quen doc lai tone. Trong business English, mot cau qua truc tiep hoac qua dai dong deu lam chat luong giao tiep giam di.',
+    ],
+  },
+  {
+    slug: 'ielts-speaking-self-review',
+    title: 'Cach tu review IELTS Speaking de thay ro loi lap lai',
+    excerpt:
+      'Khong can cho den buoi chua bai. Hoc vien van co the tu review theo 4 diem: fluency, range, grammar va pronunciation.',
+    category: 'Speaking',
+    author: 'IVYTS Academic Lab',
+    readMinutes: 6,
+    publishedAt: '2026-05-01',
+    coverImage:
+      'https://images.unsplash.com/photo-1516321318423-f06f85e504b3',
+    content: [
+      'Buoc dau tien la ghi am cau tra loi ngan, khong can lam qua dai. Muc tieu la de nghe lai xem minh lap tu nao, dung filler nao qua nhieu va dong y co bi dut quang hay khong.',
+      'Sau do, doi chieu voi mot checklist ngan. Moi lan tu review, chi nen tap trung vao 1-2 tieu chi thay vi sua het cung luc.',
+      'Neu lam deu, hoc vien se thay ro cac loi lap lai va chuan bi tot hon truoc khi vao speaking mock thật.',
+    ],
+  },
+  {
+    slug: 'grammar-revision-by-error-log',
+    title: 'On ngu phap bang error log de tranh hoc lai nhieu ma van quen',
+    excerpt:
+      'Error log giup bien moi cau sai thanh mot diem hoc lai co he thong thay vi doc dap an roi bo qua.',
+    category: 'Grammar',
+    author: 'IVYTS Editorial',
+    readMinutes: 5,
+    publishedAt: '2026-04-28',
+    coverImage:
+      'https://images.unsplash.com/photo-1523240795612-9a054b0db644',
+    content: [
+      'Moi khi sai cau ngu phap, hay ghi lai 3 thu: dang cau hoi, ly do sai va dau hieu de nhan ra lan sau. Chi can ngan gon, nhung phai deu.',
+      'Sau 1-2 tuan, nhin lai error log se thay nhom loi lap lai: verb forms, lien tu, word form hay bi dong. Day moi la noi can dau tu thoi gian on lai.',
+      'Hoc ngu phap bang error log giup tiet kiem thoi gian va tang ty le dung tren cau hoi cung dang.',
+    ],
+  },
+  {
+    slug: 'toeic-mini-test-review-loop',
+    title: 'Vong lap mini test va review loi sai de tang score nhanh hon',
+    excerpt:
+      'Mini test chi co gia tri khi hoc vien sua lai loi sai theo chu ky, khong phai lam de lien tuc.',
+    category: 'Mock Test',
+    author: 'IVYTS Coaching Team',
+    readMinutes: 4,
+    publishedAt: '2026-04-25',
+    coverImage:
+      'https://images.unsplash.com/photo-1491841550275-ad7854e35ca6',
+    content: [
+      'Mini test nen duoc dung nhu mot buoc do nhiet do, khong phai thay the toan bo viec hoc. Sau moi bai, can co mot buoi review ngan de tach loi ra thanh nhom.',
+      'Neu chi lam bai moi ma khong sua loi, diem co the dao dong nhung rat kho tang ben vung. Vong lap tot nhat la: lam bai, review, on lai, lam lai bai cung dang.',
+      'Chinh chu ky lap lai nay moi giup hoc vien thay duoc tien bo that tren dashboard va ket qua bai lam.',
+    ],
+  },
 ];

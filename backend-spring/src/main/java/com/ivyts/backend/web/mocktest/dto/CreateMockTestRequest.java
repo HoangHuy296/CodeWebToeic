@@ -16,6 +16,9 @@ public record CreateMockTestRequest(
     List<String> instructions,
     Boolean isFeatured,
     List<String> assignedCourseIds,
+    String catalogKind,
+    String exerciseTopicSlug,
+    String exercisePackSlug,
     @NotEmpty List<@Valid QuestionRequest> questions
 ) {
 }

@@ -157,7 +157,7 @@ export function StudentProfilePage() {
               <p className="text-xs font-semibold uppercase tracking-[0.34em] text-teal-700">student profile</p>
               <h1 className="mt-3 break-words text-3xl font-black tracking-tight text-slate-950 lg:text-[2rem]">{user.fullName}</h1>
               <p className="mt-2 text-sm leading-7 text-slate-600">
-                Ho so nay update truc tiep vao MongoDB. Email va phone duoc tach thanh workflow xac nhan rieng de giam rui ro doi nham thong tin lien he.
+                Ho so nay update truc tiep qua backend Spring. Email va phone duoc tach thanh workflow xac nhan rieng de giam rui ro doi nham thong tin lien he.
               </p>
             </div>
           </div>
@@ -269,7 +269,7 @@ export function StudentProfilePage() {
                   className="w-full rounded-2xl border border-stroke bg-slate-50 px-4 py-3 text-sm outline-none transition file:mr-3 file:rounded-full file:border-0 file:bg-violet-50 file:px-3 file:py-2 file:font-semibold file:text-violet-700 hover:file:bg-violet-100"
                 />
                 <span className="text-xs font-medium leading-5 text-slate-500">
-                  Ho tro upload file anh local duoi 2MB. He thong se luu chuoi anh vao `avatarUrl`.
+                  Ho tro upload file anh local duoi 2MB. He thong se luu chuoi anh vao `avatarUrl` qua API profile hien tai.
                 </span>
               </label>
 

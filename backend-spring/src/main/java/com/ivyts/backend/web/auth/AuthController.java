@@ -14,12 +14,15 @@ import com.ivyts.backend.web.auth.dto.RequestPhoneChangeRequest;
 import com.ivyts.backend.web.auth.dto.UpdateProfileRequest;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
+import java.util.Map;
+import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @Validated
@@ -36,8 +39,9 @@ public class AuthController {
     }
 
     @PostMapping("/register")
+    @ResponseStatus(HttpStatus.CREATED)
     public ApiSuccessResponse<?> register(@Valid @RequestBody RegisterRequest body) {
-        return ApiSuccessResponse.of("User registered successfully", authService.register(body));
+        return ApiSuccessResponse.of("Register successful", authService.register(body));
     }
 
     @PostMapping("/login")
@@ -46,9 +50,9 @@ public class AuthController {
     }
 
     @PostMapping("/logout")
-    public ApiSuccessResponse<?> logout(@Valid @RequestBody RefreshTokenRequest body) {
-        authService.logout(body);
-        return ApiSuccessResponse.of("Logout successful", null);
+    public ApiSuccessResponse<?> logout(HttpServletRequest request) {
+        authService.logout(requestAuthService.requireUser(request));
+        return ApiSuccessResponse.of("Logout successful", Map.of());
     }
 
     @GetMapping("/me")
@@ -58,7 +62,7 @@ public class AuthController {
 
     @PostMapping("/refresh-token")
     public ApiSuccessResponse<?> refreshToken(@Valid @RequestBody RefreshTokenRequest body) {
-        return ApiSuccessResponse.of("Token refreshed successfully", authService.refreshToken(body));
+        return ApiSuccessResponse.of("Refresh token successful", authService.refreshToken(body));
     }
 
     @PatchMapping("/me/profile")
@@ -69,12 +73,12 @@ public class AuthController {
     @PostMapping("/me/password")
     public ApiSuccessResponse<?> changePassword(HttpServletRequest request, @Valid @RequestBody ChangePasswordRequest body) {
         authService.changePassword(requestAuthService.requireUser(request), body);
-        return ApiSuccessResponse.of("Password changed successfully", null);
+        return ApiSuccessResponse.of("Password updated successfully", Map.of());
     }
 
     @PostMapping("/me/email-change/request")
     public ApiSuccessResponse<?> requestEmailChange(HttpServletRequest request, @Valid @RequestBody RequestEmailChangeRequest body) {
-        return ApiSuccessResponse.of("Email change requested successfully", authService.requestEmailChange(requestAuthService.requireUser(request), body));
+        return ApiSuccessResponse.of("Email verification code sent successfully", authService.requestEmailChange(requestAuthService.requireUser(request), body));
     }
 
     @PostMapping("/me/email-change/confirm")
@@ -84,7 +88,7 @@ public class AuthController {
 
     @PostMapping("/me/phone-change/request")
     public ApiSuccessResponse<?> requestPhoneChange(HttpServletRequest request, @Valid @RequestBody RequestPhoneChangeRequest body) {
-        return ApiSuccessResponse.of("Phone change requested successfully", authService.requestPhoneChange(requestAuthService.requireUser(request), body));
+        return ApiSuccessResponse.of("Phone OTP sent successfully", authService.requestPhoneChange(requestAuthService.requireUser(request), body));
     }
 
     @PostMapping("/me/phone-change/confirm")

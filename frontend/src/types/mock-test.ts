@@ -18,6 +18,7 @@ export interface MockTestQuestion {
 
 export interface MockTest {
   id: string;
+  catalogKind?: 'mock-test' | 'exercise';
   title: string;
   description: string;
   type: 'mini-test' | 'full-test' | 'practice-set';
@@ -33,6 +34,8 @@ export interface MockTest {
   };
   isFeatured: boolean;
   assignedCourseIds: string[];
+  exerciseTopicSlug?: string;
+  exercisePackSlug?: string;
   questions?: MockTestQuestion[];
 }
 
@@ -40,7 +43,7 @@ export interface MockTestSubmissionReviewItem {
   questionId: string;
   prompt: string;
   selectedOption: string;
-  correctAnswer: string;
+  correctAnswer?: string;
   isCorrect: boolean;
   explanation?: string;
   points: number;
@@ -63,7 +66,45 @@ export interface MockTestSubmissionResult {
   review: MockTestSubmissionReviewItem[];
 }
 
+export interface MockTestSubmissionRecord {
+  id: string;
+  score: number;
+  totalQuestions: number;
+  correctAnswers: number;
+  durationSeconds: number;
+  submittedAt: string;
+  sourceKind: 'free' | 'assigned';
+  student: {
+    id: string;
+    fullName: string;
+    email: string;
+  };
+  mockTest: {
+    id: string;
+    title: string;
+    type: 'mini-test' | 'full-test' | 'practice-set';
+    level: 'beginner' | 'intermediate' | 'advanced';
+    status: 'draft' | 'published' | 'archived';
+    questionCount: number;
+    durationMinutes: number;
+  };
+  creator: {
+    id: string;
+    fullName: string;
+    email: string;
+    role: 'admin' | 'teacher' | 'student';
+  };
+  assignedCourses: Array<{
+    id: string;
+    title: string;
+    slug: string;
+    ownerId: string;
+    ownerName: string;
+  }>;
+}
+
 export interface MockTestPayload {
+  catalogKind?: 'mock-test' | 'exercise';
   title: string;
   description: string;
   type: 'mini-test' | 'full-test' | 'practice-set';
@@ -73,6 +114,8 @@ export interface MockTestPayload {
   instructions?: string[];
   isFeatured?: boolean;
   assignedCourseIds?: string[];
+  exerciseTopicSlug?: string;
+  exercisePackSlug?: string;
   questions: Array<{
     section: 'listening' | 'reading' | 'speaking' | 'writing' | 'mixed';
     prompt: string;

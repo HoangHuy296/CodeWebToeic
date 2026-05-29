@@ -3,21 +3,8 @@ package com.ivyts.backend.domain.message;
 import com.ivyts.backend.domain.user.UserRole;
 import java.time.Instant;
 import java.util.Locale;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.mongodb.core.index.CompoundIndex;
-import org.springframework.data.mongodb.core.index.CompoundIndexes;
-import org.springframework.data.mongodb.core.index.Indexed;
-import org.springframework.data.mongodb.core.mapping.Document;
-
-@Document("messages")
-@CompoundIndexes({
-    @CompoundIndex(name = "message_type_recipient_created_idx", def = "{'messageType': 1, 'recipientUser': 1, 'createdAt': -1}")
-})
 public class Message {
 
-    @Id
     private String id;
     private String name;
     private String email;
@@ -25,9 +12,7 @@ public class Message {
     private String subject;
     private String content;
     private String summary;
-    @Indexed
     private String status = "unread";
-    @Indexed
     private String messageType = "contact";
     private String recipientRole;
     private String recipientUser;
@@ -35,9 +20,7 @@ public class Message {
     private Instant readAt;
     private Instant repliedAt;
     private String assignedTo;
-    @CreatedDate
     private Instant createdAt;
-    @LastModifiedDate
     private Instant updatedAt;
 
     public String getId() { return id; }

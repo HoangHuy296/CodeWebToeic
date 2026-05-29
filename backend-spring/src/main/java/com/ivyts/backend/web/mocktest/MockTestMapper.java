@@ -35,6 +35,9 @@ public class MockTestMapper {
         data.put("createdBy", creatorView);
         data.put("isFeatured", mockTest.isFeatured());
         data.put("assignedCourseIds", mockTest.getAssignedCourses());
+        data.put("catalogKind", mockTest.getCatalogKind());
+        data.put("exerciseTopicSlug", mockTest.getExerciseTopicSlug());
+        data.put("exercisePackSlug", mockTest.getExercisePackSlug());
         data.put("questions", questions == null ? null : questions.stream().map(question -> toQuestionView(question, includeAnswers)).toList());
         return data;
     }

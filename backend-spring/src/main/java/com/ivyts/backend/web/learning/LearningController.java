@@ -25,6 +25,6 @@ public class LearningController {
 
     @GetMapping("/{courseId}")
     public ApiSuccessResponse<?> getLearningPayload(@PathVariable String courseId, HttpServletRequest request) {
-        return ApiSuccessResponse.of("Learning payload fetched successfully", learningService.getLearningData(courseId, requestAuthService.requireUser(request)));
+        return ApiSuccessResponse.of("Learning data fetched successfully", learningService.getLearningData(courseId, requestAuthService.requireUser(request)));
     }
 }

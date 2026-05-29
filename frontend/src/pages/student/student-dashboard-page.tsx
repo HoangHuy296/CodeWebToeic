@@ -93,6 +93,10 @@ export function StudentDashboardPage() {
             <h2 className="mt-2 text-3xl font-black tracking-tight text-slate-950">Bai thi de xuat</h2>
           </div>
 
+          <Link to="/student/results" className="text-sm font-semibold text-cyan-700">
+            Xem bang diem
+          </Link>
+
           <div className="grid gap-4">
             {(mockTestsQuery.data ?? []).slice(0, 3).map((mockTest) => (
               <Link

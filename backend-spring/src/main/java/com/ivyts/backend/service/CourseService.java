@@ -2,14 +2,15 @@ package com.ivyts.backend.service;
 
 import com.ivyts.backend.common.exception.ApiException;
 import com.ivyts.backend.domain.course.Course;
-import com.ivyts.backend.domain.course.CourseRepository;
 import com.ivyts.backend.domain.course.CourseReviewStatus;
 import com.ivyts.backend.domain.lesson.Lesson;
-import com.ivyts.backend.domain.lesson.LessonRepository;
 import com.ivyts.backend.domain.user.User;
-import com.ivyts.backend.domain.user.UserRepository;
 import com.ivyts.backend.domain.user.UserRole;
+import com.ivyts.backend.notification.NotificationEventsService;
 import com.ivyts.backend.security.AuthUser;
+import com.ivyts.backend.service.coursestore.CourseStore;
+import com.ivyts.backend.service.coursestore.LessonStore;
+import com.ivyts.backend.service.userstore.UserStore;
 import com.ivyts.backend.util.SlugUtils;
 import com.ivyts.backend.web.course.CourseMapper;
 import com.ivyts.backend.web.course.dto.CreateCourseRequest;
@@ -25,28 +26,36 @@ import org.springframework.stereotype.Service;
 @Service
 public class CourseService {
 
-    private final CourseRepository courseRepository;
-    private final LessonRepository lessonRepository;
-    private final UserRepository userRepository;
+    private final CourseStore courseStore;
+    private final LessonStore lessonStore;
+    private final UserStore userStore;
     private final CourseMapper courseMapper;
+    private final NotificationEventsService notificationEventsService;
 
-    public CourseService(CourseRepository courseRepository, LessonRepository lessonRepository, UserRepository userRepository, CourseMapper courseMapper) {
-        this.courseRepository = courseRepository;
-        this.lessonRepository = lessonRepository;
-        this.userRepository = userRepository;
+    public CourseService(
+        CourseStore courseStore,
+        LessonStore lessonStore,
+        UserStore userStore,
+        CourseMapper courseMapper,
+        NotificationEventsService notificationEventsService
+    ) {
+        this.courseStore = courseStore;
+        this.lessonStore = lessonStore;
+        this.userStore = userStore;
         this.courseMapper = courseMapper;
+        this.notificationEventsService = notificationEventsService;
     }
 
     public List<Map<String, Object>> listCourses() {
-        return courseRepository.findByIsPublishedTrue().stream()
+        return courseStore.findPublished().stream()
             .map(course -> courseMapper.toCourseView(course, findOwner(course.getOwner()), null))
             .toList();
     }
 
     public List<Map<String, Object>> listManageCourses(AuthUser authUser) {
         List<Course> courses = authUser.role() == UserRole.ADMIN
-            ? courseRepository.findAll()
-            : courseRepository.findByOwner(authUser.userId());
+            ? courseStore.findAll()
+            : courseStore.findByOwner(authUser.userId());
 
         return courses.stream()
             .map(course -> courseMapper.toCourseView(course, findOwner(course.getOwner()), null))
@@ -54,14 +63,14 @@ public class CourseService {
     }
 
     public Map<String, Object> getCourseBySlug(String slug, AuthUser authUser) {
-        Course course = courseRepository.findBySlug(slug)
+        Course course = courseStore.findBySlug(slug)
             .orElseThrow(() -> new ApiException(HttpStatus.NOT_FOUND, "Course not found"));
 
         if (!course.isPublished() && !canManageCourse(authUser, course)) {
             throw new ApiException(HttpStatus.NOT_FOUND, "Course not found");
         }
 
-        List<Lesson> lessons = lessonRepository.findByCourseOrderByOrderAsc(course.getId());
+        List<Lesson> lessons = lessonStore.findByCourseOrderByOrderAsc(course.getId());
         return courseMapper.toCourseView(course, findOwner(course.getOwner()), lessons);
     }
 
@@ -93,13 +102,22 @@ public class CourseService {
         course.setReviewNote(request.reviewNote());
         course.setPublishedAt(course.isPublished() ? Instant.now() : null);
 
-        courseRepository.save(course);
+        course = courseStore.save(course);
 
         User owner = findOwner(course.getOwner());
         if (owner.getOwnedCourseIds() != null && !owner.getOwnedCourseIds().contains(course.getId())) {
             owner.getOwnedCourseIds().add(course.getId());
-            userRepository.save(owner);
+            userStore.save(owner);
         }
+        notificationEventsService.emitCourseStatusChanged(
+            authUser,
+            course.getId(),
+            course.getSlug(),
+            course.getTitle(),
+            course.isPublished(),
+            course.getOwner(),
+            "created"
+        );
 
         return courseMapper.toCourseView(course, owner, List.of());
     }
@@ -137,6 +155,7 @@ public class CourseService {
         if (request.benefits() != null) course.setBenefits(request.benefits());
 
         boolean teacherSubmittingForReview = authUser.role() == UserRole.TEACHER;
+        String transition = "updated";
         boolean nextPublished = request.isPublished() != null ? request.isPublished() : course.isPublished();
         CourseReviewStatus nextReviewStatus = authUser.role() == UserRole.ADMIN
             ? request.reviewStatus() != null ? request.reviewStatus() : (nextPublished ? CourseReviewStatus.APPROVED : course.getReviewStatus())
@@ -158,30 +177,48 @@ public class CourseService {
 
         if (teacherSubmittingForReview) {
             course.setPublishedAt(null);
+            transition = "updated";
         } else if (course.isPublished()) {
             course.setPublishedAt(previousPublishedState ? course.getPublishedAt() : Instant.now());
+            transition = previousPublishedState ? "updated" : "published";
         } else {
             course.setPublishedAt(null);
+            transition = previousPublishedState ? "draft" : "updated";
         }
 
-        courseRepository.save(course);
-        return courseMapper.toCourseView(course, findOwner(course.getOwner()), lessonRepository.findByCourseOrderByOrderAsc(course.getId()));
+        if (nextReviewStatus == CourseReviewStatus.CHANGES_REQUESTED) {
+            transition = "changes_requested";
+        } else if (nextReviewStatus == CourseReviewStatus.REJECTED) {
+            transition = "rejected";
+        }
+
+        course = courseStore.save(course);
+        notificationEventsService.emitCourseStatusChanged(
+            authUser,
+            course.getId(),
+            course.getSlug(),
+            course.getTitle(),
+            course.isPublished(),
+            course.getOwner(),
+            transition
+        );
+        return courseMapper.toCourseView(course, findOwner(course.getOwner()), lessonStore.findByCourseOrderByOrderAsc(course.getId()));
     }
 
     public void deleteCourse(String courseId, AuthUser authUser) {
         Course course = ensureManagePermission(courseId, authUser);
-        lessonRepository.deleteByCourse(course.getId());
-        courseRepository.delete(course);
+        lessonStore.deleteByCourse(course.getId());
+        courseStore.delete(course);
     }
 
     public Map<String, Object> createLesson(String courseId, CreateLessonRequest request, AuthUser authUser) {
         Course course = ensureManagePermission(courseId, authUser);
         String slug = SlugUtils.toSlug(request.slug() != null && !request.slug().isBlank() ? request.slug() : request.title());
 
-        if (lessonRepository.existsByCourseAndSlug(courseId, slug)) {
+        if (lessonStore.existsByCourseAndSlug(courseId, slug)) {
             throw new ApiException(HttpStatus.CONFLICT, "Lesson slug already exists in this course");
         }
-        if (lessonRepository.existsByCourseAndOrder(courseId, request.order())) {
+        if (lessonStore.existsByCourseAndOrder(courseId, request.order())) {
             throw new ApiException(HttpStatus.CONFLICT, "Lesson order already exists in this course");
         }
 
@@ -195,26 +232,26 @@ public class CourseService {
         lesson.setOrder(request.order());
         lesson.setPreview(Boolean.TRUE.equals(request.isPreview()));
         lesson.setMaterials(request.materials() == null ? List.of() : request.materials());
-        lessonRepository.save(lesson);
+        lesson = lessonStore.save(lesson);
 
         syncCourseLessonStats(course);
         return courseMapper.toLessonView(lesson);
     }
 
     public Map<String, Object> updateLesson(String lessonId, UpdateLessonRequest request, AuthUser authUser) {
-        Lesson lesson = lessonRepository.findById(lessonId)
+        Lesson lesson = lessonStore.findById(lessonId)
             .orElseThrow(() -> new ApiException(HttpStatus.NOT_FOUND, "Lesson not found"));
         Course course = ensureManagePermission(lesson.getCourse(), authUser);
 
         String nextSlug = request.slug() != null ? SlugUtils.toSlug(request.slug()) : request.title() != null ? SlugUtils.toSlug(request.title()) : null;
         if (nextSlug != null && !nextSlug.equals(lesson.getSlug())) {
-            if (lessonRepository.existsByCourseAndSlugAndIdNot(lesson.getCourse(), nextSlug, lessonId)) {
+            if (lessonStore.existsByCourseAndSlugAndIdNot(lesson.getCourse(), nextSlug, lessonId)) {
                 throw new ApiException(HttpStatus.CONFLICT, "Lesson slug already exists in this course");
             }
             lesson.setSlug(nextSlug);
         }
         if (request.order() != null && request.order() != lesson.getOrder()
-            && lessonRepository.existsByCourseAndOrderAndIdNot(lesson.getCourse(), request.order(), lessonId)) {
+            && lessonStore.existsByCourseAndOrderAndIdNot(lesson.getCourse(), request.order(), lessonId)) {
             throw new ApiException(HttpStatus.CONFLICT, "Lesson order already exists in this course");
         }
 
@@ -226,21 +263,21 @@ public class CourseService {
         if (request.isPreview() != null) lesson.setPreview(request.isPreview());
         if (request.materials() != null) lesson.setMaterials(request.materials());
 
-        lessonRepository.save(lesson);
+        lesson = lessonStore.save(lesson);
         syncCourseLessonStats(course);
         return courseMapper.toLessonView(lesson);
     }
 
     public void deleteLesson(String lessonId, AuthUser authUser) {
-        Lesson lesson = lessonRepository.findById(lessonId)
+        Lesson lesson = lessonStore.findById(lessonId)
             .orElseThrow(() -> new ApiException(HttpStatus.NOT_FOUND, "Lesson not found"));
         Course course = ensureManagePermission(lesson.getCourse(), authUser);
-        lessonRepository.delete(lesson);
+        lessonStore.delete(lesson);
         syncCourseLessonStats(course);
     }
 
     private Course ensureManagePermission(String courseId, AuthUser authUser) {
-        Course course = courseRepository.findById(courseId)
+        Course course = courseStore.findById(courseId)
             .orElseThrow(() -> new ApiException(HttpStatus.NOT_FOUND, "Course not found"));
 
         if (!canManageCourse(authUser, course)) {
@@ -254,7 +291,7 @@ public class CourseService {
     }
 
     private void ensureUniqueCourseSlug(String slug, String excludeCourseId) {
-        courseRepository.findBySlug(slug).ifPresent(existing -> {
+        courseStore.findBySlug(slug).ifPresent(existing -> {
             if (excludeCourseId == null || !existing.getId().equals(excludeCourseId)) {
                 throw new ApiException(HttpStatus.CONFLICT, "Course slug already exists");
             }
@@ -262,7 +299,7 @@ public class CourseService {
     }
 
     private void syncCourseLessonStats(Course course) {
-        List<Lesson> lessons = lessonRepository.findByCourseOrderByOrderAsc(course.getId());
+        List<Lesson> lessons = lessonStore.findByCourseOrderByOrderAsc(course.getId());
         int totalDuration = lessons.stream()
             .map(Lesson::getVideo)
             .filter(video -> video != null && video.getDuration() != null)
@@ -271,11 +308,11 @@ public class CourseService {
 
         course.setLessonCount(lessons.size());
         course.setTotalDuration(totalDuration);
-        courseRepository.save(course);
+        courseStore.save(course);
     }
 
     private User findOwner(String ownerId) {
-        return userRepository.findById(ownerId)
+        return userStore.findById(ownerId)
             .orElseThrow(() -> new ApiException(HttpStatus.NOT_FOUND, "Course owner not found"));
     }
 }

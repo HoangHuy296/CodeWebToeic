@@ -2,18 +2,19 @@ package com.ivyts.backend.service;
 
 import com.ivyts.backend.common.exception.ApiException;
 import com.ivyts.backend.domain.course.Course;
-import com.ivyts.backend.domain.course.CourseRepository;
 import com.ivyts.backend.domain.enrollment.Enrollment;
-import com.ivyts.backend.domain.enrollment.EnrollmentRepository;
 import com.ivyts.backend.domain.enrollment.EnrollmentStatus;
 import com.ivyts.backend.domain.message.Message;
-import com.ivyts.backend.domain.message.MessageRepository;
 import com.ivyts.backend.domain.message.MessageStatus;
 import com.ivyts.backend.domain.message.MessageType;
 import com.ivyts.backend.domain.user.User;
-import com.ivyts.backend.domain.user.UserRepository;
 import com.ivyts.backend.domain.user.UserRole;
+import com.ivyts.backend.notification.NotificationEventsService;
 import com.ivyts.backend.security.AuthUser;
+import com.ivyts.backend.service.coursestore.CourseStore;
+import com.ivyts.backend.service.enrollmentstore.EnrollmentStore;
+import com.ivyts.backend.service.messagestore.MessageStore;
+import com.ivyts.backend.service.userstore.UserStore;
 import com.ivyts.backend.web.message.MessageMapper;
 import com.ivyts.backend.web.message.dto.CreateContactMessageRequest;
 import com.ivyts.backend.web.message.dto.CreateInternalMessageRequest;
@@ -30,28 +31,31 @@ import org.springframework.stereotype.Service;
 @Service
 public class MessageService {
 
-    private final MessageRepository messageRepository;
-    private final UserRepository userRepository;
-    private final CourseRepository courseRepository;
-    private final EnrollmentRepository enrollmentRepository;
+    private final MessageStore messageStore;
+    private final UserStore userStore;
+    private final CourseStore courseStore;
+    private final EnrollmentStore enrollmentStore;
     private final MessageMapper mapper;
+    private final NotificationEventsService notificationEventsService;
 
     public MessageService(
-        MessageRepository messageRepository,
-        UserRepository userRepository,
-        CourseRepository courseRepository,
-        EnrollmentRepository enrollmentRepository,
-        MessageMapper mapper
+        MessageStore messageStore,
+        UserStore userStore,
+        CourseStore courseStore,
+        EnrollmentStore enrollmentStore,
+        MessageMapper mapper,
+        NotificationEventsService notificationEventsService
     ) {
-        this.messageRepository = messageRepository;
-        this.userRepository = userRepository;
-        this.courseRepository = courseRepository;
-        this.enrollmentRepository = enrollmentRepository;
+        this.messageStore = messageStore;
+        this.userStore = userStore;
+        this.courseStore = courseStore;
+        this.enrollmentStore = enrollmentStore;
         this.mapper = mapper;
+        this.notificationEventsService = notificationEventsService;
     }
 
     public List<Map<String, Object>> listMessages(AuthUser authUser) {
-        return messageRepository.findAll().stream()
+        return messageStore.findAll().stream()
             .filter(message -> canViewMessage(authUser, message))
             .sorted(Comparator.comparing(Message::getCreatedAt, Comparator.nullsLast(Comparator.reverseOrder())))
             .map(this::toMessageView)
@@ -68,8 +72,7 @@ public class MessageService {
         message.setSummary(buildSummary(request.content()));
         message.setMessageType(MessageType.CONTACT);
         message.setStatus(MessageStatus.UNREAD);
-        messageRepository.save(message);
-        return toMessageView(message);
+        return toMessageView(messageStore.save(message));
     }
 
     public Map<String, Object> createInternalMessage(CreateInternalMessageRequest request, AuthUser authUser) {
@@ -90,13 +93,20 @@ public class MessageService {
         message.setRecipientUser(recipient.getId());
         message.setSenderUser(sender.getId());
         message.setAssignedTo(sender.getId());
-        messageRepository.save(message);
-        return toMessageView(message);
+        Message savedMessage = messageStore.save(message);
+        notificationEventsService.emitInternalMessageReceived(
+            authUser,
+            recipient.getId(),
+            recipient.getRole().name().toLowerCase(),
+            recipient.getFullName(),
+            savedMessage.getSubject()
+        );
+        return toMessageView(savedMessage);
     }
 
     public List<Map<String, Object>> listRecipients(AuthUser authUser) {
         if (authUser.role() == UserRole.ADMIN) {
-            return userRepository.findAll().stream()
+            return userStore.findAll().stream()
                 .filter(user -> user.isActive() && user.getRole() != UserRole.ADMIN)
                 .sorted(Comparator.comparing((User user) -> user.getRole().name()).thenComparing(User::getFullName))
                 .map(mapper::toRecipientView)
@@ -104,11 +114,11 @@ public class MessageService {
         }
 
         if (authUser.role() == UserRole.TEACHER) {
-            List<User> admins = userRepository.findAll().stream()
+            List<User> admins = userStore.findAll().stream()
                 .filter(user -> user.isActive() && user.getRole() == UserRole.ADMIN)
                 .toList();
-            List<String> ownedCourseIds = courseRepository.findByOwner(authUser.userId()).stream().map(Course::getId).toList();
-            LinkedHashSet<String> studentIds = enrollmentRepository.findAll().stream()
+            List<String> ownedCourseIds = courseStore.findByOwner(authUser.userId()).stream().map(Course::getId).toList();
+            LinkedHashSet<String> studentIds = enrollmentStore.findAll().stream()
                 .filter(enrollment -> ownedCourseIds.contains(enrollment.getCourse()))
                 .filter(enrollment -> enrollment.getStatus() == EnrollmentStatus.ACTIVE || enrollment.getStatus() == EnrollmentStatus.COMPLETED)
                 .map(Enrollment::getStudent)
@@ -121,14 +131,14 @@ public class MessageService {
         }
 
         if (authUser.role() == UserRole.STUDENT) {
-            List<User> admins = userRepository.findAll().stream()
+            List<User> admins = userStore.findAll().stream()
                 .filter(user -> user.isActive() && user.getRole() == UserRole.ADMIN)
                 .toList();
-            List<String> enrolledCourseIds = enrollmentRepository.findByStudentAndStatusInOrderByCreatedAtDesc(
+            List<String> enrolledCourseIds = enrollmentStore.findByStudentAndStatusInOrderByCreatedAtDesc(
                 authUser.userId(),
                 List.of(EnrollmentStatus.ACTIVE, EnrollmentStatus.COMPLETED)
             ).stream().map(Enrollment::getCourse).distinct().toList();
-            LinkedHashSet<String> teacherIds = courseRepository.findAllById(enrolledCourseIds).stream()
+            LinkedHashSet<String> teacherIds = courseStore.findAllByIds(enrolledCourseIds).stream()
                 .map(Course::getOwner)
                 .collect(java.util.stream.Collectors.toCollection(LinkedHashSet::new));
             List<User> teachers = teacherIds.stream().map(this::findUserOrThrow).filter(User::isActive).toList();
@@ -156,8 +166,7 @@ public class MessageService {
         if (nextStatus == MessageStatus.REPLIED) {
             message.setRepliedAt(Instant.now());
         }
-        messageRepository.save(message);
-        return toMessageView(message);
+        return toMessageView(messageStore.save(message));
     }
 
     private boolean canViewMessage(AuthUser authUser, Message message) {
@@ -177,8 +186,8 @@ public class MessageService {
                 throw new ApiException(HttpStatus.FORBIDDEN, "Teachers can only message admins or their students");
             }
             if (recipient.getRole() == UserRole.STUDENT) {
-                List<String> ownedCourseIds = courseRepository.findByOwner(sender.getId()).stream().map(Course::getId).toList();
-                boolean hasSharedCourse = enrollmentRepository.findAll().stream()
+                List<String> ownedCourseIds = courseStore.findByOwner(sender.getId()).stream().map(Course::getId).toList();
+                boolean hasSharedCourse = enrollmentStore.findAll().stream()
                     .anyMatch(enrollment -> enrollment.getStudent().equals(recipient.getId())
                         && ownedCourseIds.contains(enrollment.getCourse())
                         && (enrollment.getStatus() == EnrollmentStatus.ACTIVE || enrollment.getStatus() == EnrollmentStatus.COMPLETED));
@@ -194,11 +203,11 @@ public class MessageService {
                 throw new ApiException(HttpStatus.FORBIDDEN, "Students can only message admins or teachers of enrolled courses");
             }
             if (recipient.getRole() == UserRole.TEACHER) {
-                List<String> enrolledCourseIds = enrollmentRepository.findByStudentAndStatusInOrderByCreatedAtDesc(
+                List<String> enrolledCourseIds = enrollmentStore.findByStudentAndStatusInOrderByCreatedAtDesc(
                     sender.getId(),
                     List.of(EnrollmentStatus.ACTIVE, EnrollmentStatus.COMPLETED)
                 ).stream().map(Enrollment::getCourse).toList();
-                boolean teacherOwnsEnrolledCourse = courseRepository.findAllById(enrolledCourseIds).stream()
+                boolean teacherOwnsEnrolledCourse = courseStore.findAllByIds(enrolledCourseIds).stream()
                     .anyMatch(course -> course.getOwner().equals(recipient.getId()));
                 if (!teacherOwnsEnrolledCourse) {
                     throw new ApiException(HttpStatus.FORBIDDEN, "Student can only message teachers who own enrolled courses");
@@ -208,19 +217,19 @@ public class MessageService {
     }
 
     private Message findMessageOrThrow(String messageId) {
-        return messageRepository.findById(messageId)
+        return messageStore.findById(messageId)
             .orElseThrow(() -> new ApiException(HttpStatus.NOT_FOUND, "Message not found"));
     }
 
     private User findUserOrThrow(String userId) {
-        return userRepository.findById(userId)
+        return userStore.findById(userId)
             .orElseThrow(() -> new ApiException(HttpStatus.NOT_FOUND, "User not found"));
     }
 
     private Map<String, Object> toMessageView(Message message) {
-        User assignedTo = message.getAssignedTo() != null ? userRepository.findById(message.getAssignedTo()).orElse(null) : null;
-        User recipient = message.getRecipientUser() != null ? userRepository.findById(message.getRecipientUser()).orElse(null) : null;
-        User sender = message.getSenderUser() != null ? userRepository.findById(message.getSenderUser()).orElse(null) : null;
+        User assignedTo = message.getAssignedTo() != null ? userStore.findById(message.getAssignedTo()).orElse(null) : null;
+        User recipient = message.getRecipientUser() != null ? userStore.findById(message.getRecipientUser()).orElse(null) : null;
+        User sender = message.getSenderUser() != null ? userStore.findById(message.getSenderUser()).orElse(null) : null;
         return mapper.toMessageView(message, assignedTo, recipient, sender);
     }
 

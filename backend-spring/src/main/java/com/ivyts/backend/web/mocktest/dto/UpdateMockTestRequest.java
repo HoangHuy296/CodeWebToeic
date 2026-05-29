@@ -14,6 +14,9 @@ public record UpdateMockTestRequest(
     List<String> instructions,
     Boolean isFeatured,
     List<String> assignedCourseIds,
+    String catalogKind,
+    String exerciseTopicSlug,
+    String exercisePackSlug,
     List<@Valid QuestionRequest> questions
 ) {
 }

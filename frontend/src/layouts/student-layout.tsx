@@ -5,6 +5,7 @@ const studentNav = [
   { label: 'Ho so', to: '/student/profile' },
   { label: 'Tin nhan', to: '/student/messages' },
   { label: 'Khoa hoc cua toi', to: '/student/my-courses' },
+  { label: 'Ket qua bai lam', to: '/student/results' },
   { label: 'Luyen thi', to: '/student/mock-tests' },
 ];
 

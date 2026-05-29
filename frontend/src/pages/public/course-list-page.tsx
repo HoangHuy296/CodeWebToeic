@@ -1,8 +1,9 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useAuth } from '../../app/providers/auth-provider';
 import { CourseCard } from '../../components/common/course-card';
 import { PageHero } from '../../components/common/page-hero';
+import { PaginationControls } from '../../components/common/pagination-controls';
 import { QueryErrorState, QueryLoadingState } from '../../components/common/query-state';
 import { courseApi } from '../../lib/course-api';
 import { getApiErrorMessage } from '../../lib/api';
@@ -10,9 +11,11 @@ import { enrollmentApi, enrollmentQueryKeys } from '../../lib/enrollment-api';
 
 export function CourseListPage() {
   const { role, isAuthenticated } = useAuth();
+  const pageSize = 6;
   const [activeCategory, setActiveCategory] = useState<string>('all');
   const [searchTerm, setSearchTerm] = useState('');
   const [activeLevel, setActiveLevel] = useState<'all' | 'beginner' | 'intermediate' | 'advanced'>('all');
+  const [currentPage, setCurrentPage] = useState(1);
   const coursesQuery = useQuery({
     queryKey: ['courses', 'public-list'],
     queryFn: courseApi.list,
@@ -60,6 +63,23 @@ export function CourseListPage() {
       return matchesCategory && matchesLevel && matchesSearch;
     });
   }, [activeCategory, activeLevel, coursesQuery.data, searchTerm]);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [activeCategory, activeLevel, searchTerm]);
+
+  const totalPages = Math.max(1, Math.ceil(filteredCourses.length / pageSize));
+  const paginatedCourses = useMemo(
+    () => filteredCourses.slice((currentPage - 1) * pageSize, currentPage * pageSize),
+    [currentPage, filteredCourses],
+  );
+
+  useEffect(() => {
+    if (currentPage > totalPages) {
+      setCurrentPage(totalPages);
+    }
+  }, [currentPage, totalPages]);
+
   const enrolledCourseIds = useMemo(
     () => new Set((enrollmentsQuery.data ?? []).map((enrollment) => enrollment.course.id)),
     [enrollmentsQuery.data],
@@ -184,10 +204,21 @@ export function CourseListPage() {
 
       {coursesQuery.data ? (
         <section className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-          {filteredCourses.map((course) => (
+          {paginatedCourses.map((course) => (
             <CourseCard key={course.id} course={course} isEnrolled={enrolledCourseIds.has(course.id)} />
           ))}
         </section>
+      ) : null}
+
+      {coursesQuery.data && filteredCourses.length > 0 ? (
+        <PaginationControls
+          currentPage={currentPage}
+          totalPages={totalPages}
+          pageSize={pageSize}
+          totalItems={filteredCourses.length}
+          itemLabel="khoa hoc"
+          onPageChange={setCurrentPage}
+        />
       ) : null}
 
       {coursesQuery.data && filteredCourses.length === 0 ? (

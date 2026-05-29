@@ -143,7 +143,10 @@ export function AdminUsersPage() {
                     <span className="rounded-full bg-slate-200 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-700">
                       {user.role}
                     </span>
-                    <p className="mt-2 text-xs text-slate-500">{user.ownedCourseCount} khoa hoc so huu</p>
+                    <p className="mt-2 text-xs text-slate-500">
+                      {user.ownedCourseCount}{' '}
+                      {user.role === 'student' ? 'khoa hoc da dang ky' : 'khoa hoc so huu'}
+                    </p>
                   </div>
                 </div>
                 <div className="mt-3 flex items-center justify-between gap-3 text-xs text-slate-500">

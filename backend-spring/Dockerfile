@@ -16,13 +16,12 @@ RUN mvn -B clean package -DskipTests
 
 FROM eclipse-temurin:21-jre-alpine AS production
 WORKDIR /app
-ENV SPRING_PROFILES_ACTIVE=default
 
 # Copy the fat jar produced by Spring Boot.
 COPY --from=build /app/target/backend-spring-0.1.0.jar ./app.jar
 
 EXPOSE 5000
-CMD ["java", "-jar", "app.jar"]
+CMD ["java", "-jar", "/app/app.jar"]
 
 FROM deps AS development
 WORKDIR /app

@@ -16,9 +16,9 @@ interface DashboardShellProps {
 export function DashboardShell({ title, accent, navItems }: DashboardShellProps) {
   const location = useLocation();
   const activeNavClasses =
-    'bg-teal-50 text-teal-800 ring-1 ring-teal-100 shadow-[0_12px_28px_rgba(13,148,136,0.10)]';
+    'bg-cyan-50 text-cyan-900 ring-1 ring-cyan-100 shadow-[0_12px_28px_rgba(37,99,235,0.10)]';
   const activeChildNavClasses =
-    'bg-teal-50 text-teal-800 ring-1 ring-teal-100 shadow-[0_10px_22px_rgba(13,148,136,0.10)]';
+    'bg-cyan-50 text-cyan-900 ring-1 ring-cyan-100 shadow-[0_10px_22px_rgba(37,99,235,0.10)]';
   const inactiveNavClasses = 'text-slate-600 hover:bg-slate-50 hover:text-slate-950';
   const initialExpanded = useMemo(() => {
     const expandedParents = navItems
@@ -73,7 +73,7 @@ export function DashboardShell({ title, accent, navItems }: DashboardShellProps)
                     className={[
                       'inline-flex h-11 w-11 items-center justify-center rounded-2xl border border-stroke text-sm font-black transition',
                       expandedItems.has(item.to) || item.children?.some((child) => location.pathname.startsWith(child.to))
-                        ? 'bg-teal-50 text-teal-800'
+                        ? 'bg-cyan-50 text-cyan-900'
                         : 'bg-white text-slate-700 hover:bg-slate-50',
                     ].join(' ')}
                   >

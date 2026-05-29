@@ -45,21 +45,21 @@ public class AdminController {
 
     @GetMapping("/users")
     public ApiSuccessResponse<?> listUsers(HttpServletRequest request) {
-        return ApiSuccessResponse.of("Admin users fetched successfully", adminService.listUsers(requestAuthService.requireUser(request)));
+        return ApiSuccessResponse.of("Users fetched successfully", adminService.listUsers(requestAuthService.requireUser(request)));
     }
 
     @GetMapping("/users/{id}")
     public ApiSuccessResponse<?> getUser(@PathVariable String id, HttpServletRequest request) {
-        return ApiSuccessResponse.of("Admin user fetched successfully", adminService.getUser(id, requestAuthService.requireUser(request)));
+        return ApiSuccessResponse.of("User fetched successfully", adminService.getUser(id, requestAuthService.requireUser(request)));
     }
 
     @PatchMapping("/users/{id}")
     public ApiSuccessResponse<?> updateUser(@PathVariable String id, HttpServletRequest request, @Valid @RequestBody UpdateAdminUserRequest body) {
-        return ApiSuccessResponse.of("Admin user updated successfully", adminService.updateUser(id, body, requestAuthService.requireUser(request)));
+        return ApiSuccessResponse.of("User updated successfully", adminService.updateUser(id, body, requestAuthService.requireUser(request)));
     }
 
     @DeleteMapping("/users/{id}")
     public ApiSuccessResponse<?> deactivateUser(@PathVariable String id, HttpServletRequest request) {
-        return ApiSuccessResponse.of("Admin user deactivated successfully", adminService.deactivateUser(id, requestAuthService.requireUser(request)));
+        return ApiSuccessResponse.of("User deactivated successfully", adminService.deactivateUser(id, requestAuthService.requireUser(request)));
     }
 }

@@ -4,40 +4,24 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.mongodb.core.index.CompoundIndex;
-import org.springframework.data.mongodb.core.index.CompoundIndexes;
-import org.springframework.data.mongodb.core.index.Indexed;
-import org.springframework.data.mongodb.core.mapping.Document;
-
-@Document("mocktests")
-@CompoundIndexes({
-    @CompoundIndex(name = "mock_test_status_level_type_idx", def = "{'status': 1, 'level': 1, 'type': 1}")
-})
 public class MockTest {
 
-    @Id
     private String id;
     private String title;
     private String description;
-    @Indexed
     private String type = "mini-test";
-    @Indexed
     private String level = "beginner";
     private int durationMinutes;
     private int questionCount;
-    @Indexed
     private String status = "draft";
     private List<String> instructions = new ArrayList<>();
-    @Indexed
     private String createdBy;
     private boolean isFeatured;
     private List<String> assignedCourses = new ArrayList<>();
-    @CreatedDate
+    private String catalogKind = "mock-test";
+    private String exerciseTopicSlug;
+    private String exercisePackSlug;
     private Instant createdAt;
-    @LastModifiedDate
     private Instant updatedAt;
 
     public String getId() { return id; }
@@ -64,6 +48,12 @@ public class MockTest {
     public void setFeatured(boolean featured) { isFeatured = featured; }
     public List<String> getAssignedCourses() { return assignedCourses; }
     public void setAssignedCourses(List<String> assignedCourses) { this.assignedCourses = assignedCourses; }
+    public String getCatalogKind() { return catalogKind; }
+    public void setCatalogKind(String catalogKind) { this.catalogKind = catalogKind; }
+    public String getExerciseTopicSlug() { return exerciseTopicSlug; }
+    public void setExerciseTopicSlug(String exerciseTopicSlug) { this.exerciseTopicSlug = exerciseTopicSlug; }
+    public String getExercisePackSlug() { return exercisePackSlug; }
+    public void setExercisePackSlug(String exercisePackSlug) { this.exercisePackSlug = exercisePackSlug; }
     public Instant getCreatedAt() { return createdAt; }
     public void setCreatedAt(Instant createdAt) { this.createdAt = createdAt; }
     public Instant getUpdatedAt() { return updatedAt; }

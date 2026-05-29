@@ -9,6 +9,8 @@ import com.ivyts.backend.web.course.dto.UpdateCourseRequest;
 import com.ivyts.backend.web.course.dto.UpdateLessonRequest;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
+import java.util.Map;
+import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @Validated
@@ -48,6 +51,7 @@ public class CourseController {
     }
 
     @PostMapping("/courses")
+    @ResponseStatus(HttpStatus.CREATED)
     public ApiSuccessResponse<?> createCourse(HttpServletRequest request, @Valid @RequestBody CreateCourseRequest body) {
         return ApiSuccessResponse.of("Course created successfully", courseService.createCourse(body, requestAuthService.requireUser(request)));
     }
@@ -60,10 +64,11 @@ public class CourseController {
     @DeleteMapping("/courses/{id}")
     public ApiSuccessResponse<?> deleteCourse(@PathVariable String id, HttpServletRequest request) {
         courseService.deleteCourse(id, requestAuthService.requireUser(request));
-        return ApiSuccessResponse.of("Course deleted successfully", null);
+        return ApiSuccessResponse.of("Course deleted successfully", Map.of());
     }
 
     @PostMapping("/courses/{courseId}/lessons")
+    @ResponseStatus(HttpStatus.CREATED)
     public ApiSuccessResponse<?> createLesson(@PathVariable String courseId, HttpServletRequest request, @Valid @RequestBody CreateLessonRequest body) {
         return ApiSuccessResponse.of("Lesson created successfully", courseService.createLesson(courseId, body, requestAuthService.requireUser(request)));
     }
@@ -76,6 +81,6 @@ public class CourseController {
     @DeleteMapping("/lessons/{id}")
     public ApiSuccessResponse<?> deleteLesson(@PathVariable String id, HttpServletRequest request) {
         courseService.deleteLesson(id, requestAuthService.requireUser(request));
-        return ApiSuccessResponse.of("Lesson deleted successfully", null);
+        return ApiSuccessResponse.of("Lesson deleted successfully", Map.of());
     }
 }

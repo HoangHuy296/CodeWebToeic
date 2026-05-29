@@ -4,6 +4,7 @@ import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { useAuth } from '../../app/providers/auth-provider';
 import { QueryErrorState, QueryLoadingState } from '../../components/common/query-state';
 import { getApiErrorMessage } from '../../lib/api';
+import { exerciseSessionApi } from '../../lib/exercise-session-api';
 import { mockTestApi } from '../../lib/mock-test-api';
 import type { MockTestSubmissionResult } from '../../types/mock-test';
 
@@ -20,6 +21,7 @@ export function StudentMockTestSessionPage() {
   const { role } = useAuth();
   const id = params.id ?? params.slug ?? '';
   const navigate = useNavigate();
+  const isExerciseSession = searchParams.get('catalog') === 'exercise';
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedAnswers, setSelectedAnswers] = useState<Record<string, string>>({});
   const [timeLeftSeconds, setTimeLeftSeconds] = useState<number | null>(null);
@@ -30,14 +32,14 @@ export function StudentMockTestSessionPage() {
   const mockTestQuery = useQuery({
     queryKey: ['student', 'mock-test-session', id],
     enabled: Boolean(id),
-    queryFn: () => mockTestApi.detail(id),
+    queryFn: () => (isExerciseSession ? exerciseSessionApi.detail(id) : mockTestApi.detail(id)),
   });
 
   const submitMutation = useMutation({
     mutationFn: (payload: {
       durationSeconds: number;
       answers: Array<{ questionId: string; selectedOption: string }>;
-    }) => mockTestApi.submit(id, payload),
+    }) => (isExerciseSession ? exerciseSessionApi.submit(id, payload) : mockTestApi.submit(id, payload)),
     onSuccess: (data) => {
       setResult(data);
     },
@@ -50,8 +52,8 @@ export function StudentMockTestSessionPage() {
     () => Object.values(selectedAnswers).filter((value) => value.trim().length > 0).length,
     [selectedAnswers],
   );
-  const backPath = role === 'teacher' ? '/mock-test' : searchParams.get('from') === 'public' ? '/mock-test' : '/student/mock-tests';
-  const workspaceEyebrow = role === 'teacher' ? 'teacher mock test preview' : 'student mock test session';
+  const backPath = role === 'teacher' ? (isExerciseSession ? '/exercises' : '/mock-test') : searchParams.get('from') === 'public' ? (isExerciseSession ? '/exercises' : '/mock-test') : '/student/mock-tests';
+  const workspaceEyebrow = role === 'teacher' ? (isExerciseSession ? 'teacher exercise preview' : 'teacher mock test preview') : isExerciseSession ? 'student exercise session' : 'student mock test session';
 
   useEffect(() => {
     if (!mockTestQuery.data || hasStartedRef.current) {

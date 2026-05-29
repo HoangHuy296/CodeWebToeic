@@ -5,6 +5,9 @@ export const postApi = {
   list() {
     return unwrapResponse<BlogPost[]>(api.get('/posts'));
   },
+  detailBySlug(slug: string) {
+    return unwrapResponse<BlogPost>(api.get(`/posts/${slug}`));
+  },
   create(payload: PostPayload) {
     return unwrapResponse<BlogPost>(api.post('/posts', payload));
   },

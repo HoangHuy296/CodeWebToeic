@@ -2,15 +2,15 @@ package com.ivyts.backend.service;
 
 import com.ivyts.backend.common.exception.ApiException;
 import com.ivyts.backend.domain.course.Course;
-import com.ivyts.backend.domain.course.CourseRepository;
 import com.ivyts.backend.domain.enrollment.Enrollment;
-import com.ivyts.backend.domain.enrollment.EnrollmentRepository;
 import com.ivyts.backend.domain.lesson.Lesson;
-import com.ivyts.backend.domain.lesson.LessonRepository;
 import com.ivyts.backend.domain.user.User;
-import com.ivyts.backend.domain.user.UserRepository;
 import com.ivyts.backend.domain.user.UserRole;
 import com.ivyts.backend.security.AuthUser;
+import com.ivyts.backend.service.coursestore.CourseStore;
+import com.ivyts.backend.service.coursestore.LessonStore;
+import com.ivyts.backend.service.enrollmentstore.EnrollmentStore;
+import com.ivyts.backend.service.userstore.UserStore;
 import com.ivyts.backend.web.course.CourseMapper;
 import com.ivyts.backend.web.enrollment.EnrollmentMapper;
 import java.util.LinkedHashMap;
@@ -22,25 +22,25 @@ import org.springframework.stereotype.Service;
 @Service
 public class LearningService {
 
-    private final CourseRepository courseRepository;
-    private final LessonRepository lessonRepository;
-    private final EnrollmentRepository enrollmentRepository;
-    private final UserRepository userRepository;
+    private final CourseStore courseStore;
+    private final LessonStore lessonStore;
+    private final EnrollmentStore enrollmentStore;
+    private final UserStore userStore;
     private final CourseMapper courseMapper;
     private final EnrollmentMapper enrollmentMapper;
 
     public LearningService(
-        CourseRepository courseRepository,
-        LessonRepository lessonRepository,
-        EnrollmentRepository enrollmentRepository,
-        UserRepository userRepository,
+        CourseStore courseStore,
+        LessonStore lessonStore,
+        EnrollmentStore enrollmentStore,
+        UserStore userStore,
         CourseMapper courseMapper,
         EnrollmentMapper enrollmentMapper
     ) {
-        this.courseRepository = courseRepository;
-        this.lessonRepository = lessonRepository;
-        this.enrollmentRepository = enrollmentRepository;
-        this.userRepository = userRepository;
+        this.courseStore = courseStore;
+        this.lessonStore = lessonStore;
+        this.enrollmentStore = enrollmentStore;
+        this.userStore = userStore;
         this.courseMapper = courseMapper;
         this.enrollmentMapper = enrollmentMapper;
     }
@@ -50,16 +50,16 @@ public class LearningService {
             throw new ApiException(HttpStatus.FORBIDDEN, "Only students can access learning data");
         }
 
-        Course course = courseRepository.findById(courseId)
+        Course course = courseStore.findById(courseId)
             .orElseThrow(() -> new ApiException(HttpStatus.NOT_FOUND, "Course not found"));
-        Enrollment enrollment = enrollmentRepository.findByCourseAndStudent(courseId, authUser.userId())
+        Enrollment enrollment = enrollmentStore.findByCourseAndStudent(courseId, authUser.userId())
             .orElseThrow(() -> new ApiException(HttpStatus.FORBIDDEN, "You must enroll in this course before accessing learning data"));
 
-        List<Lesson> lessons = lessonRepository.findByCourseOrderByOrderAsc(courseId);
+        List<Lesson> lessons = lessonStore.findByCourseOrderByOrderAsc(courseId);
         Lesson currentLesson = lessons.stream()
             .filter(lesson -> lesson.getId().equals(enrollment.getLastLessonId()))
             .findFirst()
-            .orElse(lessons.isEmpty() ? null : lessons.getFirst());
+            .orElse(lessons.isEmpty() ? null : lessons.get(0));
         Lesson nextLesson = currentLesson == null
             ? null
             : lessons.stream().filter(lesson -> lesson.getOrder() == currentLesson.getOrder() + 1).findFirst().orElse(null);
@@ -77,7 +77,7 @@ public class LearningService {
     }
 
     private User findUserOrThrow(String userId) {
-        return userRepository.findById(userId)
+        return userStore.findById(userId)
             .orElseThrow(() -> new ApiException(HttpStatus.NOT_FOUND, "User not found"));
     }
 }

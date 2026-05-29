@@ -1,5 +1,6 @@
 import {
   createContext,
+  useCallback,
   useContext,
   useEffect,
   useMemo,
@@ -10,6 +11,7 @@ import {
 import { useAuth } from './auth-provider';
 import { resolveWebSocketUrl } from '../../lib/notifications';
 import { getStoredAccessToken } from '../../lib/storage';
+import { notificationApi, type StoredNotification } from '../../lib/notification-api';
 import type {
   AppNotification,
   LocalNotificationInput,
@@ -18,6 +20,7 @@ import type {
 
 interface NotificationRecord extends AppNotification {
   isRead: boolean;
+  readAt?: string | null;
   source: 'websocket' | 'local';
 }
 
@@ -33,6 +36,11 @@ interface NotificationContextValue {
 
 const NotificationContext = createContext<NotificationContextValue | null>(null);
 const MAX_NOTIFICATIONS = 30;
+const NOTIFICATION_STORAGE_PREFIX = 'ivyts.notifications';
+
+function getNotificationStorageKey(userId: string) {
+  return `${NOTIFICATION_STORAGE_PREFIX}:${userId}`;
+}
 
 function prependNotification(
   current: NotificationRecord[],
@@ -40,6 +48,46 @@ function prependNotification(
 ): NotificationRecord[] {
   const deduped = current.filter((item) => item.id !== next.id);
   return [next, ...deduped].slice(0, MAX_NOTIFICATIONS);
+}
+
+function normalizeApiNotifications(items: StoredNotification[]): NotificationRecord[] {
+  return items.map((item) => ({
+    ...item,
+    source: 'websocket',
+  }));
+}
+
+function normalizeStoredNotifications(value: string | null): NotificationRecord[] {
+  if (!value) {
+    return [];
+  }
+
+  try {
+    const parsed = JSON.parse(value) as unknown;
+
+    if (!Array.isArray(parsed)) {
+      return [];
+    }
+
+    return parsed
+      .filter((item): item is NotificationRecord => {
+        if (!item || typeof item !== 'object') {
+          return false;
+        }
+
+        const candidate = item as Partial<NotificationRecord>;
+        return (
+          typeof candidate.id === 'string' &&
+          typeof candidate.title === 'string' &&
+          typeof candidate.message === 'string' &&
+          typeof candidate.createdAt === 'string' &&
+          typeof candidate.isRead === 'boolean'
+        );
+      })
+      .slice(0, MAX_NOTIFICATIONS);
+  } catch {
+    return [];
+  }
 }
 
 export function NotificationProvider({ children }: { children: ReactNode }) {
@@ -50,6 +98,61 @@ export function NotificationProvider({ children }: { children: ReactNode }) {
   >('idle');
   const socketRef = useRef<WebSocket | null>(null);
   const reconnectTimerRef = useRef<number | null>(null);
+  const notificationStorageKey = user?.id ? getNotificationStorageKey(user.id) : null;
+
+  const syncNotificationInbox = useCallback(async () => {
+    if (!isAuthenticated || !user) {
+      return;
+    }
+
+    try {
+      const payload = await notificationApi.list();
+      setNotifications(normalizeApiNotifications(payload.items));
+    } catch {
+      // Keep local cache if the inbox sync fails temporarily.
+    }
+  }, [isAuthenticated, user]);
+
+  useEffect(() => {
+    if (!notificationStorageKey) {
+      setNotifications([]);
+      return;
+    }
+
+    setNotifications(normalizeStoredNotifications(window.localStorage.getItem(notificationStorageKey)));
+  }, [notificationStorageKey]);
+
+  useEffect(() => {
+    if (!isAuthenticated || !user) {
+      return;
+    }
+
+    void syncNotificationInbox();
+  }, [isAuthenticated, syncNotificationInbox, user]);
+
+  useEffect(() => {
+    if (!isAuthenticated || !user) {
+      return;
+    }
+
+    const handleVisibilitySync = () => {
+      if (document.visibilityState === 'visible') {
+        void syncNotificationInbox();
+      }
+    };
+
+    const handleWindowFocus = () => {
+      void syncNotificationInbox();
+    };
+
+    window.addEventListener('focus', handleWindowFocus);
+    document.addEventListener('visibilitychange', handleVisibilitySync);
+
+    return () => {
+      window.removeEventListener('focus', handleWindowFocus);
+      document.removeEventListener('visibilitychange', handleVisibilitySync);
+    };
+  }, [isAuthenticated, syncNotificationInbox, user]);
 
   useEffect(() => {
     if (!isAuthenticated || !user) {
@@ -82,6 +185,7 @@ export function NotificationProvider({ children }: { children: ReactNode }) {
       socket.onopen = () => {
         if (!isUnmounted) {
           setConnectionStatus('connected');
+          void syncNotificationInbox();
         }
       };
 
@@ -126,7 +230,15 @@ export function NotificationProvider({ children }: { children: ReactNode }) {
       socketRef.current?.close();
       socketRef.current = null;
     };
-  }, [isAuthenticated, user]);
+  }, [isAuthenticated, syncNotificationInbox, user]);
+
+  useEffect(() => {
+    if (!notificationStorageKey) {
+      return;
+    }
+
+    window.localStorage.setItem(notificationStorageKey, JSON.stringify(notifications.slice(0, MAX_NOTIFICATIONS)));
+  }, [notificationStorageKey, notifications]);
 
   const value = useMemo<NotificationContextValue>(
     () => ({
@@ -150,16 +262,25 @@ export function NotificationProvider({ children }: { children: ReactNode }) {
         );
       },
       markAsRead: (notificationId) => {
+        void notificationApi.markAsRead(notificationId).catch(() => {
+          // Keep optimistic UI state even if the request fails briefly.
+        });
         setNotifications((current) =>
           current.map((item) =>
-            item.id === notificationId ? { ...item, isRead: true } : item,
+            item.id === notificationId ? { ...item, isRead: true, readAt: item.readAt ?? new Date().toISOString() } : item,
           ),
         );
       },
       markAllAsRead: () => {
-        setNotifications((current) => current.map((item) => ({ ...item, isRead: true })));
+        void notificationApi.markAllAsRead().catch(() => {
+          // Keep optimistic UI state even if the request fails briefly.
+        });
+        setNotifications((current) => current.map((item) => ({ ...item, isRead: true, readAt: item.readAt ?? new Date().toISOString() })));
       },
       clearNotifications: () => {
+        void notificationApi.clear().catch(() => {
+          // Keep optimistic UI state even if the request fails briefly.
+        });
         setNotifications([]);
       },
     }),

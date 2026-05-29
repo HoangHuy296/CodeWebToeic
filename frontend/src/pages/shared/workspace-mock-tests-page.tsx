@@ -12,8 +12,8 @@ interface WorkspaceMockTestsPageProps {
 export function WorkspaceMockTestsPage({ workspaceRole }: WorkspaceMockTestsPageProps) {
   const [search, setSearch] = useState('');
   const listQuery = useQuery({
-    queryKey: [workspaceRole, 'mock-tests', 'manage'],
-    queryFn: mockTestApi.manageMine,
+    queryKey: [workspaceRole, 'mock-test', 'manage'],
+    queryFn: () => mockTestApi.manageMine(),
   });
 
   const mockTests = useMemo(() => {
@@ -32,11 +32,11 @@ export function WorkspaceMockTestsPage({ workspaceRole }: WorkspaceMockTestsPage
 
   const createPath = `/${workspaceRole}/mock-tests/create`;
   const editBasePath = `/${workspaceRole}/mock-tests`;
+  const eyebrow = workspaceRole === 'admin' ? 'admin mock tests' : 'teacher mock tests';
   const title =
     workspaceRole === 'admin'
       ? 'Quan ly ngan hang mock tests va dieu huong sang workspace chinh sua rieng.'
       : 'Teacher co the tao mock test rieng, gan vao khoa hoc cua minh va theo doi danh sach de thi.';
-  const eyebrow = workspaceRole === 'admin' ? 'admin mock tests' : 'teacher mock tests';
 
   return (
     <div className="space-y-8">
@@ -46,7 +46,8 @@ export function WorkspaceMockTestsPage({ workspaceRole }: WorkspaceMockTestsPage
             <p className="text-xs font-semibold uppercase tracking-[0.35em] text-teal-700">{eyebrow}</p>
             <h1 className="mt-4 text-4xl font-black tracking-tight text-slate-950">{title}</h1>
             <p className="mt-4 max-w-3xl text-sm leading-8 text-slate-600">
-              Click vao mot bai thi bat ky de mo tab chinh sua rieng. Form tao bai thi moi cung duoc tach thanh mot route rieng de builder co toan bo khung lam viec.
+              Click vao mot bai thi bat ky de mo tab chinh sua rieng. Form tao bai thi moi cung duoc tach thanh mot route
+              rieng de builder co toan bo khung lam viec.
             </p>
           </div>
 
@@ -73,12 +74,16 @@ export function WorkspaceMockTestsPage({ workspaceRole }: WorkspaceMockTestsPage
           <input
             value={search}
             onChange={(event) => setSearch(event.target.value)}
-            placeholder="Tim theo title, level, type, status"
+            placeholder="Tim theo title, level, type, status cua de thi"
             className="w-full rounded-2xl border border-stroke bg-slate-50 px-4 py-3 text-sm outline-none focus:border-teal-400 lg:max-w-sm"
           />
         </div>
 
-        {listQuery.isPending ? <div className="mt-6"><QueryLoadingState title="Dang tai danh sach mock tests..." /></div> : null}
+        {listQuery.isPending ? (
+          <div className="mt-6">
+            <QueryLoadingState title="Dang tai danh sach mock tests..." />
+          </div>
+        ) : null}
         {listQuery.error ? (
           <div className="mt-6">
             <QueryErrorState title="Khong tai duoc mock tests" description={getApiErrorMessage(listQuery.error)} />

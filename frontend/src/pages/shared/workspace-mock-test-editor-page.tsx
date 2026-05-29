@@ -32,6 +32,7 @@ function createQuestionDraft(order: number): MockTestPayload['questions'][number
 
 function createMockTestDraft(): MockTestPayload {
   return {
+    catalogKind: 'mock-test',
     title: '',
     description: '',
     type: 'mini-test',
@@ -66,6 +67,7 @@ function mapQuestion(question: MockTestQuestion, index: number): MockTestPayload
 
 function mapMockTestToDraft(mockTest: MockTest): MockTestPayload {
   return {
+    catalogKind: 'mock-test',
     title: mockTest.title,
     description: mockTest.description,
     type: mockTest.type,
@@ -87,7 +89,7 @@ export function WorkspaceMockTestEditorPage({ workspaceRole, mode }: WorkspaceMo
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
 
   const detailQuery = useQuery({
-    queryKey: [workspaceRole, 'mock-tests', 'detail', slug],
+    queryKey: [workspaceRole, 'mock-test', 'detail', slug],
     queryFn: () => mockTestApi.detail(slug!),
     enabled: mode === 'edit' && Boolean(slug),
   });
@@ -115,7 +117,6 @@ export function WorkspaceMockTestEditorPage({ workspaceRole, mode }: WorkspaceMo
       await Promise.all([
         queryClient.invalidateQueries({ queryKey: [workspaceRole, 'mock-tests'] }),
         queryClient.invalidateQueries({ queryKey: ['admin', 'mock-tests'] }),
-        queryClient.invalidateQueries({ queryKey: ['teacher', 'mock-tests'] }),
         queryClient.invalidateQueries({ queryKey: ['mock-tests'] }),
         queryClient.invalidateQueries({ queryKey: ['admin', 'stats'] }),
       ]);
@@ -130,7 +131,6 @@ export function WorkspaceMockTestEditorPage({ workspaceRole, mode }: WorkspaceMo
       await Promise.all([
         queryClient.invalidateQueries({ queryKey: [workspaceRole, 'mock-tests'] }),
         queryClient.invalidateQueries({ queryKey: ['admin', 'mock-tests'] }),
-        queryClient.invalidateQueries({ queryKey: ['teacher', 'mock-tests'] }),
         queryClient.invalidateQueries({ queryKey: ['mock-tests'] }),
         queryClient.invalidateQueries({ queryKey: ['admin', 'stats'] }),
       ]);
@@ -154,6 +154,7 @@ export function WorkspaceMockTestEditorPage({ workspaceRole, mode }: WorkspaceMo
         question.options.every((option) => option.text.trim()) &&
         question.correctAnswer.trim(),
     );
+
   const pageTitle =
     workspaceRole === 'admin'
       ? mode === 'create'
@@ -172,18 +173,16 @@ export function WorkspaceMockTestEditorPage({ workspaceRole, mode }: WorkspaceMo
               <p className="text-xs font-semibold uppercase tracking-[0.32em] text-cyan-200">{workspaceRole} mock test workspace</p>
               <h1 className="mt-3 text-3xl font-black tracking-tight text-white">{pageTitle}</h1>
               <p className="mt-3 text-sm leading-7 text-slate-300">
-                Khung nay duoc thiet ke theo phong cach full-screen de viec tao va chinh sua cau hoi khong bi tran layout, tap trung vao cau hoi hien tai giong flow lam bai cua student.
+                Khung nay duoc thiet ke theo phong cach full-screen de viec tao va chinh sua cau hoi khong bi tran layout,
+                tap trung vao cau hoi hien tai giong flow lam bai cua student.
               </p>
             </div>
 
             <div className="flex flex-wrap items-center gap-3">
-              <Link
-                to={`/${workspaceRole}/mock-tests`}
-                className="rounded-full border border-white/10 bg-white/5 px-5 py-3 text-sm font-semibold text-white"
-              >
+              <Link to={`/${workspaceRole}/mock-tests`} className="rounded-full border border-white/10 bg-white/5 px-5 py-3 text-sm font-semibold text-white">
                 Ve danh sach de thi
               </Link>
-            {mode === 'edit' && slug ? (
+              {mode === 'edit' && slug ? (
                 <button
                   type="button"
                   onClick={() => {
@@ -269,6 +268,7 @@ export function WorkspaceMockTestEditorPage({ workspaceRole, mode }: WorkspaceMo
                   <option value="advanced">Advanced</option>
                 </select>
               </div>
+
               <div className="grid grid-cols-2 gap-3">
                 <input
                   type="number"

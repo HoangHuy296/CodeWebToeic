@@ -4,50 +4,30 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.mongodb.core.index.CompoundIndex;
-import org.springframework.data.mongodb.core.index.CompoundIndexes;
-import org.springframework.data.mongodb.core.index.Indexed;
-import org.springframework.data.mongodb.core.mapping.Document;
-
-@Document("courses")
-@CompoundIndexes({
-    @CompoundIndex(name = "course_category_level_published_idx", def = "{'category': 1, 'level': 1, 'isPublished': 1}")
-})
 public class Course {
 
-    @Id
     private String id;
     private String title;
-    @Indexed(unique = true)
     private String slug;
     private String shortDescription;
     private String description;
     private String category;
-    @Indexed
     private String level = "beginner";
     private double price;
     private Double salePrice;
     private String thumbnail;
     private VideoMetadata introVideo;
     private List<MaterialItem> materials = new ArrayList<>();
-    @Indexed
     private String owner;
     private int lessonCount;
     private int totalDuration;
     private List<String> tags = new ArrayList<>();
     private List<String> benefits = new ArrayList<>();
-    @Indexed
     private boolean isPublished;
-    @Indexed
     private String reviewStatus = "pending_review";
     private String reviewNote;
     private Instant publishedAt;
-    @CreatedDate
     private Instant createdAt;
-    @LastModifiedDate
     private Instant updatedAt;
 
     public String getId() { return id; }

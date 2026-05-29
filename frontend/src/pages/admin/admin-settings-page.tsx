@@ -105,7 +105,7 @@ export function AdminSettingsPage() {
           {
             title: 'Ops checklist',
             description:
-              'Khi deploy, can cau hinh `CLIENT_URL`, `VITE_API_URL`, MongoDB production, JWT secrets manh va media provider keys trong `.env`.',
+              'Khi deploy, can cau hinh `CLIENT_URL`, `VITE_API_URL`, MySQL production, Flyway migration, JWT secrets manh va media provider keys trong `.env`.',
           },
         ].map((item) => (
           <article key={item.title} className="rounded-[1.8rem] border border-stroke bg-white p-6 shadow-[0_16px_50px_rgba(15,23,42,0.06)]">
