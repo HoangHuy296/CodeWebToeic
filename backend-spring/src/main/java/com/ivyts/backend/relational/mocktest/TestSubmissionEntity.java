@@ -6,11 +6,20 @@ import jakarta.persistence.Id;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import java.math.BigDecimal;
 import java.time.Instant;
 
 @Entity
 @Table(name = "test_submissions")
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class TestSubmissionEntity {
 
     @Id
@@ -57,25 +66,4 @@ public class TestSubmissionEntity {
     void onUpdate() {
         updatedAt = Instant.now();
     }
-
-    public String getId() { return id; }
-    public void setId(String id) { this.id = id; }
-    public String getStudentId() { return studentId; }
-    public void setStudentId(String studentId) { this.studentId = studentId; }
-    public String getMockTestId() { return mockTestId; }
-    public void setMockTestId(String mockTestId) { this.mockTestId = mockTestId; }
-    public BigDecimal getScore() { return score; }
-    public void setScore(BigDecimal score) { this.score = score; }
-    public int getTotalQuestions() { return totalQuestions; }
-    public void setTotalQuestions(int totalQuestions) { this.totalQuestions = totalQuestions; }
-    public int getCorrectAnswers() { return correctAnswers; }
-    public void setCorrectAnswers(int correctAnswers) { this.correctAnswers = correctAnswers; }
-    public int getDurationSeconds() { return durationSeconds; }
-    public void setDurationSeconds(int durationSeconds) { this.durationSeconds = durationSeconds; }
-    public Instant getSubmittedAt() { return submittedAt; }
-    public void setSubmittedAt(Instant submittedAt) { this.submittedAt = submittedAt; }
-    public Instant getCreatedAt() { return createdAt; }
-    public void setCreatedAt(Instant createdAt) { this.createdAt = createdAt; }
-    public Instant getUpdatedAt() { return updatedAt; }
-    public void setUpdatedAt(Instant updatedAt) { this.updatedAt = updatedAt; }
 }

@@ -9,7 +9,7 @@ on:
       - "backend-spring/**"
       - "frontend/**"
       - "scripts/**"
-      - "docker-compose.yml"
+      - "../../devops/docker/docker-compose.yml"
       - "package.json"
       - "package-lock.json"
       - ".github/workflows/spring-stack-smoke.yml"

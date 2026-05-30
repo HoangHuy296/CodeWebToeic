@@ -6,10 +6,19 @@ import jakarta.persistence.Id;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import java.time.Instant;
 
 @Entity
 @Table(name = "mock_tests")
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class MockTestEntity {
 
     @Id
@@ -77,39 +86,4 @@ public class MockTestEntity {
     void onUpdate() {
         updatedAt = Instant.now();
     }
-
-    public String getId() { return id; }
-    public void setId(String id) { this.id = id; }
-    public String getCreatedById() { return createdById; }
-    public void setCreatedById(String createdById) { this.createdById = createdById; }
-    public String getTitle() { return title; }
-    public void setTitle(String title) { this.title = title; }
-    public String getDescription() { return description; }
-    public void setDescription(String description) { this.description = description; }
-    public String getType() { return type; }
-    public void setType(String type) { this.type = type; }
-    public String getLevel() { return level; }
-    public void setLevel(String level) { this.level = level; }
-    public int getDurationMinutes() { return durationMinutes; }
-    public void setDurationMinutes(int durationMinutes) { this.durationMinutes = durationMinutes; }
-    public int getQuestionCount() { return questionCount; }
-    public void setQuestionCount(int questionCount) { this.questionCount = questionCount; }
-    public String getStatus() { return status; }
-    public void setStatus(String status) { this.status = status; }
-    public String getInstructionsJson() { return instructionsJson; }
-    public void setInstructionsJson(String instructionsJson) { this.instructionsJson = instructionsJson; }
-    public boolean isFeatured() { return isFeatured; }
-    public void setFeatured(boolean featured) { isFeatured = featured; }
-    public String getAssignedCourseIdsJson() { return assignedCourseIdsJson; }
-    public void setAssignedCourseIdsJson(String assignedCourseIdsJson) { this.assignedCourseIdsJson = assignedCourseIdsJson; }
-    public String getCatalogKind() { return catalogKind; }
-    public void setCatalogKind(String catalogKind) { this.catalogKind = catalogKind; }
-    public String getExerciseTopicSlug() { return exerciseTopicSlug; }
-    public void setExerciseTopicSlug(String exerciseTopicSlug) { this.exerciseTopicSlug = exerciseTopicSlug; }
-    public String getExercisePackSlug() { return exercisePackSlug; }
-    public void setExercisePackSlug(String exercisePackSlug) { this.exercisePackSlug = exercisePackSlug; }
-    public Instant getCreatedAt() { return createdAt; }
-    public void setCreatedAt(Instant createdAt) { this.createdAt = createdAt; }
-    public Instant getUpdatedAt() { return updatedAt; }
-    public void setUpdatedAt(Instant updatedAt) { this.updatedAt = updatedAt; }
 }

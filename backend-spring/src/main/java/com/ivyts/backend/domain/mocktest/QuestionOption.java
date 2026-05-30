@@ -1,15 +1,17 @@
 package com.ivyts.backend.domain.mocktest;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class QuestionOption {
 
     private String key;
     private String text;
     private boolean isCorrect;
-
-    public String getKey() { return key; }
-    public void setKey(String key) { this.key = key; }
-    public String getText() { return text; }
-    public void setText(String text) { this.text = text; }
-    public boolean isCorrect() { return isCorrect; }
-    public void setCorrect(boolean correct) { isCorrect = correct; }
 }

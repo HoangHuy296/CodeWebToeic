@@ -6,10 +6,19 @@ import jakarta.persistence.Id;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import java.time.Instant;
 
 @Entity
 @Table(name = "enrollments")
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class EnrollmentEntity {
 
     @Id
@@ -62,29 +71,4 @@ public class EnrollmentEntity {
     void onUpdate() {
         updatedAt = Instant.now();
     }
-
-    public String getId() { return id; }
-    public void setId(String id) { this.id = id; }
-    public String getStudentId() { return studentId; }
-    public void setStudentId(String studentId) { this.studentId = studentId; }
-    public String getCourseId() { return courseId; }
-    public void setCourseId(String courseId) { this.courseId = courseId; }
-    public String getStatus() { return status; }
-    public void setStatus(String status) { this.status = status; }
-    public int getProgressPercent() { return progressPercent; }
-    public void setProgressPercent(int progressPercent) { this.progressPercent = progressPercent; }
-    public String getCompletedLessonIdsJson() { return completedLessonIdsJson; }
-    public void setCompletedLessonIdsJson(String completedLessonIdsJson) { this.completedLessonIdsJson = completedLessonIdsJson; }
-    public String getLastLessonId() { return lastLessonId; }
-    public void setLastLessonId(String lastLessonId) { this.lastLessonId = lastLessonId; }
-    public Instant getEnrolledAt() { return enrolledAt; }
-    public void setEnrolledAt(Instant enrolledAt) { this.enrolledAt = enrolledAt; }
-    public Instant getStartedAt() { return startedAt; }
-    public void setStartedAt(Instant startedAt) { this.startedAt = startedAt; }
-    public Instant getCompletedAt() { return completedAt; }
-    public void setCompletedAt(Instant completedAt) { this.completedAt = completedAt; }
-    public Instant getCreatedAt() { return createdAt; }
-    public void setCreatedAt(Instant createdAt) { this.createdAt = createdAt; }
-    public Instant getUpdatedAt() { return updatedAt; }
-    public void setUpdatedAt(Instant updatedAt) { this.updatedAt = updatedAt; }
 }

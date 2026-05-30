@@ -6,10 +6,19 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import java.time.Instant;
 
 @Entity
 @Table(name = "enrollment_lesson_progress")
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class EnrollmentLessonProgressEntity {
 
     @Id
@@ -33,19 +42,4 @@ public class EnrollmentLessonProgressEntity {
 
     @Column(name = "last_accessed_at")
     private Instant lastAccessedAt;
-
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-    public String getEnrollmentId() { return enrollmentId; }
-    public void setEnrollmentId(String enrollmentId) { this.enrollmentId = enrollmentId; }
-    public String getLessonId() { return lessonId; }
-    public void setLessonId(String lessonId) { this.lessonId = lessonId; }
-    public int getWatchedSeconds() { return watchedSeconds; }
-    public void setWatchedSeconds(int watchedSeconds) { this.watchedSeconds = watchedSeconds; }
-    public boolean isCompleted() { return isCompleted; }
-    public void setCompleted(boolean completed) { isCompleted = completed; }
-    public Instant getCompletedAt() { return completedAt; }
-    public void setCompletedAt(Instant completedAt) { this.completedAt = completedAt; }
-    public Instant getLastAccessedAt() { return lastAccessedAt; }
-    public void setLastAccessedAt(Instant lastAccessedAt) { this.lastAccessedAt = lastAccessedAt; }
 }

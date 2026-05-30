@@ -6,10 +6,19 @@ import jakarta.persistence.Id;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import java.time.Instant;
 
 @Entity
 @Table(name = "mock_test_questions")
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class MockTestQuestionEntity {
 
     @Id
@@ -65,31 +74,4 @@ public class MockTestQuestionEntity {
     void onUpdate() {
         updatedAt = Instant.now();
     }
-
-    public String getId() { return id; }
-    public void setId(String id) { this.id = id; }
-    public String getMockTestId() { return mockTestId; }
-    public void setMockTestId(String mockTestId) { this.mockTestId = mockTestId; }
-    public String getSectionName() { return sectionName; }
-    public void setSectionName(String sectionName) { this.sectionName = sectionName; }
-    public String getPrompt() { return prompt; }
-    public void setPrompt(String prompt) { this.prompt = prompt; }
-    public String getExplanation() { return explanation; }
-    public void setExplanation(String explanation) { this.explanation = explanation; }
-    public String getAudioUrl() { return audioUrl; }
-    public void setAudioUrl(String audioUrl) { this.audioUrl = audioUrl; }
-    public String getImageUrl() { return imageUrl; }
-    public void setImageUrl(String imageUrl) { this.imageUrl = imageUrl; }
-    public int getPoints() { return points; }
-    public void setPoints(int points) { this.points = points; }
-    public int getQuestionOrder() { return questionOrder; }
-    public void setQuestionOrder(int questionOrder) { this.questionOrder = questionOrder; }
-    public String getDifficultyLevel() { return difficultyLevel; }
-    public void setDifficultyLevel(String difficultyLevel) { this.difficultyLevel = difficultyLevel; }
-    public String getCorrectAnswer() { return correctAnswer; }
-    public void setCorrectAnswer(String correctAnswer) { this.correctAnswer = correctAnswer; }
-    public Instant getCreatedAt() { return createdAt; }
-    public void setCreatedAt(Instant createdAt) { this.createdAt = createdAt; }
-    public Instant getUpdatedAt() { return updatedAt; }
-    public void setUpdatedAt(Instant updatedAt) { this.updatedAt = updatedAt; }
 }

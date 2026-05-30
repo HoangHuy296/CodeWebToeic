@@ -6,10 +6,19 @@ import jakarta.persistence.Id;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import java.time.Instant;
 
 @Entity
 @Table(name = "messages")
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class MessageEntity {
 
     @Id
@@ -77,39 +86,4 @@ public class MessageEntity {
     void onUpdate() {
         updatedAt = Instant.now();
     }
-
-    public String getId() { return id; }
-    public void setId(String id) { this.id = id; }
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
-    public String getEmail() { return email; }
-    public void setEmail(String email) { this.email = email; }
-    public String getPhone() { return phone; }
-    public void setPhone(String phone) { this.phone = phone; }
-    public String getSubject() { return subject; }
-    public void setSubject(String subject) { this.subject = subject; }
-    public String getContent() { return content; }
-    public void setContent(String content) { this.content = content; }
-    public String getSummary() { return summary; }
-    public void setSummary(String summary) { this.summary = summary; }
-    public String getStatus() { return status; }
-    public void setStatus(String status) { this.status = status; }
-    public String getMessageType() { return messageType; }
-    public void setMessageType(String messageType) { this.messageType = messageType; }
-    public String getRecipientRole() { return recipientRole; }
-    public void setRecipientRole(String recipientRole) { this.recipientRole = recipientRole; }
-    public String getRecipientUserId() { return recipientUserId; }
-    public void setRecipientUserId(String recipientUserId) { this.recipientUserId = recipientUserId; }
-    public String getSenderUserId() { return senderUserId; }
-    public void setSenderUserId(String senderUserId) { this.senderUserId = senderUserId; }
-    public String getAssignedToId() { return assignedToId; }
-    public void setAssignedToId(String assignedToId) { this.assignedToId = assignedToId; }
-    public Instant getReadAt() { return readAt; }
-    public void setReadAt(Instant readAt) { this.readAt = readAt; }
-    public Instant getRepliedAt() { return repliedAt; }
-    public void setRepliedAt(Instant repliedAt) { this.repliedAt = repliedAt; }
-    public Instant getCreatedAt() { return createdAt; }
-    public void setCreatedAt(Instant createdAt) { this.createdAt = createdAt; }
-    public Instant getUpdatedAt() { return updatedAt; }
-    public void setUpdatedAt(Instant updatedAt) { this.updatedAt = updatedAt; }
 }

@@ -1,5 +1,5 @@
 server:
-  port: ${PORT:5000}
+  port: ${PORT:8080}
   address: ${SERVER_ADDRESS:0.0.0.0}
   forward-headers-strategy: framework
 

@@ -8,9 +8,9 @@
   "scripts": {
     "dev": "powershell -ExecutionPolicy Bypass -File .\\scripts\\start-main-stack.ps1",
     "dev:clean": "powershell -ExecutionPolicy Bypass -File .\\scripts\\reset-main-stack.ps1",
-    "logs": "docker compose --profile prod --profile dev --profile mysql logs -f nginx frontend backend-dev mysql",
+    "logs": "devops compose --profile prod --profile dev --profile mysql logs -f nginx frontend backend-dev mysql",
     "dev:frontend": "npm run dev --workspace frontend",
-    "build:backend-spring": "docker compose --profile prod build backend",
+    "build:backend-spring": "devops compose --profile prod build backend",
     "build:frontend": "npm run build --workspace frontend",
     "seed": "powershell -ExecutionPolicy Bypass -File .\\scripts\\seed-backend-spring.ps1",
     "cleanup:regression": "powershell -ExecutionPolicy Bypass -File .\\scripts\\cleanup-regression.ps1",
