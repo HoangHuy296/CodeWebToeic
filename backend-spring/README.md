@@ -1,74 +1,130 @@
-# Spring Boot Backend
+# backend-spring
 
-`backend-spring/` la backend chinh hien tai cua repo.
+`backend-spring/` is the active backend for this repo.
 
-Runtime mac dinh:
+Primary runtime:
+
 - Spring Boot `3.5.3`
 - Java `21`
 - MySQL
 - Flyway
-- WebSocket notification gateway
-- notification inbox persistence
+- JWT auth
+- WebSocket notifications
+- Google ID-token verification for student/teacher sign-in
 
-## Run locally
+## How it runs in the app
+
+Recommended stack from the repo root:
 
 ```bash
-cd backend-spring
-mvn spring-boot:run
+make up
 ```
 
-Common commands:
+That brings up:
+
+- `frontend`
+- `backend`
+- `mysql`
+- `nginx`
+
+Direct backend URL:
+
+- `http://localhost:5000`
+
+Public API via nginx:
+
+- `http://localhost/api`
+
+## Local commands
+
+From the repo root:
+
+```bash
+npm run dev
+npm run dev:clean
+npm run seed
+npm run smoke:guest
+npm run smoke:student
+npm run smoke:teacher
+npm run smoke:teacher:exercise
+npm run smoke:admin
+npm run smoke:google
+npm run regression:spring-stack
+```
+
+From `backend-spring/` directly:
 
 ```bash
 mvn spring-boot:run
 mvn clean package
 ```
 
-## Run with Docker from repo root
+## Configuration
 
-```bash
-npm run dev
-npm run dev:clean
-npm run logs
-npm run seed
-npm run cleanup:regression
-npm run regression:spring-stack
-npm run smoke:student
-npm run smoke:teacher
-npm run smoke:admin
-```
+Main runtime config:
 
-`npm run dev` la luong chay chinh hien tai, boot `frontend + backend-dev + mysql + nginx`.
-`npm run dev:clean` reset volume MySQL va boot lai toan bo stack sach.
-`npm run seed` seed theo dung luong chinh (`mysql + backend-dev + frontend + nginx`).
+- `src/main/resources/application.yml`
 
-## Production-shaped flow
+Environment example:
 
-Luong duoc khuyen nghi de test gan production:
+- `.env.example`
 
-1. `npm run seed`
-2. `npm run dev`
-3. `npm run regression:spring-stack`
+Key values:
 
-Stack nay su dung:
-- `frontend`
-- `backend-dev`
-- `mysql`
-- `nginx`
+- `PORT`
+- `MYSQL_URL`
+- `MYSQL_USERNAME`
+- `MYSQL_PASSWORD`
+- `CLIENT_URL`
+- `JWT_ACCESS_SECRET`
+- `JWT_REFRESH_SECRET`
+- `GOOGLE_CLIENT_ID`
 
-Health checks da duoc them cho:
-- `mysql`
-- `backend`
-- `frontend`
-- `nginx`
+## Auth model
 
-## Key environment values
+Supported sign-in modes:
 
-Mac dinh xem tai `src/main/resources/application.yml`:
+- email/password for all existing local accounts
+- Google popup sign-in for `student` and `teacher`
 
-- `server.port`
-- `spring.datasource.*`
-- `spring.flyway.*`
-- `app.security.jwt-access-secret`
-- `app.security.jwt-refresh-secret`
-- `app.cors.allowed-origins`
+Current rules:
+
+- `admin` cannot use Google sign-in
+- existing local accounts are not auto-linked
+- matching email without existing Google link returns `GOOGLE_LINK_REQUIRED`
+- Google-created users may have `password_hash = null`
+
+Current automated verification:
+
+- `GOOGLE_ROLE_NOT_ALLOWED`
+- `GOOGLE_TOKEN_INVALID`
+- `GOOGLE_ROLE_INVALID`
+
+The successful Google popup sign-in path still needs one real browser verification with a Google account allowed by the configured OAuth client.
+
+## Data ownership
+
+This service is responsible for:
+
+- users and auth
+- courses and lessons
+- enrollments and learning progress
+- exercises and mock-tests
+- results/submissions
+- messages
+- posts
+- notifications
+- admin stats/charts/users
+
+## Flyway
+
+Migrations are stored in:
+
+- `src/main/resources/db/migration/mysql`
+
+Rules for future development:
+
+1. Add new migrations instead of editing old ones.
+2. Keep auth schema changes aligned with DTO/service/store/entity updates.
+3. Prefer additive migrations.
+4. Keep durable seed data separate in intent from transient smoke data.

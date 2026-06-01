@@ -4,10 +4,15 @@ import java.util.List;
 
 public record ApiErrorResponse(
     boolean success,
+    String code,
     String message,
     List<ApiErrorItem> errors
 ) {
     public static ApiErrorResponse of(String message, List<ApiErrorItem> errors) {
-        return new ApiErrorResponse(false, message, errors);
+        return new ApiErrorResponse(false, null, message, errors);
+    }
+
+    public static ApiErrorResponse of(String code, String message, List<ApiErrorItem> errors) {
+        return new ApiErrorResponse(false, code, message, errors);
     }
 }

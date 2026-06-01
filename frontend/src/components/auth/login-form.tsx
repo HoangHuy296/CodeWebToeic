@@ -3,10 +3,12 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../app/providers/auth-provider';
 import { getApiErrorMessage } from '../../lib/api';
 import { getDefaultRolePath } from '../../routes/path-utils';
-import type { AppRole } from '../../types/auth';
+import type { AppRole, GoogleAuthRole } from '../../types/auth';
+import { GoogleRoleAuthPanel } from './google-role-auth-panel';
 
 interface LoginFormProps {
   variant?: 'user' | 'admin';
+  selectedRole?: GoogleAuthRole;
 }
 
 const contentMap = {
@@ -42,12 +44,18 @@ const contentMap = {
   },
 };
 
-export function LoginForm({ variant = 'user' }: LoginFormProps) {
+export function LoginForm({ variant = 'user', selectedRole }: LoginFormProps) {
   const navigate = useNavigate();
   const location = useLocation();
   const { login, logout } = useAuth();
   const content = contentMap[variant];
-  const [email, setEmail] = useState(content.defaultEmail);
+  const roleLabels: Record<GoogleAuthRole, string> = {
+    student: 'hoc vien',
+    teacher: 'giang vien',
+  };
+  const defaultUserEmail =
+    variant === 'user' && selectedRole === 'teacher' ? 'teacher@ivyts.dev' : content.defaultEmail;
+  const [email, setEmail] = useState(defaultUserEmail);
   const [password, setPassword] = useState(content.defaultPassword);
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -60,7 +68,11 @@ export function LoginForm({ variant = 'user' }: LoginFormProps) {
         {content.eyebrow}
       </p>
       <h2 className="mt-3 text-3xl font-black tracking-tight text-slate-950">{content.title}</h2>
-      <p className="mt-3 text-sm leading-7 text-slate-600">{content.description}</p>
+      <p className="mt-3 text-sm leading-7 text-slate-600">
+        {variant === 'user' && selectedRole
+          ? `Ban dang dang nhap voi vai tro ${roleLabels[selectedRole]}.`
+          : content.description}
+      </p>
 
       <form
         className="mt-8 grid gap-4"
@@ -126,7 +138,10 @@ export function LoginForm({ variant = 'user' }: LoginFormProps) {
       <div className="mt-6 grid gap-2 text-sm text-slate-600">
         <p>
           {content.altLabel}{' '}
-          <Link to={content.altLinkTo} className="font-semibold text-teal-700">
+          <Link
+            to={selectedRole && content.altLinkTo.startsWith('/') ? `${content.altLinkTo}?role=${selectedRole}` : content.altLinkTo}
+            className="font-semibold text-teal-700"
+          >
             {content.altLinkLabel}
           </Link>
         </p>
@@ -134,6 +149,8 @@ export function LoginForm({ variant = 'user' }: LoginFormProps) {
           {content.secondaryLinkLabel}
         </Link>
       </div>
+
+      {variant === 'user' && selectedRole ? <GoogleRoleAuthPanel mode="login" selectedRole={selectedRole} /> : null}
     </div>
   );
 }

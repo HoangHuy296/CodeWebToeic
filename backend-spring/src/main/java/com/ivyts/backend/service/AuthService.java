@@ -55,7 +55,7 @@ public class AuthService {
         user.setEmail(normalizedEmail);
         user.setPasswordHash(PASSWORD_ENCODER.encode(request.password()));
         user.setPhone(blankToNull(request.phone()));
-        user.setRole(UserRole.STUDENT);
+        user.setRole(parseSelfRegisterRole(request.intendedRole()));
         user.setActive(true);
         user = userStore.save(user);
         notificationEventsService.emitNewUserRegistered(user.getId(), user.getEmail(), user.getFullName());
@@ -68,6 +68,14 @@ public class AuthService {
             .orElseThrow(() -> new ApiException(HttpStatus.UNAUTHORIZED, "Email or password is incorrect"));
 
         ensureActive(user);
+
+        if (user.getPasswordHash() == null || user.getPasswordHash().isBlank()) {
+            throw new ApiException(
+                HttpStatus.UNAUTHORIZED,
+                "GOOGLE_SIGN_IN_REQUIRED",
+                "This account uses Google sign-in. Please continue with Google."
+            );
+        }
 
         if (!PASSWORD_ENCODER.matches(request.password(), user.getPasswordHash())) {
             throw new ApiException(HttpStatus.UNAUTHORIZED, "Email or password is incorrect");
@@ -101,6 +109,11 @@ public class AuthService {
             throw new ApiException(HttpStatus.UNAUTHORIZED, "Refresh token is not valid");
         }
 
+        return buildAuthResponse(user);
+    }
+
+    public AuthResponse authenticateTrustedUser(User user) {
+        ensureActive(user);
         return buildAuthResponse(user);
     }
 
@@ -233,6 +246,7 @@ public class AuthService {
         String accessToken = jwtService.signAccessToken(payload);
         String refreshToken = jwtService.signRefreshToken(payload);
         user.setRefreshToken(refreshToken);
+        user.setLastLoginAt(Instant.now());
         User persistedUser = userStore.save(user);
         return new AuthResponse(toPublicUser(persistedUser), accessToken, refreshToken);
     }
@@ -260,6 +274,16 @@ public class AuthService {
         if (!user.isActive()) {
             throw new ApiException(HttpStatus.FORBIDDEN, "Account is inactive");
         }
+    }
+
+    private UserRole parseSelfRegisterRole(String intendedRole) {
+        String normalizedRole = intendedRole == null ? "student" : intendedRole.trim().toLowerCase(Locale.ROOT);
+        return switch (normalizedRole) {
+            case "student" -> UserRole.STUDENT;
+            case "teacher" -> UserRole.TEACHER;
+            case "admin" -> throw new ApiException(HttpStatus.FORBIDDEN, "Admin accounts cannot be self-registered");
+            default -> throw new ApiException(HttpStatus.BAD_REQUEST, "Registration role must be student or teacher");
+        };
     }
 
     private String generateSixDigitCode() {

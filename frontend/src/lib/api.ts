@@ -52,6 +52,14 @@ export function getApiErrorMessage(error: unknown): string {
   return error instanceof Error ? error.message : 'Unexpected error';
 }
 
+export function getApiErrorCode(error: unknown): string | null {
+  if (axios.isAxiosError<ApiErrorResponse>(error)) {
+    return error.response?.data.code ?? null;
+  }
+
+  return null;
+}
+
 export function getApiFieldErrors(error: unknown): Record<string, string> {
   if (axios.isAxiosError<ApiErrorResponse>(error)) {
     const items = error.response?.data.errors ?? [];

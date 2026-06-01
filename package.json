@@ -8,16 +8,18 @@
   "scripts": {
     "dev": "powershell -ExecutionPolicy Bypass -File .\\scripts\\start-main-stack.ps1",
     "dev:clean": "powershell -ExecutionPolicy Bypass -File .\\scripts\\reset-main-stack.ps1",
-    "logs": "devops compose --profile prod --profile dev --profile mysql logs -f nginx frontend backend-dev mysql",
+    "logs": "docker compose -f devops/docker/docker-compose.yml -f devops/docker/docker-compose.prod.yml -f devops/docker/docker-compose.dev.yml --env-file devops/env/.env.dev logs -f nginx frontend backend mysql",
     "dev:frontend": "npm run dev --workspace frontend",
     "build:backend-spring": "devops compose --profile prod build backend",
     "build:frontend": "npm run build --workspace frontend",
     "seed": "powershell -ExecutionPolicy Bypass -File .\\scripts\\seed-backend-spring.ps1",
     "cleanup:regression": "powershell -ExecutionPolicy Bypass -File .\\scripts\\cleanup-regression.ps1",
     "regression:spring-stack": "powershell -ExecutionPolicy Bypass -File .\\scripts\\regression-spring-mysql.ps1",
+    "smoke:guest": "powershell -ExecutionPolicy Bypass -File .\\scripts\\smoke-guest-role.ps1",
     "smoke:student": "powershell -ExecutionPolicy Bypass -File .\\scripts\\smoke-student-role.ps1",
     "smoke:teacher": "powershell -ExecutionPolicy Bypass -File .\\scripts\\smoke-teacher-role.ps1",
     "smoke:teacher:exercise": "powershell -ExecutionPolicy Bypass -File .\\scripts\\smoke-teacher-exercise-workspace.ps1",
-    "smoke:admin": "powershell -ExecutionPolicy Bypass -File .\\scripts\\smoke-admin-role.ps1"
+    "smoke:admin": "powershell -ExecutionPolicy Bypass -File .\\scripts\\smoke-admin-role.ps1",
+    "smoke:google": "powershell -ExecutionPolicy Bypass -File .\\scripts\\smoke-google-auth.ps1"
   }
 }

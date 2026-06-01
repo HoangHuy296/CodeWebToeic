@@ -31,11 +31,23 @@ public class UserAuthEntity {
     @Column(name = "email", nullable = false, unique = true, length = 191)
     private String email;
 
-    @Column(name = "password_hash", nullable = false)
+    @Column(name = "password_hash")
     private String passwordHash;
 
     @Column(name = "role", nullable = false, length = 32)
     private String role;
+
+    @Column(name = "google_sub", unique = true, length = 191)
+    private String googleSub;
+
+    @Column(name = "google_email_verified", nullable = false)
+    private boolean googleEmailVerified;
+
+    @Column(name = "google_linked_at")
+    private Instant googleLinkedAt;
+
+    @Column(name = "last_login_at")
+    private Instant lastLoginAt;
 
     @Column(name = "avatar_url", columnDefinition = "TEXT")
     private String avatarUrl;

@@ -3,9 +3,11 @@ package com.ivyts.backend.web.auth;
 import com.ivyts.backend.common.api.ApiSuccessResponse;
 import com.ivyts.backend.security.RequestAuthService;
 import com.ivyts.backend.service.AuthService;
+import com.ivyts.backend.service.GoogleOAuthService;
 import com.ivyts.backend.web.auth.dto.ChangePasswordRequest;
 import com.ivyts.backend.web.auth.dto.ConfirmEmailChangeRequest;
 import com.ivyts.backend.web.auth.dto.ConfirmPhoneChangeRequest;
+import com.ivyts.backend.web.auth.dto.GoogleAuthRequest;
 import com.ivyts.backend.web.auth.dto.LoginRequest;
 import com.ivyts.backend.web.auth.dto.RefreshTokenRequest;
 import com.ivyts.backend.web.auth.dto.RegisterRequest;
@@ -31,10 +33,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
 
     private final AuthService authService;
+    private final GoogleOAuthService googleOAuthService;
     private final RequestAuthService requestAuthService;
 
-    public AuthController(AuthService authService, RequestAuthService requestAuthService) {
+    public AuthController(AuthService authService, GoogleOAuthService googleOAuthService, RequestAuthService requestAuthService) {
         this.authService = authService;
+        this.googleOAuthService = googleOAuthService;
         this.requestAuthService = requestAuthService;
     }
 
@@ -47,6 +51,11 @@ public class AuthController {
     @PostMapping("/login")
     public ApiSuccessResponse<?> login(@Valid @RequestBody LoginRequest body) {
         return ApiSuccessResponse.of("Login successful", authService.login(body));
+    }
+
+    @PostMapping("/google")
+    public ApiSuccessResponse<?> googleAuth(@Valid @RequestBody GoogleAuthRequest body) {
+        return ApiSuccessResponse.of("Google login successful", googleOAuthService.authenticate(body));
     }
 
     @PostMapping("/logout")

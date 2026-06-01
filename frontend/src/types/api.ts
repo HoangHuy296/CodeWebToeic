@@ -11,7 +11,7 @@ export interface ApiErrorItem {
 
 export interface ApiErrorResponse {
   success: false;
+  code?: string | null;
   message: string;
   errors: ApiErrorItem[];
 }
-

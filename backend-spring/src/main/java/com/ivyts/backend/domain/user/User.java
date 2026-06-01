@@ -22,6 +22,10 @@ public class User {
     private String email;
     private String passwordHash;
     private String role = "student";
+    private String googleSub;
+    private boolean googleEmailVerified;
+    private Instant googleLinkedAt;
+    private Instant lastLoginAt;
     private String avatarUrl;
     private String phone;
     private String bio;

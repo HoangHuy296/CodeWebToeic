@@ -16,7 +16,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(ApiException.class)
     public ResponseEntity<ApiErrorResponse> handleApiException(ApiException exception) {
         return ResponseEntity.status(exception.getStatus())
-            .body(ApiErrorResponse.of(exception.getMessage(), List.of()));
+            .body(ApiErrorResponse.of(exception.getCode(), exception.getMessage(), List.of()));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -32,12 +32,12 @@ public class GlobalExceptionHandler {
             })
             .toList();
 
-        return ResponseEntity.badRequest().body(ApiErrorResponse.of("Validation failed", errors));
+        return ResponseEntity.badRequest().body(ApiErrorResponse.of(null, "Validation failed", errors));
     }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiErrorResponse> handleUnknown(Exception exception) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-            .body(ApiErrorResponse.of(exception.getMessage() == null ? "Unexpected error" : exception.getMessage(), List.of()));
+            .body(ApiErrorResponse.of(null, exception.getMessage() == null ? "Unexpected error" : exception.getMessage(), List.of()));
     }
 }

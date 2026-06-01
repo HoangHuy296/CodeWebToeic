@@ -32,6 +32,11 @@ public class MySqlUserStore implements UserStore {
     }
 
     @Override
+    public Optional<User> findByGoogleSub(String googleSub) {
+        return userAuthJpaRepository.findByGoogleSub(googleSub).map(this::toDomain);
+    }
+
+    @Override
     public Optional<User> findByRefreshToken(String refreshToken) {
         return userAuthJpaRepository.findByRefreshToken(refreshToken).map(this::toDomain);
     }
@@ -53,6 +58,10 @@ public class MySqlUserStore implements UserStore {
         entity.setEmail(user.getEmail());
         entity.setPasswordHash(user.getPasswordHash());
         entity.setRole(user.getRole().name().toLowerCase());
+        entity.setGoogleSub(user.getGoogleSub());
+        entity.setGoogleEmailVerified(user.isGoogleEmailVerified());
+        entity.setGoogleLinkedAt(user.getGoogleLinkedAt());
+        entity.setLastLoginAt(user.getLastLoginAt());
         entity.setAvatarUrl(user.getAvatarUrl());
         entity.setPhone(user.getPhone());
         entity.setBio(user.getBio());
@@ -74,6 +83,10 @@ public class MySqlUserStore implements UserStore {
         user.setEmail(entity.getEmail());
         user.setPasswordHash(entity.getPasswordHash());
         user.setRole(com.ivyts.backend.domain.user.UserRole.valueOf(entity.getRole().toUpperCase()));
+        user.setGoogleSub(entity.getGoogleSub());
+        user.setGoogleEmailVerified(entity.isGoogleEmailVerified());
+        user.setGoogleLinkedAt(entity.getGoogleLinkedAt());
+        user.setLastLoginAt(entity.getLastLoginAt());
         user.setAvatarUrl(entity.getAvatarUrl());
         user.setPhone(entity.getPhone());
         user.setBio(entity.getBio());

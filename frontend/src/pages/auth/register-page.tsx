@@ -1,11 +1,22 @@
-import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useMemo, useState } from 'react';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
+import { GoogleRoleAuthPanel } from '../../components/auth/google-role-auth-panel';
+import { AuthRoleSelector } from '../../components/auth/auth-role-selector';
 import { useAuth } from '../../app/providers/auth-provider';
 import { getApiErrorMessage } from '../../lib/api';
+import type { GoogleAuthRole } from '../../types/auth';
+
+function parseRole(value: string | null): GoogleAuthRole | null {
+  return value === 'student' || value === 'teacher' ? value : null;
+}
 
 export function RegisterPage() {
   const navigate = useNavigate();
   const { register } = useAuth();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const initialRole = useMemo(() => parseRole(searchParams.get('role')), [searchParams]);
+  const [selectedRole, setSelectedRole] = useState<GoogleAuthRole | null>(initialRole);
+  const [hasContinued, setHasContinued] = useState<boolean>(Boolean(initialRole));
   const [form, setForm] = useState({
     fullName: '',
     email: '',
@@ -15,12 +26,34 @@ export function RegisterPage() {
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  if (!hasContinued || !selectedRole) {
+    return (
+      <AuthRoleSelector
+        mode="register"
+        selectedRole={selectedRole}
+        onSelect={(role) => setSelectedRole(role)}
+        onContinue={() => {
+          if (!selectedRole) {
+            return;
+          }
+
+          setSearchParams({ role: selectedRole });
+          setHasContinued(true);
+        }}
+      />
+    );
+  }
+
+  const roleLabel = selectedRole === 'teacher' ? 'giang vien' : 'hoc vien';
+
   return (
     <div>
       <p className="text-xs font-semibold tracking-[0.35em] text-teal-700 uppercase">Dang ky</p>
-      <h2 className="mt-3 text-3xl font-black tracking-tight text-slate-950">Tao tai khoan hoc vien moi</h2>
+      <h2 className="mt-3 text-3xl font-black tracking-tight text-slate-950">
+        Tao tai khoan {roleLabel} moi
+      </h2>
       <p className="mt-3 text-sm leading-7 text-slate-600">
-        Register hien tao `student` account theo dung backend phase auth da xay.
+        Form nay tao tai khoan {roleLabel} theo role da chon truoc do.
       </p>
 
       <form
@@ -31,8 +64,11 @@ export function RegisterPage() {
           setError(null);
 
           try {
-            await register(form);
-            navigate('/student/dashboard', { replace: true });
+            await register({
+              ...form,
+              intendedRole: selectedRole,
+            });
+            navigate(selectedRole === 'teacher' ? '/teacher/dashboard' : '/student/dashboard', { replace: true });
           } catch (submitError) {
             setError(getApiErrorMessage(submitError));
           } finally {
@@ -91,11 +127,12 @@ export function RegisterPage() {
 
       <p className="mt-6 text-sm text-slate-600">
         Da co tai khoan?{' '}
-        <Link to="/login" className="font-semibold text-teal-700">
+        <Link to={`/login?role=${selectedRole}`} className="font-semibold text-teal-700">
           Dang nhap
         </Link>
       </p>
+
+      <GoogleRoleAuthPanel mode="register" selectedRole={selectedRole} />
     </div>
   );
 }
-

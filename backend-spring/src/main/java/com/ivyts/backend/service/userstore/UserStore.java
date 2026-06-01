@@ -10,6 +10,8 @@ public interface UserStore {
 
     Optional<User> findByEmail(String email);
 
+    Optional<User> findByGoogleSub(String googleSub);
+
     Optional<User> findByRefreshToken(String refreshToken);
 
     List<User> findAll();

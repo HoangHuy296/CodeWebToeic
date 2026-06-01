@@ -1,4 +1,5 @@
 export type AppRole = 'guest' | 'student' | 'teacher' | 'admin';
+export type GoogleAuthRole = 'student' | 'teacher';
 
 export interface PublicUser {
   id: string;
@@ -23,9 +24,15 @@ export interface LoginInput {
   password: string;
 }
 
+export interface GoogleAuthInput {
+  credential: string;
+  intendedRole: GoogleAuthRole;
+}
+
 export interface RegisterInput extends LoginInput {
   fullName: string;
   phone?: string;
+  intendedRole: GoogleAuthRole;
 }
 
 export interface UpdateProfileInput {

@@ -35,6 +35,8 @@ spring:
 app:
   cors:
     allowed-origins: ${CLIENT_URL:http://localhost:5173,http://localhost:5174,http://localhost:5175,http://localhost}
+  google:
+    client-id: ${GOOGLE_CLIENT_ID:}
   security:
     jwt-access-secret: ${JWT_ACCESS_SECRET:replace-me}
     jwt-refresh-secret: ${JWT_REFRESH_SECRET:replace-me}

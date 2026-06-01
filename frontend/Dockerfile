@@ -16,7 +16,9 @@ COPY frontend ./frontend
 
 # The frontend can be built against an absolute API URL or a reverse-proxied /api path.
 ARG VITE_API_URL=/api
+ARG VITE_GOOGLE_CLIENT_ID=
 ENV VITE_API_URL=${VITE_API_URL}
+ENV VITE_GOOGLE_CLIENT_ID=${VITE_GOOGLE_CLIENT_ID}
 
 WORKDIR /app/frontend
 RUN npm run build

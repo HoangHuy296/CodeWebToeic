@@ -1,5 +1,5 @@
 import { api, unwrapResponse } from './api';
-import type { AuthPayload, LoginInput, PublicUser, RegisterInput } from '../types/auth';
+import type { AuthPayload, GoogleAuthInput, LoginInput, PublicUser, RegisterInput } from '../types/auth';
 import type {
   ChangePasswordInput,
   UpdateProfileInput,
@@ -9,6 +9,9 @@ import type {
 export const authApi = {
   login(payload: LoginInput) {
     return unwrapResponse<AuthPayload>(api.post('/auth/login', payload));
+  },
+  google(payload: GoogleAuthInput) {
+    return unwrapResponse<AuthPayload>(api.post('/auth/google', payload));
   },
   register(payload: RegisterInput) {
     return unwrapResponse<AuthPayload>(api.post('/auth/register', payload));

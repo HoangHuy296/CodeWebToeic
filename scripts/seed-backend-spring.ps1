@@ -14,32 +14,36 @@ function Invoke-DockerCompose {
 
 try {
   Write-Host "Resetting Spring dev stack and re-applying Flyway seed on mysql + backend-dev..." -ForegroundColor Cyan
-
-  $downExitCode = Invoke-DockerCompose -Arguments @(
+  $composeArgs = @(
     "compose",
-    "--profile", "prod",
-    "--profile", "dev",
-    "--profile", "mysql",
+    "-f", "devops/docker/docker-compose.yml",
+    "-f", "devops/docker/docker-compose.prod.yml",
+    "-f", "devops/docker/docker-compose.dev.yml",
+    "--env-file", "devops/env/.env.dev"
+  )
+
+  $downExitCode = Invoke-DockerCompose -Arguments (
+    $composeArgs + @(
     "down",
     "-v",
     "--remove-orphans"
+    )
   )
   if ($downExitCode -ne 0) {
     throw "Failed to tear down the existing Docker stack before seeding."
   }
 
-  $upExitCode = Invoke-DockerCompose -Arguments @(
-    "compose",
-    "--profile", "prod",
-    "--profile", "dev",
-    "--profile", "mysql",
+  $upExitCode = Invoke-DockerCompose -Arguments (
+    $composeArgs + @(
     "up",
     "-d",
+    "--build",
     "mysql",
-    "backend-dev",
+    "backend",
     "frontend",
     "nginx",
     "--remove-orphans"
+    )
   )
   if ($upExitCode -ne 0) {
     throw "Failed to start mysql + backend-dev + frontend + nginx for seeding."

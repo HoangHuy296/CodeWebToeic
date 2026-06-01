@@ -10,7 +10,7 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { authApi } from '../../lib/auth-api';
 import { clearStoredAuthTokens, getStoredAccessToken, getStoredRefreshToken, storeAuthTokens } from '../../lib/storage';
 import { getApiErrorMessage, isUnauthorizedError } from '../../lib/api';
-import type { AppRole, AuthPayload, LoginInput, PublicUser, RegisterInput } from '../../types/auth';
+import type { AppRole, AuthPayload, GoogleAuthInput, LoginInput, PublicUser, RegisterInput } from '../../types/auth';
 
 interface AuthContextValue {
   user: PublicUser | null;
@@ -19,6 +19,7 @@ interface AuthContextValue {
   isAuthLoading: boolean;
   authError: string | null;
   login: (payload: LoginInput) => Promise<PublicUser>;
+  loginWithGoogle: (payload: GoogleAuthInput) => Promise<PublicUser>;
   register: (payload: RegisterInput) => Promise<PublicUser>;
   logout: () => Promise<void>;
   refreshCurrentUser: () => Promise<PublicUser | null>;
@@ -113,6 +114,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       authError,
       login: async (payload) => {
         const response = await authApi.login(payload);
+        return handleAuthSuccess(response);
+      },
+      loginWithGoogle: async (payload) => {
+        const response = await authApi.google(payload);
         return handleAuthSuccess(response);
       },
       register: async (payload) => {

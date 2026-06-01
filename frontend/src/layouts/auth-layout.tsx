@@ -10,8 +10,8 @@ export function AuthLayout() {
         </h1>
         <div className="mt-8 grid gap-4">
           {[
-            'Login/register ket noi backend that',
-            'Auth context bootstrap bang TanStack Query',
+            'Chon role truoc khi vao form dang nhap hoac dang ky',
+            'Dang nhap Google va mat khau deu di qua backend that',
             'Role-based routes cho student, teacher, admin',
           ].map((item) => (
             <div key={item} className="rounded-2xl border border-white/10 bg-white/5 px-4 py-4 text-sm font-medium text-slate-100">
@@ -27,4 +27,3 @@ export function AuthLayout() {
     </div>
   );
 }
-

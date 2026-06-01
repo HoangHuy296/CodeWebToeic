@@ -7,5 +7,7 @@ public interface UserAuthJpaRepository extends JpaRepository<UserAuthEntity, Str
 
     Optional<UserAuthEntity> findByEmail(String email);
 
+    Optional<UserAuthEntity> findByGoogleSub(String googleSub);
+
     Optional<UserAuthEntity> findByRefreshToken(String refreshToken);
 }
