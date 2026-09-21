@@ -29,9 +29,9 @@ export function AdminSettingsPage() {
 
   return (
     <div className="space-y-8">
-      <section className="rounded-[2rem] border border-white/70 bg-white/90 p-8 shadow-[0_24px_70px_rgba(15,23,42,0.08)]">
+      <section className="rounded-[2rem] border border-stroke bg-white/90 p-8 shadow-[0_24px_70px_rgba(15,23,42,0.08)]">
         <p className="text-xs font-semibold tracking-[0.35em] text-teal-700 uppercase">admin settings</p>
-        <h1 className="mt-4 text-4xl font-black tracking-tight text-slate-950">Operational settings va runtime overview cho MVP.</h1>
+        <h1 className="mt-4 text-4xl font-extrabold tracking-tight text-slate-950">Operational settings va runtime overview cho MVP.</h1>
         <p className="mt-4 max-w-3xl text-sm leading-8 text-slate-600">
           MVP chua co API luu cau hinh dong. Vi vay trang nay tap trung vao runtime config, suc khoe content pipeline va cac nguyen tac van hanh
           de admin co mot diem quan sat that su huu dung.
@@ -49,7 +49,7 @@ export function AdminSettingsPage() {
       <section className="grid gap-6 xl:grid-cols-[0.95fr_1.05fr]">
         <article className="rounded-[1.8rem] border border-stroke bg-white p-6 shadow-[0_16px_50px_rgba(15,23,42,0.06)]">
           <p className="text-xs font-semibold tracking-[0.3em] text-slate-500 uppercase">runtime</p>
-          <h2 className="mt-2 text-2xl font-black tracking-tight text-slate-950">Thong so van hanh frontend</h2>
+          <h2 className="mt-2 text-2xl font-extrabold tracking-tight text-slate-950">Thong so van hanh frontend</h2>
 
           <div className="mt-6 grid gap-4">
             <div className="rounded-2xl border border-stroke bg-slate-50 p-4">
@@ -73,7 +73,7 @@ export function AdminSettingsPage() {
 
         <article className="rounded-[1.8rem] border border-stroke bg-white p-6 shadow-[0_16px_50px_rgba(15,23,42,0.06)]">
           <p className="text-xs font-semibold tracking-[0.3em] text-slate-500 uppercase">content mix</p>
-          <h2 className="mt-2 text-2xl font-black tracking-tight text-slate-950">Ty trong noi dung dang publish</h2>
+          <h2 className="mt-2 text-2xl font-extrabold tracking-tight text-slate-950">Ty trong noi dung dang publish</h2>
 
           <div className="mt-6 h-80">
             <ResponsiveContainer width="100%" height="100%">
@@ -109,7 +109,7 @@ export function AdminSettingsPage() {
           },
         ].map((item) => (
           <article key={item.title} className="rounded-[1.8rem] border border-stroke bg-white p-6 shadow-[0_16px_50px_rgba(15,23,42,0.06)]">
-            <h3 className="text-xl font-black tracking-tight text-slate-950">{item.title}</h3>
+            <h3 className="text-xl font-extrabold tracking-tight text-slate-950">{item.title}</h3>
             <p className="mt-3 text-sm leading-8 text-slate-600">{item.description}</p>
           </article>
         ))}

@@ -8,6 +8,8 @@ interface ThemeContextValue {
 }
 
 const STORAGE_KEY = 'ivyts-theme';
+const TRANSITION_CLASS = 'theme-transition';
+const TRANSITION_MS = 400;
 const ThemeContext = createContext<ThemeContextValue | null>(null);
 
 function getInitialTheme(): ThemeMode {
@@ -35,6 +37,9 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     () => ({
       theme,
       toggleTheme: () => {
+        const root = document.documentElement;
+        root.classList.add(TRANSITION_CLASS);
+        window.setTimeout(() => root.classList.remove(TRANSITION_CLASS), TRANSITION_MS);
         setTheme((current) => (current === 'light' ? 'dark' : 'light'));
       },
     }),

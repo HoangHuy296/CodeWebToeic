@@ -66,7 +66,7 @@ export function GoogleRoleAuthPanel({ mode, selectedRole }: GoogleRoleAuthPanelP
       <div className="flex items-center justify-between gap-4">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.28em] text-teal-700">google sign-in</p>
-          <h3 className="mt-2 text-lg font-black tracking-tight text-slate-950">
+          <h3 className="mt-2 text-lg font-extrabold tracking-tight text-slate-950">
             {mode === 'register' ? 'Dang ky bang Google' : 'Dang nhap bang Google'}
           </h3>
         </div>

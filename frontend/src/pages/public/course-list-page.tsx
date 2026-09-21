@@ -103,7 +103,7 @@ export function CourseListPage() {
           <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
             <div>
               <p className="text-xs font-semibold uppercase tracking-[0.28em] text-teal-700">search and filter</p>
-              <h2 className="mt-2 text-2xl font-black tracking-tight text-slate-950">Tim khoa hoc theo category, level va tu khoa</h2>
+              <h2 className="mt-2 text-2xl font-extrabold tracking-tight text-slate-950">Tim khoa hoc theo category, level va tu khoa</h2>
             </div>
 
             <button
@@ -176,11 +176,11 @@ export function CourseListPage() {
 
         <article className="rounded-[1.8rem] border border-stroke bg-[linear-gradient(135deg,rgba(15,23,42,0.96),rgba(15,118,110,0.9),rgba(249,115,22,0.78))] p-6 text-white shadow-[0_20px_60px_rgba(15,23,42,0.22)]">
           <p className="text-xs font-semibold uppercase tracking-[0.28em] text-amber-100">deal spotlight</p>
-          <h3 className="mt-3 text-2xl font-black tracking-tight">Chon dung khoa hoc theo target score va uu dai hien tai.</h3>
+          <h3 className="mt-3 text-2xl font-extrabold tracking-tight">Chon dung khoa hoc theo target score va uu dai hien tai.</h3>
           <div className="mt-5 grid gap-3">
             <div className="rounded-[1.3rem] border border-white/10 bg-white/8 px-4 py-4">
               <p className="text-sm font-semibold text-cyan-100">Category dang chon</p>
-              <p className="mt-2 text-lg font-black">{activeCategory === 'all' ? 'Tat ca category' : activeCategory}</p>
+              <p className="mt-2 text-lg font-extrabold">{activeCategory === 'all' ? 'Tat ca category' : activeCategory}</p>
             </div>
             <div className="rounded-[1.3rem] border border-white/10 bg-white/8 px-4 py-4">
               <p className="text-sm font-semibold text-cyan-100">Goi y chot nhanh</p>
@@ -196,7 +196,7 @@ export function CourseListPage() {
         <section className="flex items-end justify-between gap-4">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.28em] text-teal-700">course results</p>
-            <h2 className="mt-2 text-2xl font-black tracking-tight text-slate-950">Khoa hoc dang mo ban</h2>
+            <h2 className="mt-2 text-2xl font-extrabold tracking-tight text-slate-950">Khoa hoc dang mo ban</h2>
           </div>
           <p className="text-sm font-semibold text-slate-500">Moi card giu day du thong tin nhung uu tien diem so, level va promotion.</p>
         </section>
@@ -224,7 +224,7 @@ export function CourseListPage() {
       {coursesQuery.data && filteredCourses.length === 0 ? (
         <section className="rounded-[1.8rem] border border-dashed border-stroke bg-white p-8 text-center shadow-[0_16px_50px_rgba(15,23,42,0.04)]">
           <p className="text-sm font-semibold uppercase tracking-[0.2em] text-slate-500">Khong co du lieu</p>
-          <h3 className="mt-3 text-2xl font-black tracking-tight text-slate-950">
+          <h3 className="mt-3 text-2xl font-extrabold tracking-tight text-slate-950">
             Chua co khoa hoc trung voi bo loc hien tai
           </h3>
           <p className="mt-3 text-sm leading-7 text-slate-600">

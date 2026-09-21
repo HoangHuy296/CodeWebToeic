@@ -73,11 +73,11 @@ export function AdminPostsPage() {
 
   return (
     <div className="space-y-8">
-      <section className="rounded-[2rem] border border-white/70 bg-white/90 p-8 shadow-[0_24px_70px_rgba(15,23,42,0.08)]">
+      <section className="rounded-[2rem] border border-stroke bg-white/90 p-8 shadow-[0_24px_70px_rgba(15,23,42,0.08)]">
         <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
           <div>
             <p className="text-xs font-semibold tracking-[0.35em] text-teal-700 uppercase">admin posts</p>
-            <h1 className="mt-4 text-4xl font-black tracking-tight text-slate-950">Editorial desk cho draft, publish va archive bai viet.</h1>
+            <h1 className="mt-4 text-4xl font-extrabold tracking-tight text-slate-950">Editorial desk cho draft, publish va archive bai viet.</h1>
             <p className="mt-4 max-w-3xl text-sm leading-8 text-slate-600">
               Trang nay da noi that den BlogPost CRUD. Admin co the mo bai viet cu de cap nhat hoac tao bai moi ngay trong dashboard.
             </p>
@@ -98,7 +98,7 @@ export function AdminPostsPage() {
 
       <section className="grid gap-6 xl:grid-cols-[0.9fr_1.1fr]">
         <article className="rounded-[1.8rem] border border-stroke bg-white p-6 shadow-[0_16px_50px_rgba(15,23,42,0.06)]">
-          <h2 className="text-2xl font-black tracking-tight text-slate-950">Thu vien bai viet</h2>
+          <h2 className="text-2xl font-extrabold tracking-tight text-slate-950">Thu vien bai viet</h2>
 
           {postsQuery.isPending ? <div className="mt-6"><QueryLoadingState title="Dang tai bai viet..." /></div> : null}
           {postsQuery.error ? (
@@ -136,7 +136,7 @@ export function AdminPostsPage() {
         <article className="rounded-[1.8rem] border border-stroke bg-white p-6 shadow-[0_16px_50px_rgba(15,23,42,0.06)]">
           <div className="flex items-center justify-between gap-4">
             <div>
-              <h2 className="text-2xl font-black tracking-tight text-slate-950">{selectedPostId ? 'Chinh sua bai viet' : 'Tao bai viet moi'}</h2>
+              <h2 className="text-2xl font-extrabold tracking-tight text-slate-950">{selectedPostId ? 'Chinh sua bai viet' : 'Tao bai viet moi'}</h2>
               <p className="mt-2 text-sm text-slate-600">Editor MVP uu tien su dung nhanh va dung payload backend.</p>
             </div>
 

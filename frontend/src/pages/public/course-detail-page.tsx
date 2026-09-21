@@ -244,7 +244,7 @@ export function CourseDetailPage() {
                       <span className="rounded-full bg-teal-100 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-teal-700">
                         {managementTone.badge}
                       </span>
-                      <h2 className="mt-4 text-2xl font-black tracking-tight text-slate-950">Theo doi / Chinh sua khoa hoc ngay tren public detail</h2>
+                      <h2 className="mt-4 text-2xl font-extrabold tracking-tight text-slate-950">Theo doi / Chinh sua khoa hoc ngay tren public detail</h2>
                       <p className="mt-3 max-w-3xl text-sm leading-7 text-slate-600">{managementTone.note}</p>
                     </div>
                     <div className="flex flex-wrap items-center gap-3">
@@ -285,7 +285,7 @@ export function CourseDetailPage() {
                       }}
                     >
                       <div>
-                        <h3 className="text-xl font-black tracking-tight text-slate-950">Cap nhat khoa hoc</h3>
+                        <h3 className="text-xl font-extrabold tracking-tight text-slate-950">Cap nhat khoa hoc</h3>
                         <p className="mt-2 text-sm text-slate-600">
                           {resolveTeacherSubmitCopy(isAdmin)}
                         </p>
@@ -424,7 +424,7 @@ export function CourseDetailPage() {
               ) : null}
 
               <article className="rounded-[2rem] border border-stroke bg-white p-8 shadow-[0_24px_70px_rgba(15,23,42,0.08)]">
-                <h2 className="text-2xl font-black tracking-tight text-slate-950">Mo ta khoa hoc</h2>
+                <h2 className="text-2xl font-extrabold tracking-tight text-slate-950">Mo ta khoa hoc</h2>
                 <p className="mt-4 text-sm leading-8 text-slate-600">{course.description}</p>
 
                 <div className="mt-8 grid gap-3 sm:grid-cols-2">
@@ -451,7 +451,7 @@ export function CourseDetailPage() {
 
               <article className="rounded-[2rem] border border-stroke bg-white p-8 shadow-[0_24px_70px_rgba(15,23,42,0.08)]">
                 <div className="flex items-center justify-between gap-4">
-                  <h2 className="text-2xl font-black tracking-tight text-slate-950">Lesson list</h2>
+                  <h2 className="text-2xl font-extrabold tracking-tight text-slate-950">Lesson list</h2>
                   <span className="rounded-full bg-teal-50 px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-teal-700">
                     {course.lessonCount} lessons
                   </span>
@@ -465,7 +465,7 @@ export function CourseDetailPage() {
                           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
                             Lesson {lesson.order}
                           </p>
-                          <h3 className="mt-2 text-lg font-bold tracking-tight text-slate-950">{lesson.title}</h3>
+                          <h3 className="mt-2 text-lg font-extrabold tracking-tight text-slate-950">{lesson.title}</h3>
                         </div>
                         {lesson.isPreview ? (
                           <span className="rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-amber-700">
@@ -483,7 +483,7 @@ export function CourseDetailPage() {
             <aside className="space-y-6">
               <article className="rounded-[2rem] border border-stroke bg-white p-8 shadow-[0_24px_70px_rgba(15,23,42,0.08)]">
                 <p className="text-xs font-semibold uppercase tracking-[0.25em] text-teal-700">{course.category}</p>
-                <h2 className="mt-3 text-3xl font-black tracking-tight text-slate-950">
+                <h2 className="mt-3 text-3xl font-extrabold tracking-tight text-slate-950">
                   {course.salePrice ? formatCurrency(course.salePrice) : formatCurrency(course.price)}
                 </h2>
                 {course.salePrice ? (
@@ -497,7 +497,7 @@ export function CourseDetailPage() {
                   </div>
                   <div className="rounded-2xl bg-slate-50 px-4 py-4">
                     <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Giang vien</p>
-                    <p className="mt-2 font-bold text-slate-900">{course.owner.fullName ?? 'IVYTS 1997'}</p>
+                    <p className="mt-2 font-bold text-slate-900">{course.owner.fullName ?? 'IVYTS 1998'}</p>
                   </div>
                 </div>
 
@@ -522,7 +522,7 @@ export function CourseDetailPage() {
               </article>
 
               <article className="rounded-[2rem] border border-stroke bg-white p-8 shadow-[0_24px_70px_rgba(15,23,42,0.08)]">
-                <h3 className="text-xl font-black tracking-tight text-slate-950">Tai lieu di kem</h3>
+                <h3 className="text-xl font-extrabold tracking-tight text-slate-950">Tai lieu di kem</h3>
                 <div className="mt-5 grid gap-3">
                   {course.materials.map((material) => (
                     <a

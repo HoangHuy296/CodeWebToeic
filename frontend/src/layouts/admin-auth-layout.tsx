@@ -7,7 +7,7 @@ export function AdminAuthLayout() {
         <p className="text-xs font-semibold uppercase tracking-[0.35em] text-cyan-200">
           Admin access
         </p>
-        <h1 className="mt-5 max-w-2xl text-4xl font-black tracking-tight">
+        <h1 className="mt-5 max-w-2xl text-4xl font-extrabold tracking-tight">
           Khu vuc quan tri rieng cho van hanh he thong, duyet noi dung va theo doi toan bo CRM.
         </h1>
         <div className="mt-8 grid gap-4 md:grid-cols-2">
@@ -27,7 +27,7 @@ export function AdminAuthLayout() {
         </div>
       </section>
 
-      <section className="rounded-[2rem] border border-white/70 bg-white/92 p-6 shadow-[0_24px_70px_rgba(15,23,42,0.08)] lg:p-8">
+      <section className="rounded-[2rem] border border-stroke bg-white/92 p-6 shadow-[0_24px_70px_rgba(15,23,42,0.08)] lg:p-8">
         <Outlet />
       </section>
     </div>

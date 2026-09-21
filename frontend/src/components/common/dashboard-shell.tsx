@@ -30,10 +30,10 @@ export function DashboardShell({ title, accent, navItems }: DashboardShellProps)
 
   return (
     <div className="grid gap-6 lg:grid-cols-[280px_minmax(0,1fr)]">
-      <aside className="rounded-[2rem] border border-white/70 bg-white/85 p-5 shadow-[0_24px_70px_rgba(15,23,42,0.08)]">
+      <aside className="rounded-[2rem] border border-stroke bg-white/85 p-5 shadow-[0_24px_70px_rgba(15,23,42,0.08)]">
         <div className="rounded-[1.5rem] bg-slate-950 p-5 text-white">
           <p className="text-xs font-semibold tracking-[0.3em] uppercase text-slate-300">{accent}</p>
-          <h2 className="mt-3 text-2xl font-black tracking-tight">{title}</h2>
+          <h2 className="mt-3 text-2xl font-extrabold tracking-tight">{title}</h2>
         </div>
 
         <nav className="mt-4 grid gap-2">
@@ -71,7 +71,7 @@ export function DashboardShell({ title, accent, navItems }: DashboardShellProps)
                       })
                     }
                     className={[
-                      'inline-flex h-11 w-11 items-center justify-center rounded-2xl border border-stroke text-sm font-black transition',
+                      'inline-flex h-11 w-11 items-center justify-center rounded-2xl border border-stroke text-sm font-extrabold transition',
                       expandedItems.has(item.to) || item.children?.some((child) => location.pathname.startsWith(child.to))
                         ? 'bg-cyan-50 text-cyan-900'
                         : 'bg-white text-slate-700 hover:bg-slate-50',

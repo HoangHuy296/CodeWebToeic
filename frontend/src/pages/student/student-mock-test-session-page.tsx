@@ -112,7 +112,7 @@ export function StudentMockTestSessionPage() {
           <div className="flex flex-wrap items-start justify-between gap-4">
             <div className="max-w-4xl">
               <p className="text-xs font-semibold uppercase tracking-[0.32em] text-cyan-200">{workspaceEyebrow}</p>
-              <h1 className="mt-3 text-3xl font-black tracking-tight text-white">
+              <h1 className="mt-3 text-3xl font-extrabold tracking-tight text-white">
                 {mockTestQuery.data?.title ?? 'Dang tai bai thi...'}
               </h1>
               <p className="mt-3 text-sm leading-7 text-slate-300">
@@ -123,7 +123,7 @@ export function StudentMockTestSessionPage() {
             <div className="flex flex-wrap items-center gap-3">
               <div className="rounded-[1.4rem] border border-amber-300/20 bg-amber-400/10 px-4 py-3 text-right">
                 <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-amber-100">Thoi gian con lai</p>
-                <p className="mt-1 text-2xl font-black tracking-tight text-amber-300">
+                <p className="mt-1 text-2xl font-extrabold tracking-tight text-amber-300">
                   {formatCountdown(timeLeftSeconds ?? totalDurationSeconds)}
                 </p>
               </div>
@@ -141,21 +141,21 @@ export function StudentMockTestSessionPage() {
           <div className="mt-5 grid gap-4 md:grid-cols-4">
             <article className="rounded-[1.3rem] border border-white/10 bg-white/5 px-4 py-4">
               <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">Loai bai thi</p>
-              <p className="mt-2 text-lg font-black tracking-tight text-white">{mockTestQuery.data?.type ?? '--'}</p>
+              <p className="mt-2 text-lg font-extrabold tracking-tight text-white">{mockTestQuery.data?.type ?? '--'}</p>
             </article>
             <article className="rounded-[1.3rem] border border-white/10 bg-white/5 px-4 py-4">
               <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">Level</p>
-              <p className="mt-2 text-lg font-black tracking-tight text-white">{mockTestQuery.data?.level ?? '--'}</p>
+              <p className="mt-2 text-lg font-extrabold tracking-tight text-white">{mockTestQuery.data?.level ?? '--'}</p>
             </article>
             <article className="rounded-[1.3rem] border border-white/10 bg-white/5 px-4 py-4">
               <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">So cau da lam</p>
-              <p className="mt-2 text-lg font-black tracking-tight text-white">
+              <p className="mt-2 text-lg font-extrabold tracking-tight text-white">
                 {answeredCount}/{questions.length}
               </p>
             </article>
             <article className="rounded-[1.3rem] border border-white/10 bg-white/5 px-4 py-4">
               <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">So cau hien co</p>
-              <p className="mt-2 text-lg font-black tracking-tight text-white">{questions.length}</p>
+              <p className="mt-2 text-lg font-extrabold tracking-tight text-white">{questions.length}</p>
             </article>
           </div>
         </header>
@@ -174,7 +174,7 @@ export function StudentMockTestSessionPage() {
             <aside className="rounded-[2rem] border border-white/10 bg-white/5 p-5 shadow-[0_18px_55px_rgba(2,6,23,0.3)] backdrop-blur">
               <div>
                 <p className="text-xs font-semibold uppercase tracking-[0.28em] text-cyan-200">question navigator</p>
-                <h2 className="mt-3 text-2xl font-black tracking-tight text-white">Danh sach cau hoi</h2>
+                <h2 className="mt-3 text-2xl font-extrabold tracking-tight text-white">Danh sach cau hoi</h2>
               </div>
 
               <div className="mt-5 grid grid-cols-5 gap-2">
@@ -236,7 +236,7 @@ export function StudentMockTestSessionPage() {
                 <div className="space-y-5">
                   <div className="rounded-[1.6rem] border border-emerald-300/20 bg-emerald-500/10 px-5 py-5">
                     <p className="text-xs font-semibold uppercase tracking-[0.24em] text-emerald-200">Ket qua bai thi</p>
-                    <h2 className="mt-2 text-3xl font-black tracking-tight text-white">{result.score} diem</h2>
+                    <h2 className="mt-2 text-3xl font-extrabold tracking-tight text-white">{result.score} diem</h2>
                     <p className="mt-2 text-sm text-emerald-100">
                       Dung {result.correctAnswers}/{result.totalQuestions} cau. Thoi gian lam bai: {formatCountdown(result.durationSeconds)}.
                     </p>
@@ -256,7 +256,7 @@ export function StudentMockTestSessionPage() {
                         <div className="flex items-start justify-between gap-3">
                           <div>
                             <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-300">Cau {index + 1}</p>
-                            <h3 className="mt-2 text-lg font-black tracking-tight text-white">{item.prompt}</h3>
+                            <h3 className="mt-2 text-lg font-extrabold tracking-tight text-white">{item.prompt}</h3>
                           </div>
                           <span className="rounded-full bg-white/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-white">
                             {item.isCorrect ? 'Dung' : 'Sai'}
@@ -306,7 +306,7 @@ export function StudentMockTestSessionPage() {
                         {currentQuestion.section}
                       </span>
                     </div>
-                    <h2 className="mt-3 text-2xl font-black tracking-tight text-white">{currentQuestion.prompt}</h2>
+                    <h2 className="mt-3 text-2xl font-extrabold tracking-tight text-white">{currentQuestion.prompt}</h2>
                   </div>
 
                   <div className="grid gap-3">

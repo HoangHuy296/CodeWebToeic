@@ -103,9 +103,9 @@ export function AdminMessagesPage() {
 
   return (
     <div className="space-y-8">
-      <section className="rounded-[2rem] border border-white/70 bg-white/90 p-8 shadow-[0_24px_70px_rgba(15,23,42,0.08)]">
+      <section className="rounded-[2rem] border border-stroke bg-white/90 p-8 shadow-[0_24px_70px_rgba(15,23,42,0.08)]">
         <p className="text-xs font-semibold tracking-[0.35em] text-teal-700 uppercase">admin messages</p>
-        <h1 className="mt-4 text-4xl font-black tracking-tight text-slate-950">Inbox van hanh cho lien he, tu van va support.</h1>
+        <h1 className="mt-4 text-4xl font-extrabold tracking-tight text-slate-950">Inbox van hanh cho lien he, tu van va support.</h1>
         <p className="mt-4 max-w-3xl text-sm leading-8 text-slate-600">
           Admin co the doc luong contact messages thuc te, loc theo unread/read/replied va danh dau trang thai ngay trong man hinh nay.
         </p>
@@ -114,7 +114,7 @@ export function AdminMessagesPage() {
       <section className="grid gap-6 xl:grid-cols-[0.95fr_1.05fr]">
         <article className="rounded-[1.8rem] border border-stroke bg-white p-6 shadow-[0_16px_50px_rgba(15,23,42,0.06)]">
           <div className="flex items-center justify-between gap-4">
-            <h2 className="text-2xl font-black tracking-tight text-slate-950">Inbox</h2>
+            <h2 className="text-2xl font-extrabold tracking-tight text-slate-950">Inbox</h2>
           </div>
 
           <div className="mt-5 grid gap-3">
@@ -192,7 +192,7 @@ export function AdminMessagesPage() {
 
         <article className="rounded-[1.8rem] border border-stroke bg-white p-6 shadow-[0_16px_50px_rgba(15,23,42,0.06)]">
           <div>
-            <h2 className="text-2xl font-black tracking-tight text-slate-950">Chi tiet message va reply</h2>
+            <h2 className="text-2xl font-extrabold tracking-tight text-slate-950">Chi tiet message va reply</h2>
             <p className="mt-2 text-sm text-slate-600">Xem day du role, sender, recipient va tra loi truc tiep tu detail pane truoc khi mo form gui moi.</p>
           </div>
           {markMutation.error ? (
@@ -206,7 +206,7 @@ export function AdminMessagesPage() {
               <div className="rounded-[1.5rem] border border-stroke bg-slate-50 p-5">
                 <div className="flex flex-wrap items-center justify-between gap-3">
                   <div>
-                    <p className="text-xl font-black tracking-tight text-slate-950">{selectedMessage.subject}</p>
+                    <p className="text-xl font-extrabold tracking-tight text-slate-950">{selectedMessage.subject}</p>
                     <p className="mt-2 text-sm text-slate-600">
                       {selectedMessage.name} - {selectedMessage.email} {selectedMessage.phone ? `- ${selectedMessage.phone}` : ''}
                     </p>
@@ -312,7 +312,7 @@ export function AdminMessagesPage() {
 
           <div className="mt-8 grid gap-6">
             <div>
-              <h2 className="text-2xl font-black tracking-tight text-slate-950">Gui tin nhan noi bo</h2>
+              <h2 className="text-2xl font-extrabold tracking-tight text-slate-950">Gui tin nhan noi bo</h2>
               <p className="mt-2 text-sm text-slate-600">Admin co the gui message truc tiep cho teacher va student ngay trong inbox nay.</p>
             </div>
 

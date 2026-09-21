@@ -110,15 +110,15 @@ export function WorkspaceMockTestResultsPage({ audience }: WorkspaceMockTestResu
       <section className="grid gap-4 md:grid-cols-3">
         <article className="rounded-[1.7rem] border border-stroke bg-white/90 p-5 shadow-[0_16px_40px_rgba(15,23,42,0.06)]">
           <p className="text-xs font-semibold uppercase tracking-[0.25em] text-cyan-700">Tong bai da cham</p>
-          <p className="mt-3 text-3xl font-black tracking-tight text-slate-950">{totalSubmissions}</p>
+          <p className="mt-3 text-3xl font-extrabold tracking-tight text-slate-950">{totalSubmissions}</p>
         </article>
         <article className="rounded-[1.7rem] border border-stroke bg-white/90 p-5 shadow-[0_16px_40px_rgba(15,23,42,0.06)]">
           <p className="text-xs font-semibold uppercase tracking-[0.25em] text-cyan-700">Diem trung binh</p>
-          <p className="mt-3 text-3xl font-black tracking-tight text-slate-950">{averageScore}/100</p>
+          <p className="mt-3 text-3xl font-extrabold tracking-tight text-slate-950">{averageScore}/100</p>
         </article>
         <article className="rounded-[1.7rem] border border-stroke bg-white/90 p-5 shadow-[0_16px_40px_rgba(15,23,42,0.06)]">
           <p className="text-xs font-semibold uppercase tracking-[0.25em] text-cyan-700">Bai dat 80+</p>
-          <p className="mt-3 text-3xl font-black tracking-tight text-slate-950">{strongAttempts}</p>
+          <p className="mt-3 text-3xl font-extrabold tracking-tight text-slate-950">{strongAttempts}</p>
         </article>
       </section>
 
@@ -194,7 +194,7 @@ export function WorkspaceMockTestResultsPage({ audience }: WorkspaceMockTestResu
                   </span>
                 </div>
 
-                <h3 className="mt-4 text-xl font-black tracking-tight text-slate-950">{submission.mockTest.title}</h3>
+                <h3 className="mt-4 text-xl font-extrabold tracking-tight text-slate-950">{submission.mockTest.title}</h3>
                 <p className="mt-2 text-sm text-slate-600">
                   {audience === 'admin' ? `${submission.student.fullName} · ` : ''}
                   {submission.creator.fullName} · {formatDateTime(submission.submittedAt)}
@@ -245,7 +245,7 @@ export function WorkspaceMockTestResultsPage({ audience }: WorkspaceMockTestResu
                   <p className="text-xs font-semibold uppercase tracking-[0.25em] text-cyan-700">
                     {selectedSummary?.creator.role === 'teacher' ? 'de cua giang vien' : 'de he thong'}
                   </p>
-                  <h2 className="mt-2 text-3xl font-black tracking-tight text-slate-950">
+                  <h2 className="mt-2 text-3xl font-extrabold tracking-tight text-slate-950">
                     {submissionDetailQuery.data.mockTest.title}
                   </h2>
                   <p className="mt-3 text-sm leading-7 text-slate-600">
@@ -257,7 +257,7 @@ export function WorkspaceMockTestResultsPage({ audience }: WorkspaceMockTestResu
 
                 <div className="rounded-[1.4rem] bg-[linear-gradient(135deg,rgba(8,145,178,0.12),rgba(37,99,235,0.08))] px-5 py-4 text-right">
                   <p className="text-xs font-semibold uppercase tracking-[0.22em] text-cyan-700">Diem so</p>
-                  <p className="mt-2 text-3xl font-black tracking-tight text-slate-950">
+                  <p className="mt-2 text-3xl font-extrabold tracking-tight text-slate-950">
                     {submissionDetailQuery.data.score}/100
                   </p>
                 </div>
@@ -266,19 +266,19 @@ export function WorkspaceMockTestResultsPage({ audience }: WorkspaceMockTestResu
               <div className="grid gap-4 sm:grid-cols-3">
                 <div className="rounded-[1.4rem] border border-stroke bg-slate-50 px-4 py-4">
                   <p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-500">Dung / Tong</p>
-                  <p className="mt-2 text-xl font-black text-slate-950">
+                  <p className="mt-2 text-xl font-extrabold text-slate-950">
                     {submissionDetailQuery.data.correctAnswers}/{submissionDetailQuery.data.totalQuestions}
                   </p>
                 </div>
                 <div className="rounded-[1.4rem] border border-stroke bg-slate-50 px-4 py-4">
                   <p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-500">Thoi gian lam bai</p>
-                  <p className="mt-2 text-xl font-black text-slate-950">
+                  <p className="mt-2 text-xl font-extrabold text-slate-950">
                     {formatDurationSeconds(submissionDetailQuery.data.durationSeconds)}
                   </p>
                 </div>
                 <div className="rounded-[1.4rem] border border-stroke bg-slate-50 px-4 py-4">
                   <p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-500">Nguon</p>
-                  <p className="mt-2 text-xl font-black text-slate-950">
+                  <p className="mt-2 text-xl font-extrabold text-slate-950">
                     {selectedSummary?.sourceKind === 'assigned' ? 'Gan khoa hoc' : 'De tu do'}
                   </p>
                 </div>

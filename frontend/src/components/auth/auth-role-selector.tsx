@@ -17,13 +17,13 @@ const roleCards: Array<{
     role: 'student',
     title: 'Hoc vien',
     subtitle: 'Hoc course, lam bai tap, lam bai thi va theo doi tien do hoc.',
-    accent: 'from-teal-500/20 via-cyan-400/10 to-emerald-400/20',
+    accent: 'from-teal-600 via-cyan-600 to-emerald-600',
   },
   {
     role: 'teacher',
     title: 'Giang vien',
     subtitle: 'Quan ly course, lesson, bai tap va bai thi cua hoc vien.',
-    accent: 'from-slate-900 via-blue-900/85 to-cyan-700/70',
+    accent: 'from-slate-900 via-blue-900 to-cyan-700',
   },
 ];
 
@@ -59,7 +59,7 @@ export function AuthRoleSelector({ selectedRole, onSelect, onContinue, mode }: A
       <p className="text-xs font-semibold uppercase tracking-[0.35em] text-teal-700">
         {mode === 'register' ? 'Dang ky' : 'Dang nhap'}
       </p>
-      <h2 className="mt-3 text-3xl font-black tracking-tight text-slate-950">
+      <h2 className="mt-3 text-3xl font-extrabold tracking-tight text-slate-950">
         Chon vai tro truoc khi tiep tuc
       </h2>
       <p className="mt-3 text-sm leading-7 text-slate-600">
@@ -78,18 +78,18 @@ export function AuthRoleSelector({ selectedRole, onSelect, onContinue, mode }: A
                 'group rounded-[1.8rem] border px-5 py-5 text-left transition',
                 isSelected
                   ? 'border-teal-300 bg-white shadow-[0_18px_40px_rgba(15,118,110,0.12)] ring-2 ring-teal-200/70'
-                  : 'border-white/70 bg-white/70 hover:border-teal-150 hover:bg-white',
+                  : 'border-stroke bg-white/70 hover:border-teal-150 hover:bg-white',
               ].join(' ')}
             >
               <div
                 className={[
                   'flex min-h-24 items-center justify-between rounded-[1.4rem] px-4 py-4 text-white',
-                  `bg-[linear-gradient(135deg,var(--tw-gradient-stops))] ${card.accent}`,
+                  `bg-linear-to-br ${card.accent}`,
                 ].join(' ')}
               >
                 <div>
                   <p className="text-xs font-semibold uppercase tracking-[0.24em] text-white/75">Role</p>
-                  <p className="mt-2 text-2xl font-black tracking-tight">{card.title}</p>
+                  <p className="mt-2 text-2xl font-extrabold tracking-tight">{card.title}</p>
                 </div>
                 <RoleIllustration role={card.role} />
               </div>

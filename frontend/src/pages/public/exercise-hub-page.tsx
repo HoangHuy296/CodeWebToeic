@@ -64,7 +64,7 @@ export function ExerciseHubPage() {
         <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.28em] text-slate-500">Danh muc chu de</p>
-            <h2 className="mt-2 text-3xl font-black tracking-tight text-slate-950">Loc bai tap theo chu de on tap</h2>
+            <h2 className="mt-2 text-3xl font-extrabold tracking-tight text-slate-950">Loc bai tap theo chu de on tap</h2>
           </div>
           <p className="max-w-2xl text-sm leading-7 text-slate-600">
             Ban co the chon mot chu de de xem nhom bai tap lien quan, hoac mo trang chi tiet chu de de xem toan bo bai tap theo nhan do.

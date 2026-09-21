@@ -116,7 +116,7 @@ export function TeacherMessagesPage() {
       <section className="grid gap-6 xl:grid-cols-[0.92fr_1.08fr]">
         <article className="rounded-[1.8rem] border border-stroke bg-white p-6 shadow-[0_16px_50px_rgba(15,23,42,0.06)]">
           <div className="flex items-center justify-between gap-4">
-            <h2 className="text-2xl font-black tracking-tight text-slate-950">Inbox</h2>
+            <h2 className="text-2xl font-extrabold tracking-tight text-slate-950">Inbox</h2>
           </div>
 
           <div className="mt-5 grid gap-3">
@@ -204,7 +204,7 @@ export function TeacherMessagesPage() {
 
         <article className="rounded-[1.8rem] border border-stroke bg-white p-6 shadow-[0_16px_50px_rgba(15,23,42,0.06)]">
           <div>
-            <h2 className="text-2xl font-black tracking-tight text-slate-950">Chi tiet message va reply</h2>
+            <h2 className="text-2xl font-extrabold tracking-tight text-slate-950">Chi tiet message va reply</h2>
             <p className="mt-2 text-sm text-slate-600">Teacher co the xem conversation va phan hoi ngay tu detail pane truoc khi tao message moi.</p>
           </div>
 
@@ -219,7 +219,7 @@ export function TeacherMessagesPage() {
               <div className="rounded-[1.5rem] border border-stroke bg-slate-50 p-5">
                 <div className="flex flex-wrap items-center justify-between gap-3">
                   <div>
-                    <p className="text-xl font-black tracking-tight text-slate-950">{selectedMessage.subject}</p>
+                    <p className="text-xl font-extrabold tracking-tight text-slate-950">{selectedMessage.subject}</p>
                     <p className="mt-2 text-sm text-slate-600">
                       {(replyTarget?.fullName ?? selectedMessage.name) || 'Nguoi gui'} - {(replyTarget?.email ?? selectedMessage.email) || 'No email'}
                     </p>
@@ -323,7 +323,7 @@ export function TeacherMessagesPage() {
 
           <div className="mt-8 grid gap-6">
             <div>
-              <h2 className="text-2xl font-black tracking-tight text-slate-950">Gui tin nhan moi</h2>
+              <h2 className="text-2xl font-extrabold tracking-tight text-slate-950">Gui tin nhan moi</h2>
               <p className="mt-2 text-sm text-slate-600">Teacher chi nhan va gui cho admin hoac student dang hoc trong khoa hoc cua minh.</p>
             </div>
 

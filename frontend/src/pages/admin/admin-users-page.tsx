@@ -77,9 +77,9 @@ export function AdminUsersPage() {
 
   return (
     <div className="space-y-8">
-      <section className="rounded-[2rem] border border-white/70 bg-white/90 p-8 shadow-[0_24px_70px_rgba(15,23,42,0.08)]">
+      <section className="rounded-[2rem] border border-stroke bg-white/90 p-8 shadow-[0_24px_70px_rgba(15,23,42,0.08)]">
         <p className="text-xs font-semibold tracking-[0.35em] text-teal-700 uppercase">admin users</p>
-        <h1 className="mt-4 text-4xl font-black tracking-tight text-slate-950">Workspace quan tri user theo mo hinh master-detail.</h1>
+        <h1 className="mt-4 text-4xl font-extrabold tracking-tight text-slate-950">Workspace quan tri user theo mo hinh master-detail.</h1>
         <p className="mt-4 max-w-3xl text-sm leading-8 text-slate-600">
           Admin co the loc user theo role, mo chi tiet ho so, cap nhat role, so dien thoai, avatar va vo hieu hoa tai khoan
           ngay tren cung mot man hinh.
@@ -90,7 +90,7 @@ export function AdminUsersPage() {
         <article className="rounded-[1.8rem] border border-stroke bg-white p-6 shadow-[0_16px_50px_rgba(15,23,42,0.06)]">
           <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
             <div>
-              <h2 className="text-2xl font-black tracking-tight text-slate-950">Danh sach nguoi dung</h2>
+              <h2 className="text-2xl font-extrabold tracking-tight text-slate-950">Danh sach nguoi dung</h2>
               <p className="mt-2 text-sm text-slate-600">Chon mot user o cot trai de mo panel chinh sua.</p>
             </div>
 
@@ -169,7 +169,7 @@ export function AdminUsersPage() {
         <article className="rounded-[1.8rem] border border-stroke bg-white p-6 shadow-[0_16px_50px_rgba(15,23,42,0.06)]">
           <div className="flex items-center justify-between gap-4">
             <div>
-              <h2 className="text-2xl font-black tracking-tight text-slate-950">Ho so va phan quyen</h2>
+              <h2 className="text-2xl font-extrabold tracking-tight text-slate-950">Ho so va phan quyen</h2>
               <p className="mt-2 text-sm text-slate-600">Panel nay dang bind truc tiep voi `GET/PATCH /api/admin/users/:id`.</p>
             </div>
           </div>
@@ -243,7 +243,7 @@ export function AdminUsersPage() {
                   />
                 </label>
 
-                <div className="grid gap-3 rounded-2xl border border-white/80 bg-white px-4 py-4 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-start">
+                <div className="grid gap-3 rounded-2xl border border-stroke bg-white px-4 py-4 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-start">
                   <div>
                     <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Tong quan</p>
                     <p className="mt-1 text-sm text-slate-600">

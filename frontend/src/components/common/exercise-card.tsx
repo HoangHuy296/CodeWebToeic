@@ -48,7 +48,7 @@ export function ExerciseCard({ exercise, topicLabel }: ExerciseCardProps) {
         <span className="rounded-full bg-slate-100 px-3 py-1 text-slate-700">{exercise.type}</span>
       </div>
 
-      <h3 className="mt-4 text-2xl font-black tracking-tight text-slate-950">{exercise.title}</h3>
+      <h3 className="mt-4 text-2xl font-extrabold tracking-tight text-slate-950">{exercise.title}</h3>
       <p className="mt-3 text-sm leading-7 text-slate-600">{exercise.description}</p>
 
       <div className="mt-5 grid grid-cols-3 gap-3 text-sm">
@@ -62,7 +62,7 @@ export function ExerciseCard({ exercise, topicLabel }: ExerciseCardProps) {
         </div>
         <div className="rounded-2xl bg-slate-50 px-3 py-3">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Nguoi tao</p>
-          <p className="mt-1 font-bold text-slate-900">{exercise.createdBy.fullName ?? 'IVYTS 1997'}</p>
+          <p className="mt-1 font-bold text-slate-900">{exercise.createdBy.fullName ?? 'IVYTS 1998'}</p>
         </div>
       </div>
 

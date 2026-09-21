@@ -49,7 +49,7 @@ export function RegisterPage() {
   return (
     <div>
       <p className="text-xs font-semibold tracking-[0.35em] text-teal-700 uppercase">Dang ky</p>
-      <h2 className="mt-3 text-3xl font-black tracking-tight text-slate-950">
+      <h2 className="mt-3 text-3xl font-extrabold tracking-tight text-slate-950">
         Tao tai khoan {roleLabel} moi
       </h2>
       <p className="mt-3 text-sm leading-7 text-slate-600">

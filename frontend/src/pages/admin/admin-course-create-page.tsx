@@ -259,9 +259,9 @@ export function AdminCourseCreatePage() {
 
   return (
     <div className="space-y-8">
-      <section className="rounded-[2rem] border border-white/70 bg-white/90 p-8 shadow-[0_24px_70px_rgba(15,23,42,0.08)]">
+      <section className="rounded-[2rem] border border-stroke bg-white/90 p-8 shadow-[0_24px_70px_rgba(15,23,42,0.08)]">
         <p className="text-xs font-semibold tracking-[0.35em] text-teal-700 uppercase">course packaging</p>
-        <h1 className="mt-4 text-4xl font-black tracking-tight text-slate-950">Tao khoa hoc va dong goi lesson ngay trong mot quy trinh.</h1>
+        <h1 className="mt-4 text-4xl font-extrabold tracking-tight text-slate-950">Tao khoa hoc va dong goi lesson ngay trong mot quy trinh.</h1>
         <p className="mt-4 max-w-3xl text-sm leading-8 text-slate-600">
           Form nay tao `course` truoc, sau do push tung `lesson` thong qua API rieng. Cac field video chi luu metadata/url de
           san sang nang cap sang Cloudinary, S3, Bunny hoac Vimeo private o phase sau.
@@ -285,7 +285,7 @@ export function AdminCourseCreatePage() {
         }}
       >
         <section className="rounded-[1.8rem] border border-stroke bg-white p-6 shadow-[0_16px_50px_rgba(15,23,42,0.06)]">
-          <h2 className="text-2xl font-black tracking-tight text-slate-950">Thong tin khoa hoc</h2>
+          <h2 className="text-2xl font-extrabold tracking-tight text-slate-950">Thong tin khoa hoc</h2>
           <div className="mt-6 grid gap-4 md:grid-cols-2">
             <label className="grid gap-2 text-sm font-semibold text-slate-700">
               Ten khoa hoc
@@ -353,7 +353,7 @@ export function AdminCourseCreatePage() {
         </section>
 
         <section className="rounded-[1.8rem] border border-stroke bg-white p-6 shadow-[0_16px_50px_rgba(15,23,42,0.06)]">
-          <h2 className="text-2xl font-black tracking-tight text-slate-950">Intro video va tai nguyen</h2>
+          <h2 className="text-2xl font-extrabold tracking-tight text-slate-950">Intro video va tai nguyen</h2>
           <div className="mt-6 grid gap-4 md:grid-cols-2">
             <label className="grid gap-2 text-sm font-semibold text-slate-700">
               Intro video URL
@@ -408,7 +408,7 @@ export function AdminCourseCreatePage() {
         <section className="rounded-[1.8rem] border border-stroke bg-white p-6 shadow-[0_16px_50px_rgba(15,23,42,0.06)]">
           <div className="flex items-center justify-between gap-4">
             <div>
-              <h2 className="text-2xl font-black tracking-tight text-slate-950">Lesson packaging</h2>
+              <h2 className="text-2xl font-extrabold tracking-tight text-slate-950">Lesson packaging</h2>
               <p className="mt-2 text-sm text-slate-600">Moi lesson co video, materials va co the danh dau preview.</p>
             </div>
             <button
@@ -424,7 +424,7 @@ export function AdminCourseCreatePage() {
             {lessons.map((lesson, index) => (
               <article key={`lesson-${index}`} className="rounded-[1.5rem] border border-stroke bg-slate-50 p-5">
                 <div className="flex items-center justify-between gap-4">
-                  <h3 className="text-lg font-black tracking-tight text-slate-950">Lesson {index + 1}</h3>
+                  <h3 className="text-lg font-extrabold tracking-tight text-slate-950">Lesson {index + 1}</h3>
                   <button
                     type="button"
                     onClick={() => {

@@ -109,7 +109,7 @@ export function TeacherStudentsPage() {
           <div className="grid gap-4 xl:grid-cols-[1.2fr_0.8fr]">
             <article className="rounded-[1.8rem] border border-stroke bg-white p-6 shadow-[0_16px_50px_rgba(15,23,42,0.06)]">
               <p className="text-xs font-semibold uppercase tracking-[0.25em] text-violet-700">active course</p>
-              <h2 className="mt-3 text-3xl font-black tracking-tight text-slate-950">{activeCourse.title}</h2>
+              <h2 className="mt-3 text-3xl font-extrabold tracking-tight text-slate-950">{activeCourse.title}</h2>
               <p className="mt-3 text-sm leading-7 text-slate-600">{activeCourse.shortDescription}</p>
               <div className="mt-4 flex flex-wrap gap-3 text-sm text-slate-500">
                 <span>{activeCourse.category}</span>
@@ -127,7 +127,7 @@ export function TeacherStudentsPage() {
               ].map((item) => (
                 <article key={item.label} className="rounded-[1.5rem] border border-stroke bg-white p-5 shadow-[0_16px_50px_rgba(15,23,42,0.06)]">
                   <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">{item.label}</p>
-                  <p className="mt-3 text-3xl font-black tracking-tight text-slate-950">{item.value}</p>
+                  <p className="mt-3 text-3xl font-extrabold tracking-tight text-slate-950">{item.value}</p>
                 </article>
               ))}
             </div>
@@ -149,7 +149,7 @@ export function TeacherStudentsPage() {
                     className="grid grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)_8rem_8rem] items-center gap-4 px-5 py-4"
                   >
                     <div className="min-w-0">
-                      <p className="truncate text-base font-black tracking-tight text-slate-950">
+                      <p className="truncate text-base font-extrabold tracking-tight text-slate-950">
                         {enrollment.student.fullName ?? 'Hoc vien'}
                       </p>
                       <p className="truncate text-sm text-slate-500">{enrollment.student.email ?? 'No email'}</p>
@@ -164,14 +164,14 @@ export function TeacherStudentsPage() {
                     </div>
 
                     <div>
-                      <p className="text-sm font-black tracking-tight text-slate-950">
+                      <p className="text-sm font-extrabold tracking-tight text-slate-950">
                         {enrollment.completedLessonIds.length}/{activeCourse.lessonCount}
                       </p>
                       <p className="mt-1 text-xs text-slate-500">completed</p>
                     </div>
 
                     <div>
-                      <p className="text-sm font-black tracking-tight text-slate-950">
+                      <p className="text-sm font-extrabold tracking-tight text-slate-950">
                         {new Date(enrollment.enrolledAt).toLocaleDateString('vi-VN')}
                       </p>
                       <p className="mt-1 text-xs text-slate-500">enrolled</p>

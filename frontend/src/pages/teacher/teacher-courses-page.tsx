@@ -141,7 +141,7 @@ export function TeacherCoursesPage() {
         <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
           <div className="max-w-3xl">
             <p className="text-xs font-semibold uppercase tracking-[0.3em] text-teal-700">teacher submission workflow</p>
-            <h2 className="mt-3 text-3xl font-black tracking-tight text-slate-950">Tao khoa hoc moi cho admin review</h2>
+            <h2 className="mt-3 text-3xl font-extrabold tracking-tight text-slate-950">Tao khoa hoc moi cho admin review</h2>
             <p className="mt-4 text-sm leading-8 text-slate-600">
               Sau khi teacher tao khoa hoc, backend se tu dong ep trang thai ve draft. Ban draft chi dung de theo doi noi dung khoa hoc. Chi khi admin publish, teacher moi mo duoc Lesson List de quan ly bai giang.
             </p>
@@ -256,7 +256,7 @@ export function TeacherCoursesPage() {
                     <span className="rounded-full bg-white/75 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-700">{course.lessonCount} lessons</span>
                   </div>
 
-                  <h2 className="mt-3 line-clamp-2 text-xl font-black tracking-tight text-slate-950">{course.title}</h2>
+                  <h2 className="mt-3 line-clamp-2 text-xl font-extrabold tracking-tight text-slate-950">{course.title}</h2>
                   <p className="mt-2 line-clamp-2 text-sm leading-6 text-slate-600">{course.shortDescription}</p>
 
                   <div className="mt-3 flex flex-wrap gap-x-4 gap-y-1 text-sm text-slate-500">
@@ -266,7 +266,7 @@ export function TeacherCoursesPage() {
                 </div>
               </div>
 
-              <div className="mt-4 rounded-[1.2rem] border border-white/70 bg-white/65 px-4 py-3 text-sm leading-6 text-slate-700">
+              <div className="mt-4 rounded-[1.2rem] border border-stroke bg-white/65 px-4 py-3 text-sm leading-6 text-slate-700">
                 {course.isPublished
                   ? 'Khoa hoc da duoc admin publish. Teacher co the theo doi version dang live tren public page va CRUD lesson trong workspace rieng.'
                   : reviewStatus === 'changes_requested'
@@ -281,11 +281,11 @@ export function TeacherCoursesPage() {
                   to={`/teacher/courses/${course.slug}/lessons`}
                   target="_blank"
                   rel="noreferrer"
-                  className="rounded-2xl border border-white/80 bg-white/80 px-4 py-2.5 text-center text-sm font-semibold text-slate-900 transition hover:bg-white"
+                  className="rounded-2xl border border-stroke bg-white/80 px-4 py-2.5 text-center text-sm font-semibold text-slate-900 transition hover:bg-white"
                 >
                   Lesson List
                 </Link>
-                <Link to={`/courses/${course.slug}`} className="rounded-2xl border border-white/80 bg-white/80 px-4 py-2.5 text-center text-sm font-semibold text-slate-900 transition hover:bg-white">
+                <Link to={`/courses/${course.slug}`} className="rounded-2xl border border-stroke bg-white/80 px-4 py-2.5 text-center text-sm font-semibold text-slate-900 transition hover:bg-white">
                   Xem trang public
                 </Link>
               </div>

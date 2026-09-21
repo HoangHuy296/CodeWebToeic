@@ -45,7 +45,7 @@ export function BlogListPage() {
                 <span className="h-1 w-1 rounded-full bg-slate-300" />
                 <span>{article.author.fullName ?? article.author.email ?? 'IVYTS Editorial'}</span>
               </div>
-              <h2 className="mt-4 text-2xl font-black tracking-tight text-slate-950">{article.title}</h2>
+              <h2 className="mt-4 text-2xl font-extrabold tracking-tight text-slate-950">{article.title}</h2>
               <p className="mt-3 text-sm leading-7 text-slate-600">{article.excerpt}</p>
               <Link
                 to={`/blog/${article.slug}`}

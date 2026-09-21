@@ -54,7 +54,7 @@ export function ExerciseTopicPage() {
         <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
           <div className="max-w-4xl">
             <p className="text-xs font-semibold uppercase tracking-[0.32em] text-teal-700">bai tap / {topic.shortLabel}</p>
-            <h1 className="mt-4 text-4xl font-black tracking-tight text-slate-950">{topic.label}</h1>
+            <h1 className="mt-4 text-4xl font-extrabold tracking-tight text-slate-950">{topic.label}</h1>
             <p className="mt-4 text-sm leading-8 text-slate-600">{topic.description}</p>
           </div>
 

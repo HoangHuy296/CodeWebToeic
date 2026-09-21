@@ -20,10 +20,10 @@ function ProfileModal({
 }) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/45 px-4 py-6 backdrop-blur-sm">
-      <div className="w-full max-w-lg rounded-[2rem] border border-white/70 bg-white p-6 shadow-[0_24px_80px_rgba(15,23,42,0.18)]">
+      <div className="w-full max-w-lg rounded-[2rem] border border-stroke bg-white p-6 shadow-[0_24px_80px_rgba(15,23,42,0.18)]">
         <div className="flex items-start justify-between gap-4">
           <div>
-            <h3 className="text-2xl font-black tracking-tight text-slate-950">{title}</h3>
+            <h3 className="text-2xl font-extrabold tracking-tight text-slate-950">{title}</h3>
             <p className="mt-2 text-sm leading-7 text-slate-600">{description}</p>
           </div>
           <button type="button" onClick={onClose} className="rounded-full bg-slate-100 px-3 py-2 text-sm font-semibold text-slate-700">
@@ -139,10 +139,10 @@ export function TeacherProfilePage() {
 
   return (
     <div className="space-y-8">
-      <section className="rounded-[2rem] border border-white/70 bg-white/90 p-6 shadow-[0_24px_70px_rgba(15,23,42,0.08)] lg:p-8">
+      <section className="rounded-[2rem] border border-stroke bg-white/90 p-6 shadow-[0_24px_70px_rgba(15,23,42,0.08)] lg:p-8">
         <div className="grid gap-6 lg:grid-cols-[minmax(0,0.84fr)_minmax(0,1.16fr)] lg:items-center">
           <div className="flex min-w-0 items-center gap-5">
-            <div className="flex h-20 w-20 items-center justify-center overflow-hidden rounded-[1.5rem] bg-[linear-gradient(135deg,var(--color-brand),var(--color-brand-deep))] text-2xl font-black text-white shadow-[0_16px_38px_rgba(15,118,110,0.24)]">
+            <div className="flex h-20 w-20 items-center justify-center overflow-hidden rounded-[1.5rem] bg-[linear-gradient(135deg,var(--color-brand),var(--color-brand-deep))] text-2xl font-extrabold text-white shadow-[0_16px_38px_rgba(15,118,110,0.24)]">
               {user.avatarUrl ? (
                 <img src={user.avatarUrl} alt={user.fullName} className="h-full w-full object-cover" />
               ) : (
@@ -151,7 +151,7 @@ export function TeacherProfilePage() {
             </div>
             <div className="min-w-0">
               <p className="text-xs font-semibold uppercase tracking-[0.34em] text-teal-700">teacher profile</p>
-              <h1 className="mt-3 break-words text-3xl font-black tracking-tight text-slate-950 lg:text-[2rem]">{user.fullName}</h1>
+              <h1 className="mt-3 break-words text-3xl font-extrabold tracking-tight text-slate-950 lg:text-[2rem]">{user.fullName}</h1>
               <p className="mt-2 text-sm leading-7 text-slate-600">
                 Ho so giang vien duoc cap nhat truc tiep qua backend Spring. Email va phone van di qua workflow xac nhan rieng de tranh doi nham thong tin lien he.
               </p>
@@ -161,7 +161,7 @@ export function TeacherProfilePage() {
           <div className="grid gap-4 sm:grid-cols-3">
             <article className="min-w-0 rounded-[1.5rem] border border-stroke bg-slate-50 p-5">
               <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Email hien tai</p>
-              <p className="mt-3 min-h-[2.75rem] break-all text-sm font-black tracking-tight text-slate-950">{user.email}</p>
+              <p className="mt-3 min-h-[2.75rem] break-all text-sm font-extrabold tracking-tight text-slate-950">{user.email}</p>
               <button
                 type="button"
                 onClick={() => setEmailModalOpen(true)}
@@ -173,7 +173,7 @@ export function TeacherProfilePage() {
 
             <article className="min-w-0 rounded-[1.5rem] border border-stroke bg-slate-50 p-5">
               <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">So dien thoai</p>
-              <p className="mt-3 min-h-[2.75rem] break-all text-sm font-black tracking-tight text-slate-950">{user.phone || 'Chua cap nhat'}</p>
+              <p className="mt-3 min-h-[2.75rem] break-all text-sm font-extrabold tracking-tight text-slate-950">{user.phone || 'Chua cap nhat'}</p>
               <button
                 type="button"
                 onClick={() => setPhoneModalOpen(true)}
@@ -185,7 +185,7 @@ export function TeacherProfilePage() {
 
             <article className="min-w-0 rounded-[1.5rem] border border-stroke bg-slate-50 p-5">
               <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Khoa hoc dang so huu</p>
-              <p className="mt-3 break-all text-sm font-black tracking-tight text-slate-950">{String(ownedCourseIds.length)}</p>
+              <p className="mt-3 break-all text-sm font-extrabold tracking-tight text-slate-950">{String(ownedCourseIds.length)}</p>
             </article>
           </div>
         </div>
@@ -196,7 +196,7 @@ export function TeacherProfilePage() {
           <div className="flex items-end justify-between gap-4">
             <div>
               <p className="text-xs font-semibold uppercase tracking-[0.3em] text-teal-700">profile editor</p>
-              <h2 className="mt-2 text-3xl font-black tracking-tight text-slate-950">Cap nhat thong tin giang vien</h2>
+              <h2 className="mt-2 text-3xl font-extrabold tracking-tight text-slate-950">Cap nhat thong tin giang vien</h2>
             </div>
           </div>
 
@@ -223,7 +223,7 @@ export function TeacherProfilePage() {
               <div className="min-w-0 rounded-[1.5rem] border border-stroke bg-slate-50 p-5">
                 <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Avatar preview</p>
                 <div className="mt-4 flex justify-center">
-                  <div className="flex h-28 w-28 items-center justify-center overflow-hidden rounded-[1.4rem] bg-[linear-gradient(135deg,var(--color-brand),var(--color-brand-deep))] text-2xl font-black text-white shadow-[0_16px_34px_rgba(76,29,149,0.2)]">
+                  <div className="flex h-28 w-28 items-center justify-center overflow-hidden rounded-[1.4rem] bg-[linear-gradient(135deg,var(--color-brand),var(--color-brand-deep))] text-2xl font-extrabold text-white shadow-[0_16px_34px_rgba(76,29,149,0.2)]">
                     {profileDraft.avatarUrl ? (
                       <img src={profileDraft.avatarUrl} alt={profileDraft.fullName || user.fullName} className="h-full w-full object-cover" />
                     ) : (
@@ -282,7 +282,7 @@ export function TeacherProfilePage() {
             {profileSuccess ? <p className="rounded-2xl bg-teal-50 px-4 py-3 text-sm font-semibold text-teal-700">{profileSuccess}</p> : null}
             {isUploadingAvatar ? <p className="rounded-2xl bg-violet-50 px-4 py-3 text-sm font-semibold text-violet-700">Dang doc avatar local...</p> : null}
 
-            <div className="sticky bottom-3 z-10 -mx-2 rounded-[1.4rem] border border-white/70 bg-white/92 px-5 py-4 shadow-[0_16px_36px_rgba(15,23,42,0.12)] backdrop-blur">
+            <div className="sticky bottom-3 z-10 -mx-2 rounded-[1.4rem] border border-stroke bg-white/92 px-5 py-4 shadow-[0_16px_36px_rgba(15,23,42,0.12)] backdrop-blur">
               <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                 <div>
                   <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Sticky action bar</p>
@@ -303,7 +303,7 @@ export function TeacherProfilePage() {
         <div className="grid min-w-0 gap-6">
           <article className="min-w-0 rounded-[1.8rem] border border-stroke bg-white p-6 shadow-[0_16px_50px_rgba(15,23,42,0.06)]">
             <p className="text-xs font-semibold uppercase tracking-[0.3em] text-teal-700">password</p>
-            <h2 className="mt-2 text-[1.75rem] font-black tracking-tight text-slate-950">Cap nhat mat khau</h2>
+            <h2 className="mt-2 text-[1.75rem] font-extrabold tracking-tight text-slate-950">Cap nhat mat khau</h2>
 
             <form
               className="mt-6 grid gap-4"
@@ -384,7 +384,7 @@ export function TeacherProfilePage() {
 
           <article className="min-w-0 rounded-[1.8rem] border border-stroke bg-white p-6 shadow-[0_16px_50px_rgba(15,23,42,0.06)]">
             <p className="text-xs font-semibold uppercase tracking-[0.3em] text-teal-700">owned course ids</p>
-            <h2 className="mt-2 text-[1.75rem] font-black tracking-tight text-slate-950">Khoa hoc dang so huu</h2>
+            <h2 className="mt-2 text-[1.75rem] font-extrabold tracking-tight text-slate-950">Khoa hoc dang so huu</h2>
             <p className="mt-3 text-sm leading-7 text-slate-600">
               Trang nay doc truc tiep tu course manage API de khop voi teacher workspace. Moi item hien course id va ten khoa hoc ma giang vien dang quan ly.
             </p>
@@ -412,7 +412,7 @@ export function TeacherProfilePage() {
                       {course.id}
                     </p>
                     <div className="mt-2 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                      <p className="min-w-0 break-words text-sm font-black tracking-tight text-slate-950">
+                      <p className="min-w-0 break-words text-sm font-extrabold tracking-tight text-slate-950">
                         {course.title}
                       </p>
                       <span className="rounded-full bg-teal-50 px-3 py-1 text-xs font-semibold uppercase tracking-[0.16em] text-teal-700">
@@ -488,7 +488,7 @@ export function TeacherProfilePage() {
 
             {emailDraft.previewCode ? (
               <div className="rounded-2xl border border-amber-200 bg-amber-50 px-4 py-4 text-sm text-amber-800">
-                Dev preview code: <span className="font-black">{emailDraft.previewCode}</span>
+                Dev preview code: <span className="font-extrabold">{emailDraft.previewCode}</span>
                 <br />
                 Het han luc: {new Date(emailDraft.expiresAt).toLocaleString('vi-VN')}
               </div>
@@ -591,7 +591,7 @@ export function TeacherProfilePage() {
 
             {phoneDraft.previewCode ? (
               <div className="rounded-2xl border border-amber-200 bg-amber-50 px-4 py-4 text-sm text-amber-800">
-                Dev preview OTP: <span className="font-black">{phoneDraft.previewCode}</span>
+                Dev preview OTP: <span className="font-extrabold">{phoneDraft.previewCode}</span>
                 <br />
                 Het han luc: {new Date(phoneDraft.expiresAt).toLocaleString('vi-VN')}
               </div>

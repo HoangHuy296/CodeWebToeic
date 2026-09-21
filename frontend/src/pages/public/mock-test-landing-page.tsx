@@ -68,12 +68,12 @@ export function MockTestLandingPage() {
         <section className="grid gap-4 rounded-[2rem] border border-stroke bg-white p-6 shadow-[0_18px_50px_rgba(15,23,42,0.06)] md:grid-cols-2">
           <article className="rounded-[1.5rem] bg-slate-50 px-5 py-5">
             <p className="text-xs font-semibold uppercase tracking-[0.25em] text-slate-500">Admin published free tests</p>
-            <p className="mt-2 text-3xl font-black tracking-tight text-slate-950">{publicPublishedCount}</p>
+            <p className="mt-2 text-3xl font-extrabold tracking-tight text-slate-950">{publicPublishedCount}</p>
             <p className="mt-2 text-sm leading-7 text-slate-600">Teacher co the xem cac bai thi published ma admin push ra public cho tat ca hoc vien.</p>
           </article>
           <article className="rounded-[1.5rem] bg-slate-50 px-5 py-5">
             <p className="text-xs font-semibold uppercase tracking-[0.25em] text-slate-500">Your mock tests</p>
-            <p className="mt-2 text-3xl font-black tracking-tight text-slate-950">{teacherOwnedCount}</p>
+            <p className="mt-2 text-3xl font-extrabold tracking-tight text-slate-950">{teacherOwnedCount}</p>
             <p className="mt-2 text-sm leading-7 text-slate-600">Bao gom ca draft, published va archived do chinh teacher nay tao.</p>
           </article>
         </section>

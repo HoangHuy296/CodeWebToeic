@@ -64,7 +64,7 @@ export function StudentLearningPage() {
         <div className="grid gap-6 lg:grid-cols-[320px_minmax(0,1fr)]">
           <aside className="rounded-[2rem] border border-stroke bg-white p-5 shadow-[0_18px_55px_rgba(15,23,42,0.06)]">
             <p className="text-xs font-semibold uppercase tracking-[0.3em] text-teal-700">learning progress</p>
-            <h1 className="mt-3 text-2xl font-black tracking-tight text-slate-950">
+            <h1 className="mt-3 text-2xl font-extrabold tracking-tight text-slate-950">
               {course.title}
             </h1>
 
@@ -133,7 +133,7 @@ export function StudentLearningPage() {
                   <p className="text-xs font-semibold uppercase tracking-[0.3em] text-teal-700">
                     Lesson {selectedLesson.order}
                   </p>
-                  <h2 className="mt-3 text-3xl font-black tracking-tight text-slate-950">
+                  <h2 className="mt-3 text-3xl font-extrabold tracking-tight text-slate-950">
                     {selectedLesson.title}
                   </h2>
                 </div>
@@ -169,7 +169,7 @@ export function StudentLearningPage() {
             </section>
 
             <section className="rounded-[2rem] border border-stroke bg-white p-8 shadow-[0_24px_70px_rgba(15,23,42,0.08)]">
-              <h3 className="text-2xl font-black tracking-tight text-slate-950">Tai lieu lesson</h3>
+              <h3 className="text-2xl font-extrabold tracking-tight text-slate-950">Tai lieu lesson</h3>
               <div className="mt-5 grid gap-3 md:grid-cols-2">
                 {selectedLesson.materials.map((material) => (
                   <a

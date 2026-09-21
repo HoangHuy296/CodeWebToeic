@@ -54,7 +54,7 @@ export function StudentMyCoursesPage() {
       {!enrollmentsQuery.isPending && !enrollmentsQuery.error && visibleEnrollments.length === 0 ? (
         <section className="rounded-[1.8rem] border border-dashed border-stroke bg-white p-8 text-center shadow-[0_16px_50px_rgba(15,23,42,0.04)]">
           <p className="text-sm font-semibold uppercase tracking-[0.2em] text-slate-500">Chua co khoa hoc</p>
-          <h3 className="mt-3 text-2xl font-black tracking-tight text-slate-950">
+          <h3 className="mt-3 text-2xl font-extrabold tracking-tight text-slate-950">
             Tai khoan nay chua enroll khoa hoc nao
           </h3>
           <p className="mt-3 text-sm leading-7 text-slate-600">

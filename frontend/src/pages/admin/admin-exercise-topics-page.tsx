@@ -78,11 +78,11 @@ export function AdminExerciseTopicsPage() {
 
   return (
     <div className="space-y-8">
-      <section className="rounded-[2rem] border border-white/70 bg-white/90 p-8 shadow-[0_24px_70px_rgba(15,23,42,0.08)]">
+      <section className="rounded-[2rem] border border-stroke bg-white/90 p-8 shadow-[0_24px_70px_rgba(15,23,42,0.08)]">
         <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
           <div>
             <p className="text-xs font-semibold tracking-[0.35em] text-teal-700 uppercase">admin exercises</p>
-            <h1 className="mt-4 text-4xl font-black tracking-tight text-slate-950">Quan ly chu de on tap va so luong bai tap theo tung chu de.</h1>
+            <h1 className="mt-4 text-4xl font-extrabold tracking-tight text-slate-950">Quan ly chu de on tap va so luong bai tap theo tung chu de.</h1>
             <p className="mt-4 max-w-3xl text-sm leading-8 text-slate-600">
               Khu nay chi giu lai nhung thu can thiet: ten chu de, mo ta, accent, keywords va tong so bai tap theo chu de.
               Cac bai tap se duoc tao rieng trong workspace bai tap va gan truc tiep vao mot chu de on tap.
@@ -112,7 +112,7 @@ export function AdminExerciseTopicsPage() {
 
       <section className="grid gap-6 xl:grid-cols-[0.9fr_1.1fr]">
         <article className="rounded-[1.8rem] border border-stroke bg-white p-6 shadow-[0_16px_50px_rgba(15,23,42,0.06)]">
-          <h2 className="text-2xl font-black tracking-tight text-slate-950">Chu de hien co</h2>
+          <h2 className="text-2xl font-extrabold tracking-tight text-slate-950">Chu de hien co</h2>
           {topicsQuery.isPending || itemsQuery.isPending ? <div className="mt-6"><QueryLoadingState title="Dang tai chu de..." /></div> : null}
           {topicsQuery.error || itemsQuery.error ? (
             <div className="mt-6">
@@ -146,7 +146,7 @@ export function AdminExerciseTopicsPage() {
         <article className="rounded-[1.8rem] border border-stroke bg-white p-6 shadow-[0_16px_50px_rgba(15,23,42,0.06)]">
           <div className="flex items-center justify-between gap-4">
             <div>
-              <h2 className="text-2xl font-black tracking-tight text-slate-950">{selectedTopicId ? 'Chinh sua chu de' : 'Tao chu de moi'}</h2>
+              <h2 className="text-2xl font-extrabold tracking-tight text-slate-950">{selectedTopicId ? 'Chinh sua chu de' : 'Tao chu de moi'}</h2>
               <p className="mt-2 text-sm text-slate-600">Khong con section hay packs. Moi bai tap chi can duoc gan vao mot chu de on tap.</p>
             </div>
             {selectedTopicId ? (

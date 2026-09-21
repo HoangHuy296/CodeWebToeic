@@ -57,12 +57,12 @@ export function CourseCard({ course, isEnrolled = false }: CourseCardProps) {
 
           <div className="flex flex-wrap justify-end gap-2">
             {discountPercent > 0 ? (
-              <span className="rounded-full bg-[linear-gradient(135deg,#fb7185,#f97316)] px-3 py-1 text-[11px] font-black uppercase tracking-[0.14em] text-white shadow-[0_14px_28px_rgba(249,115,22,0.26)]">
+              <span className="rounded-full bg-[linear-gradient(135deg,#fb7185,#f97316)] px-3 py-1 text-[11px] font-extrabold uppercase tracking-[0.14em] text-white shadow-[0_14px_28px_rgba(249,115,22,0.26)]">
                 Promotion
               </span>
             ) : null}
             {isEnrolled ? (
-              <span className="rounded-full bg-emerald-100/95 px-3 py-1 text-[11px] font-black uppercase tracking-[0.14em] text-emerald-800 shadow-sm">
+              <span className="rounded-full bg-emerald-100/95 px-3 py-1 text-[11px] font-extrabold uppercase tracking-[0.14em] text-emerald-800 shadow-sm">
                 Owned
               </span>
             ) : null}
@@ -77,11 +77,11 @@ export function CourseCard({ course, isEnrolled = false }: CourseCardProps) {
           <div className="grid grid-cols-2 gap-3 rounded-[1.15rem] bg-white/95 px-3 py-3 shadow-[0_12px_28px_rgba(15,23,42,0.14)] backdrop-blur">
             <div>
               <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-slate-500">Lessons</p>
-              <p className="mt-1 text-sm font-black text-slate-900">{course.lessonCount}</p>
+              <p className="mt-1 text-sm font-extrabold text-slate-900">{course.lessonCount}</p>
             </div>
             <div>
               <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-slate-500">Duration</p>
-              <p className="mt-1 text-sm font-black text-slate-900">{formatDurationMinutes(course.totalDuration)}</p>
+              <p className="mt-1 text-sm font-extrabold text-slate-900">{formatDurationMinutes(course.totalDuration)}</p>
             </div>
           </div>
         </div>
@@ -100,7 +100,7 @@ export function CourseCard({ course, isEnrolled = false }: CourseCardProps) {
             ) : null}
           </div>
 
-          <h3 className="mt-3 line-clamp-2 text-xl font-black leading-7 text-slate-950">
+          <h3 className="mt-3 line-clamp-2 text-xl font-extrabold leading-7 text-slate-950">
             {course.title}
           </h3>
           <p className="mt-2 line-clamp-2 text-sm leading-6 text-slate-600">
@@ -129,7 +129,7 @@ export function CourseCard({ course, isEnrolled = false }: CourseCardProps) {
                 {benefitPreview.length > 0 ? benefitPreview.join(' • ') : audienceLabel}
               </p>
             </div>
-            <span className="shrink-0 rounded-full bg-white px-3 py-1.5 text-[11px] font-black uppercase tracking-[0.12em] text-slate-700 shadow-sm">
+            <span className="shrink-0 rounded-full bg-white px-3 py-1.5 text-[11px] font-extrabold uppercase tracking-[0.12em] text-slate-700 shadow-sm">
               {discountPercent > 0 ? `Save ${discountPercent}%` : 'Guided'}
             </span>
           </div>

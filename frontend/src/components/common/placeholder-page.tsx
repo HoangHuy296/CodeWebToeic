@@ -8,9 +8,9 @@ interface PlaceholderPageProps {
 export function PlaceholderPage({ eyebrow, title, description, bullets }: PlaceholderPageProps) {
   return (
     <div className="space-y-8">
-      <section className="rounded-[2rem] border border-white/70 bg-white/85 p-8 shadow-[0_26px_70px_rgba(15,23,42,0.08)] backdrop-blur lg:p-12">
+      <section className="rounded-[2rem] border border-stroke bg-white/85 p-8 shadow-[0_26px_70px_rgba(15,23,42,0.08)] backdrop-blur lg:p-12">
         <p className="text-xs font-semibold tracking-[0.35em] text-teal-700 uppercase">{eyebrow}</p>
-        <h1 className="mt-4 text-4xl font-black tracking-tight text-slate-950">{title}</h1>
+        <h1 className="mt-4 text-4xl font-extrabold tracking-tight text-slate-950">{title}</h1>
         <p className="mt-4 max-w-3xl text-base leading-8 text-slate-600">{description}</p>
       </section>
 

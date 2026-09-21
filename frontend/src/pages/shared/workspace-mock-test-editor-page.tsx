@@ -171,7 +171,7 @@ export function WorkspaceMockTestEditorPage({ workspaceRole, mode }: WorkspaceMo
           <div className="flex flex-wrap items-start justify-between gap-4">
             <div className="max-w-4xl">
               <p className="text-xs font-semibold uppercase tracking-[0.32em] text-cyan-200">{workspaceRole} mock test workspace</p>
-              <h1 className="mt-3 text-3xl font-black tracking-tight text-white">{pageTitle}</h1>
+              <h1 className="mt-3 text-3xl font-extrabold tracking-tight text-white">{pageTitle}</h1>
               <p className="mt-3 text-sm leading-7 text-slate-300">
                 Khung nay duoc thiet ke theo phong cach full-screen de viec tao va chinh sua cau hoi khong bi tran layout,
                 tap trung vao cau hoi hien tai giong flow lam bai cua student.
@@ -210,19 +210,19 @@ export function WorkspaceMockTestEditorPage({ workspaceRole, mode }: WorkspaceMo
           <div className="mt-5 grid gap-4 md:grid-cols-4">
             <article className="rounded-[1.3rem] border border-white/10 bg-white/5 px-4 py-4">
               <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">Loai bai thi</p>
-              <p className="mt-2 text-lg font-black tracking-tight text-white">{draft.type}</p>
+              <p className="mt-2 text-lg font-extrabold tracking-tight text-white">{draft.type}</p>
             </article>
             <article className="rounded-[1.3rem] border border-white/10 bg-white/5 px-4 py-4">
               <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">Level</p>
-              <p className="mt-2 text-lg font-black tracking-tight text-white">{draft.level}</p>
+              <p className="mt-2 text-lg font-extrabold tracking-tight text-white">{draft.level}</p>
             </article>
             <article className="rounded-[1.3rem] border border-white/10 bg-white/5 px-4 py-4">
               <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">So cau hoi</p>
-              <p className="mt-2 text-lg font-black tracking-tight text-white">{draft.questions.length}</p>
+              <p className="mt-2 text-lg font-extrabold tracking-tight text-white">{draft.questions.length}</p>
             </article>
             <article className="rounded-[1.3rem] border border-white/10 bg-white/5 px-4 py-4">
               <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">Assigned courses</p>
-              <p className="mt-2 text-lg font-black tracking-tight text-white">{selectedCourseCount}</p>
+              <p className="mt-2 text-lg font-extrabold tracking-tight text-white">{selectedCourseCount}</p>
             </article>
           </div>
         </header>
@@ -238,7 +238,7 @@ export function WorkspaceMockTestEditorPage({ workspaceRole, mode }: WorkspaceMo
           <aside className="rounded-[2rem] border border-white/10 bg-white/5 p-5 shadow-[0_18px_55px_rgba(2,6,23,0.3)] backdrop-blur">
             <div>
               <p className="text-xs font-semibold uppercase tracking-[0.28em] text-cyan-200">Cau hinh va navigator</p>
-              <h2 className="mt-3 text-2xl font-black tracking-tight text-white">Mock test outline</h2>
+              <h2 className="mt-3 text-2xl font-extrabold tracking-tight text-white">Mock test outline</h2>
             </div>
 
             <div className="mt-5 grid gap-3">
@@ -409,7 +409,7 @@ export function WorkspaceMockTestEditorPage({ workspaceRole, mode }: WorkspaceMo
                   <div className="flex flex-wrap items-center justify-between gap-3">
                     <div>
                       <p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-200">Question {currentQuestionIndex + 1}</p>
-                      <h2 className="mt-2 text-2xl font-black tracking-tight text-white">Question body editor</h2>
+                      <h2 className="mt-2 text-2xl font-extrabold tracking-tight text-white">Question body editor</h2>
                     </div>
                     <button
                       type="button"
@@ -553,7 +553,7 @@ export function WorkspaceMockTestEditorPage({ workspaceRole, mode }: WorkspaceMo
                           }
                           className="size-4"
                         />
-                        <span className="w-8 text-sm font-black text-cyan-200">{option.key}</span>
+                        <span className="w-8 text-sm font-extrabold text-cyan-200">{option.key}</span>
                         <input
                           value={option.text}
                           onChange={(event) =>

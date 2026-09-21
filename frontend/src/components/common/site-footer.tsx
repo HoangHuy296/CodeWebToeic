@@ -5,8 +5,8 @@ export function SiteFooter() {
     <footer className="border-t border-stroke bg-slate-950 text-slate-200">
       <div className="mx-auto grid max-w-7xl gap-10 px-5 py-16 lg:grid-cols-[1.2fr_0.8fr_0.8fr] lg:px-8">
         <div>
-          <p className="text-xs font-semibold tracking-[0.35em] text-teal-300 uppercase">IVYTS 1997</p>
-          <h3 className="mt-4 text-3xl font-black tracking-tight text-white">
+          <p className="text-xs font-semibold tracking-[0.35em] text-teal-300 uppercase">IVYTS 1998</p>
+          <h3 className="mt-4 text-3xl font-extrabold tracking-tight text-white">
             English learning CRM cho TOEIC, IELTS va lop hoc online co tien do ro rang.
           </h3>
           <p className="mt-4 max-w-xl text-sm leading-7 text-slate-400">

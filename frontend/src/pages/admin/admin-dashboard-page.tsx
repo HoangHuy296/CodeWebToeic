@@ -54,11 +54,11 @@ export function AdminDashboardPage() {
 
   return (
     <div className="space-y-8">
-      <section className="rounded-[2rem] border border-white/70 bg-white/90 p-8 shadow-[0_24px_70px_rgba(15,23,42,0.08)]">
+      <section className="rounded-[2rem] border border-stroke bg-white/90 p-8 shadow-[0_24px_70px_rgba(15,23,42,0.08)]">
         <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
           <div>
             <p className="text-xs font-semibold tracking-[0.35em] text-teal-700 uppercase">admin dashboard</p>
-            <h1 className="mt-4 text-4xl font-black tracking-tight text-slate-950">
+            <h1 className="mt-4 text-4xl font-extrabold tracking-tight text-slate-950">
               Control center cho van hanh noi dung, hoc vien va doanh thu.
             </h1>
             <p className="mt-4 max-w-3xl text-sm leading-8 text-slate-600">
@@ -131,7 +131,7 @@ export function AdminDashboardPage() {
           <div className="flex items-center justify-between gap-4">
             <div>
               <p className="text-xs font-semibold tracking-[0.3em] text-slate-500 uppercase">revenue trend</p>
-              <h2 className="mt-2 text-2xl font-black tracking-tight text-slate-950">Dong doanh thu 6 thang</h2>
+              <h2 className="mt-2 text-2xl font-extrabold tracking-tight text-slate-950">Dong doanh thu 6 thang</h2>
             </div>
           </div>
 
@@ -155,7 +155,7 @@ export function AdminDashboardPage() {
 
         <article className="rounded-[1.8rem] border border-stroke bg-white p-6 shadow-[0_16px_50px_rgba(15,23,42,0.06)]">
           <p className="text-xs font-semibold tracking-[0.3em] text-slate-500 uppercase">support inbox</p>
-          <h2 className="mt-2 text-2xl font-black tracking-tight text-slate-950">Tin nhan moi can xu ly</h2>
+          <h2 className="mt-2 text-2xl font-extrabold tracking-tight text-slate-950">Tin nhan moi can xu ly</h2>
 
           <div className="mt-6 grid gap-4">
             {messages.slice(0, 4).map((message) => (
@@ -192,7 +192,7 @@ export function AdminDashboardPage() {
       <section className="grid gap-6 xl:grid-cols-[0.95fr_1.05fr]">
         <article className="rounded-[1.8rem] border border-stroke bg-white p-6 shadow-[0_16px_50px_rgba(15,23,42,0.06)]">
           <p className="text-xs font-semibold tracking-[0.3em] text-slate-500 uppercase">enrollment chart</p>
-          <h2 className="mt-2 text-2xl font-black tracking-tight text-slate-950">Toc do dang ky va hoan thanh</h2>
+          <h2 className="mt-2 text-2xl font-extrabold tracking-tight text-slate-950">Toc do dang ky va hoan thanh</h2>
 
           <div className="mt-6 h-80">
             <ResponsiveContainer width="100%" height="100%">
@@ -213,7 +213,7 @@ export function AdminDashboardPage() {
           <div className="flex items-center justify-between gap-4">
             <div>
               <p className="text-xs font-semibold tracking-[0.3em] text-slate-500 uppercase">content pipeline</p>
-              <h2 className="mt-2 text-2xl font-black tracking-tight text-slate-950">Khoa hoc va bai viet gan day</h2>
+              <h2 className="mt-2 text-2xl font-extrabold tracking-tight text-slate-950">Khoa hoc va bai viet gan day</h2>
             </div>
             <Link to="/admin/courses" className="text-sm font-semibold text-teal-700">
               Mo workspace

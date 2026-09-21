@@ -29,7 +29,7 @@ const contentMap = {
   },
   admin: {
     eyebrow: 'Admin login',
-    title: 'Dang nhap khu vuc quan tri IVYTS 1997',
+    title: 'Dang nhap khu vuc quan tri IVYTS 1998',
     description: 'Chi tai khoan admin moi co the truy cap workspace quan tri rieng.',
     defaultEmail: 'admin@ivyts.dev',
     defaultPassword: 'Password@123',
@@ -67,7 +67,7 @@ export function LoginForm({ variant = 'user', selectedRole }: LoginFormProps) {
       <p className="text-xs font-semibold uppercase tracking-[0.35em] text-teal-700">
         {content.eyebrow}
       </p>
-      <h2 className="mt-3 text-3xl font-black tracking-tight text-slate-950">{content.title}</h2>
+      <h2 className="mt-3 text-3xl font-extrabold tracking-tight text-slate-950">{content.title}</h2>
       <p className="mt-3 text-sm leading-7 text-slate-600">
         {variant === 'user' && selectedRole
           ? `Ban dang dang nhap voi vai tro ${roleLabels[selectedRole]}.`

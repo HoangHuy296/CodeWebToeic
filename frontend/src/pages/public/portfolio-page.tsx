@@ -130,8 +130,8 @@ export function PortfolioPage() {
         <div className="relative grid gap-8 lg:grid-cols-[1.02fr_0.98fr] lg:items-center">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.36em] text-teal-200">teacher profile</p>
-            <h1 className="mt-4 max-w-3xl text-4xl font-black tracking-tight lg:text-6xl">
-              Nang luc giang vien, feedback hoc vien va kenh ket noi cua IVYTS 1997.
+            <h1 className="mt-4 max-w-3xl text-4xl font-extrabold tracking-tight lg:text-6xl">
+              Nang luc giang vien, feedback hoc vien va kenh ket noi cua IVYTS 1998.
             </h1>
             <p className="mt-5 max-w-2xl text-sm leading-8 text-slate-300 lg:text-base">
               Day la trang gioi thieu phong cach giang day, ket qua hoc vien va cach lien he nhanh voi admin hoac teacher truoc khi chon lo trinh TOEIC / IELTS.
@@ -159,7 +159,7 @@ export function PortfolioPage() {
                 { label: 'Feedback score', value: '4.9/5' },
               ].map((item) => (
                 <article key={item.label} className="rounded-[1.5rem] border border-white/10 bg-white/7 px-4 py-4 backdrop-blur">
-                  <p className="text-2xl font-black tracking-tight text-white">{item.value}</p>
+                  <p className="text-2xl font-extrabold tracking-tight text-white">{item.value}</p>
                   <p className="mt-1 text-xs font-semibold uppercase tracking-[0.18em] text-slate-300">{item.label}</p>
                 </article>
               ))}
@@ -190,7 +190,7 @@ export function PortfolioPage() {
       <section className="grid gap-6 lg:grid-cols-[0.9fr_1.1fr]">
         <article className="rounded-[2rem] border border-stroke bg-[linear-gradient(160deg,rgba(20,184,166,0.12),rgba(255,255,255,0.94))] p-7 shadow-[0_18px_55px_rgba(15,23,42,0.06)]">
           <p className="text-xs font-semibold uppercase tracking-[0.32em] text-teal-700">classroom evidence</p>
-          <h2 className="mt-3 text-3xl font-black tracking-tight text-slate-950">Khong gian hoc tap co cau truc va co dau vet tien bo.</h2>
+          <h2 className="mt-3 text-3xl font-extrabold tracking-tight text-slate-950">Khong gian hoc tap co cau truc va co dau vet tien bo.</h2>
           <p className="mt-4 text-sm leading-8 text-slate-600">
             Hinh anh tap trung vao lop hoc, buoi coaching, review bai thi va nhung diem cham giup hoc vien tin vao chat luong giang day.
           </p>
@@ -200,7 +200,7 @@ export function PortfolioPage() {
               'Mock test va error log duoc dung lam co so cho buoi review.',
               'Profile giang vien the hien ro phong cach coaching va muc tieu diem.',
             ].map((item) => (
-              <div key={item} className="rounded-2xl border border-white/70 bg-white/80 px-4 py-4 text-sm font-semibold text-slate-700">
+              <div key={item} className="rounded-2xl border border-stroke bg-white/80 px-4 py-4 text-sm font-semibold text-slate-700">
                 {item}
               </div>
             ))}
@@ -216,7 +216,7 @@ export function PortfolioPage() {
               <div className="overflow-hidden rounded-[1.8rem] border border-stroke bg-white shadow-[0_18px_55px_rgba(15,23,42,0.06)]">
                 <img src={image.src} alt={image.alt} className="h-64 w-full object-cover" />
                 <div className="p-5">
-                  <p className="text-lg font-black tracking-tight text-slate-950">{image.title}</p>
+                  <p className="text-lg font-extrabold tracking-tight text-slate-950">{image.title}</p>
                   <p className="mt-2 text-sm leading-7 text-slate-600">{image.alt}</p>
                 </div>
               </div>
@@ -230,7 +230,7 @@ export function PortfolioPage() {
           <div className="flex items-end justify-between gap-4">
             <div>
               <p className="text-xs font-semibold uppercase tracking-[0.32em] text-teal-700">student feedback</p>
-              <h2 className="mt-3 text-3xl font-black tracking-tight text-slate-950">Feedback hoc vien duoc gan voi ket qua cu the.</h2>
+              <h2 className="mt-3 text-3xl font-extrabold tracking-tight text-slate-950">Feedback hoc vien duoc gan voi ket qua cu the.</h2>
             </div>
             <span className="rounded-full bg-slate-950 px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-white">
               4.9/5 rating
@@ -243,7 +243,7 @@ export function PortfolioPage() {
                 <p className="text-sm leading-8 text-slate-700">"{feedback.quote}"</p>
                 <div className="mt-4 flex items-center justify-between gap-3">
                   <div>
-                    <p className="text-sm font-black tracking-tight text-slate-950">{feedback.student}</p>
+                    <p className="text-sm font-extrabold tracking-tight text-slate-950">{feedback.student}</p>
                     <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Hoc vien TOEIC</p>
                   </div>
                   <span className="rounded-full bg-teal-50 px-3 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-teal-700">
@@ -257,12 +257,12 @@ export function PortfolioPage() {
 
         <article className="rounded-[2rem] border border-stroke bg-slate-950 p-7 text-white shadow-[0_20px_60px_rgba(15,23,42,0.14)]">
           <p className="text-xs font-semibold uppercase tracking-[0.32em] text-amber-300">teacher strengths</p>
-          <h2 className="mt-3 text-3xl font-black tracking-tight">Nang luc giang vien nam o lo trinh, du lieu va cach feedback.</h2>
+          <h2 className="mt-3 text-3xl font-extrabold tracking-tight">Nang luc giang vien nam o lo trinh, du lieu va cach feedback.</h2>
 
           <div className="mt-6 grid gap-4">
             {teacherStrengths.map((item) => (
               <article key={item.title} className="rounded-[1.6rem] border border-white/10 bg-white/6 p-5">
-                <p className="text-lg font-black tracking-tight text-white">{item.title}</p>
+                <p className="text-lg font-extrabold tracking-tight text-white">{item.title}</p>
                 <p className="mt-2 text-sm leading-7 text-slate-300">{item.text}</p>
               </article>
             ))}
@@ -277,12 +277,12 @@ export function PortfolioPage() {
         <div className="grid gap-6 lg:grid-cols-[0.88fr_1.12fr] lg:items-start">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.32em] text-teal-700">social connect</p>
-            <h2 className="mt-3 text-3xl font-black tracking-tight text-slate-950">Ket noi nhanh voi admin va giang vien.</h2>
+            <h2 className="mt-3 text-3xl font-extrabold tracking-tight text-slate-950">Ket noi nhanh voi admin va giang vien.</h2>
             <p className="mt-4 text-sm leading-8 text-slate-600">
               Chon kenh lien he phu hop de duoc tu van target score, lich hoc, hoc phi hoac lo trinh TOEIC / IELTS.
             </p>
 
-            <div className="mt-6 rounded-[1.6rem] border border-white/70 bg-white/85 p-5">
+            <div className="mt-6 rounded-[1.6rem] border border-stroke bg-white/85 p-5">
               <p className="text-sm font-semibold text-slate-900">Thong tin nen gui khi lien he</p>
               <ul className="mt-3 grid gap-3 text-sm leading-7 text-slate-600">
                 <li>Muc tieu diem TOEIC / IELTS va deadline can dat.</li>
@@ -296,7 +296,7 @@ export function PortfolioPage() {
             {contactCards.map((person) => (
               <article key={person.role} className="rounded-[1.8rem] border border-stroke bg-white p-6 shadow-[0_16px_50px_rgba(15,23,42,0.06)]">
                 <p className="text-xs font-semibold uppercase tracking-[0.28em] text-teal-700">{person.role}</p>
-                <h3 className="mt-3 text-2xl font-black tracking-tight text-slate-950">{person.name}</h3>
+                <h3 className="mt-3 text-2xl font-extrabold tracking-tight text-slate-950">{person.name}</h3>
                 <p className="mt-3 text-sm leading-7 text-slate-600">{person.note}</p>
 
                 <div className="mt-6 grid gap-3">

@@ -73,7 +73,7 @@ export function StudentDashboardPage() {
           <div className="flex items-end justify-between gap-4">
             <div>
               <p className="text-xs font-semibold uppercase tracking-[0.3em] text-teal-700">continue learning</p>
-              <h2 className="mt-2 text-3xl font-black tracking-tight text-slate-950">Khoa hoc dang hoc</h2>
+              <h2 className="mt-2 text-3xl font-extrabold tracking-tight text-slate-950">Khoa hoc dang hoc</h2>
             </div>
             <Link to="/student/my-courses" className="text-sm font-semibold text-teal-700">
               Xem tat ca
@@ -90,7 +90,7 @@ export function StudentDashboardPage() {
         <div className="space-y-5">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.3em] text-teal-700">mock tests</p>
-            <h2 className="mt-2 text-3xl font-black tracking-tight text-slate-950">Bai thi de xuat</h2>
+            <h2 className="mt-2 text-3xl font-extrabold tracking-tight text-slate-950">Bai thi de xuat</h2>
           </div>
 
           <Link to="/student/results" className="text-sm font-semibold text-cyan-700">
@@ -112,7 +112,7 @@ export function StudentDashboardPage() {
                     {mockTest.durationMinutes} phut
                   </span>
                 </div>
-                <h3 className="mt-4 text-xl font-black tracking-tight text-slate-950">{mockTest.title}</h3>
+                <h3 className="mt-4 text-xl font-extrabold tracking-tight text-slate-950">{mockTest.title}</h3>
                 <p className="mt-2 text-sm leading-7 text-slate-600">{mockTest.description}</p>
               </Link>
             ))}

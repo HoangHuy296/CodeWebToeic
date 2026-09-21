@@ -58,15 +58,15 @@ export function HomePage() {
   return (
     <div className="space-y-8">
       <PageHero
-        eyebrow="IVYTS 1997"
+        eyebrow="IVYTS 1998"
         title="English learning CRM cho TOEIC, IELTS va lop hoc online co the do luong."
-        description="IVYTS 1997 ket hop khoa hoc dong goi, mock test, learning progress va inbox noi bo de hoc vien hoc ro lo trinh, giang vien theo doi tien do, admin van hanh gon."
+        description="IVYTS 1998 ket hop khoa hoc dong goi, mock test, learning progress va inbox noi bo de hoc vien hoc ro lo trinh, giang vien theo doi tien do, admin van hanh gon."
       />
 
       <section className="grid gap-4 lg:grid-cols-[1.2fr_0.8fr]">
         <article className="rounded-[2rem] border border-white/20 bg-[linear-gradient(135deg,rgba(15,23,42,0.98),rgba(15,118,110,0.9),rgba(29,78,216,0.86))] p-8 text-white shadow-[0_26px_70px_rgba(15,23,42,0.2)] lg:p-10">
           <p className="text-xs font-semibold tracking-[0.35em] text-cyan-100 uppercase">english academy crm</p>
-          <h2 className="mt-4 text-3xl font-black tracking-tight">Hoc vien thay duoc diem den. Giang vien thay duoc tien do.</h2>
+          <h2 className="mt-4 text-3xl font-extrabold tracking-tight">Hoc vien thay duoc diem den. Giang vien thay duoc tien do.</h2>
           <p className="mt-4 max-w-2xl text-sm leading-7 text-slate-300">
             Tu landing page den trang hoc, he thong tap trung vao nhung viec quan trong: chon khoa hoc dung trinh do, lam bai thi dung thoi diem, va nhan feedback dung nguoi.
           </p>
@@ -79,10 +79,10 @@ export function HomePage() {
         <div className="grid gap-4">
           {featureCards.map((card, index) => (
             <article key={card.title} className="rounded-[1.8rem] border border-stroke bg-white p-6 shadow-[0_16px_50px_rgba(15,23,42,0.06)]">
-              <span className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-teal-50 text-sm font-black text-teal-700">
+              <span className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-teal-50 text-sm font-extrabold text-teal-700">
                 0{index + 1}
               </span>
-              <h3 className="mt-4 text-xl font-bold tracking-tight text-slate-950">{card.title}</h3>
+              <h3 className="mt-4 text-xl font-extrabold tracking-tight text-slate-950">{card.title}</h3>
               <p className="mt-3 text-sm leading-7 text-slate-600">{card.text}</p>
             </article>
           ))}
@@ -98,7 +98,7 @@ export function HomePage() {
         ].map((item) => (
           <article key={item.label} className="rounded-[1.6rem] border border-stroke bg-white p-6 shadow-[0_16px_50px_rgba(15,23,42,0.06)]">
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">{item.label}</p>
-            <p className="mt-3 text-3xl font-black tracking-tight text-slate-950">{item.value}</p>
+            <p className="mt-3 text-3xl font-extrabold tracking-tight text-slate-950">{item.value}</p>
           </article>
         ))}
       </section>
@@ -120,7 +120,7 @@ export function HomePage() {
         <div className="flex items-end justify-between gap-4">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.3em] text-teal-700">featured courses</p>
-            <h2 className="mt-2 text-3xl font-black tracking-tight text-slate-950">Khoa hoc noi bat</h2>
+            <h2 className="mt-2 text-3xl font-extrabold tracking-tight text-slate-950">Khoa hoc noi bat</h2>
           </div>
           <Link to="/courses" className="text-sm font-semibold text-teal-700">
             Xem tat ca
@@ -137,8 +137,8 @@ export function HomePage() {
       <section className="space-y-5">
         <div className="flex items-end justify-between gap-4">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.3em] text-teal-700">why ivyts 1997</p>
-            <h2 className="mt-2 text-3xl font-black tracking-tight text-slate-950">Mot he thong cho hoc va van hanh</h2>
+            <p className="text-xs font-semibold uppercase tracking-[0.3em] text-teal-700">why ivyts 1998</p>
+            <h2 className="mt-2 text-3xl font-extrabold tracking-tight text-slate-950">Mot he thong cho hoc va van hanh</h2>
           </div>
         </div>
         <div className="grid gap-4 lg:grid-cols-3">
@@ -157,7 +157,7 @@ export function HomePage() {
       <section className="space-y-5">
         <div>
             <p className="text-xs font-semibold uppercase tracking-[0.3em] text-teal-700">mock tests</p>
-          <h2 className="mt-2 text-3xl font-black tracking-tight text-slate-950">Bai thi giup hoc vien biet minh dang o dau</h2>
+          <h2 className="mt-2 text-3xl font-extrabold tracking-tight text-slate-950">Bai thi giup hoc vien biet minh dang o dau</h2>
         </div>
         <div className="grid gap-6 lg:grid-cols-2">
           {featuredMockTests.map((mockTest) => (
@@ -169,7 +169,7 @@ export function HomePage() {
       <section className="space-y-5">
         <div>
             <p className="text-xs font-semibold uppercase tracking-[0.3em] text-teal-700">study guides</p>
-          <h2 className="mt-2 text-3xl font-black tracking-tight text-slate-950">Huong dan hoc TOEIC va IELTS co he thong</h2>
+          <h2 className="mt-2 text-3xl font-extrabold tracking-tight text-slate-950">Huong dan hoc TOEIC va IELTS co he thong</h2>
         </div>
         <div className="grid gap-6 lg:grid-cols-3">
           {featuredPosts.map((article) => (
@@ -177,7 +177,7 @@ export function HomePage() {
               <img src={article.coverImage} alt={article.title} className="h-44 w-full object-cover" />
               <div className="p-6">
                 <p className="text-xs font-semibold uppercase tracking-[0.2em] text-teal-700">{article.tags[0] ?? 'Blog'}</p>
-                <h3 className="mt-3 text-2xl font-black tracking-tight text-slate-950">{article.title}</h3>
+                <h3 className="mt-3 text-2xl font-extrabold tracking-tight text-slate-950">{article.title}</h3>
                 <p className="mt-3 text-sm leading-7 text-slate-600">{article.excerpt}</p>
                 <Link to={`/blog/${article.slug}`} className="mt-5 inline-flex text-sm font-semibold text-teal-700">
                   Doc tiep

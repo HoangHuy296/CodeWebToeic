@@ -87,14 +87,14 @@ export function SiteHeader() {
   const isExerciseRoute = location.pathname.startsWith('/exercises');
 
   return (
-    <header className="sticky top-0 z-50 border-b border-white/60 bg-[rgba(248,250,252,0.82)] backdrop-blur-xl">
+    <header className="sticky top-0 z-50 border-b border-stroke bg-[rgba(248,250,252,0.82)] backdrop-blur-xl">
       <div className="mx-auto flex max-w-7xl items-center gap-4 px-4 py-4 lg:px-8">
         <div className="shrink-0">
           <SiteLogo />
         </div>
 
         <nav className="hidden min-w-0 flex-1 items-center justify-center lg:flex">
-          <div className="flex max-w-full items-center gap-1 rounded-full border border-white/70 bg-white/72 px-2 py-2 shadow-[0_16px_40px_rgba(15,23,42,0.08)]">
+          <div className="flex max-w-full items-center gap-1 rounded-full border border-stroke bg-white/72 px-2 py-2 shadow-[0_16px_40px_rgba(15,23,42,0.08)]">
             {navItems.slice(0, 2).map((item) => (
               <HeaderLink key={item.to} label={item.label} to={item.to} />
             ))}

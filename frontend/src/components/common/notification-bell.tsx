@@ -90,7 +90,7 @@ export function NotificationBell() {
         <div className="absolute right-0 z-50 mt-3 w-[min(92vw,25rem)] rounded-[2rem] border border-stroke bg-white/95 p-4 shadow-[0_24px_70px_rgba(15,23,42,0.16)] backdrop-blur-xl">
           <div className="flex items-start justify-between gap-4">
             <div>
-              <h3 className="text-lg font-black tracking-tight text-slate-950">Thong bao</h3>
+              <h3 className="text-lg font-extrabold tracking-tight text-slate-950">Thong bao</h3>
               <p className="mt-1 text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
                 {statusLabel}
               </p>

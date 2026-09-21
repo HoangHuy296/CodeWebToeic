@@ -47,11 +47,11 @@ export function WorkspaceExerciseItemsPage({ workspaceRole }: WorkspaceExerciseI
 
   return (
     <div className="space-y-8">
-      <section className="rounded-[2rem] border border-white/70 bg-white/90 p-8 shadow-[0_24px_70px_rgba(15,23,42,0.08)]">
+      <section className="rounded-[2rem] border border-stroke bg-white/90 p-8 shadow-[0_24px_70px_rgba(15,23,42,0.08)]">
         <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.35em] text-amber-700">{eyebrow}</p>
-            <h1 className="mt-4 text-4xl font-black tracking-tight text-slate-950">{title}</h1>
+            <h1 className="mt-4 text-4xl font-extrabold tracking-tight text-slate-950">{title}</h1>
             <p className="mt-4 max-w-3xl text-sm leading-8 text-slate-600">
               Khu nay danh rieng cho bai tap on tap. Exercise items di theo huong luyen tap va ca nhan hoa,
               khong dung chung workflow quan ly voi mock-test nua.
@@ -70,7 +70,7 @@ export function WorkspaceExerciseItemsPage({ workspaceRole }: WorkspaceExerciseI
       <section className="rounded-[1.8rem] border border-stroke bg-white p-6 shadow-[0_16px_50px_rgba(15,23,42,0.06)]">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
           <div>
-            <h2 className="text-2xl font-black tracking-tight text-slate-950">Danh sach bai tap</h2>
+            <h2 className="text-2xl font-extrabold tracking-tight text-slate-950">Danh sach bai tap</h2>
             <p className="mt-2 text-sm text-slate-600">
               {workspaceRole === 'admin'
                 ? 'Admin nhin thay toan bo bai tap on tap trong he thong.'
@@ -115,7 +115,7 @@ export function WorkspaceExerciseItemsPage({ workspaceRole }: WorkspaceExerciseI
                 </span>
               </div>
 
-              <h3 className="mt-4 text-2xl font-black tracking-tight text-slate-950">{item.title}</h3>
+              <h3 className="mt-4 text-2xl font-extrabold tracking-tight text-slate-950">{item.title}</h3>
               <p className="mt-2 text-xs font-semibold uppercase tracking-[0.18em] text-amber-700">
                 Chu de: {item.exerciseTopicSlug || 'chua gan'}
               </p>
@@ -124,15 +124,15 @@ export function WorkspaceExerciseItemsPage({ workspaceRole }: WorkspaceExerciseI
               <div className="mt-5 grid gap-3 sm:grid-cols-3">
                 <div className="rounded-2xl bg-white px-4 py-4 text-sm text-slate-700">
                   <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">So cau</p>
-                  <p className="mt-2 text-lg font-black text-slate-950">{item.questionCount}</p>
+                  <p className="mt-2 text-lg font-extrabold text-slate-950">{item.questionCount}</p>
                 </div>
                 <div className="rounded-2xl bg-white px-4 py-4 text-sm text-slate-700">
                   <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Thoi gian</p>
-                  <p className="mt-2 text-lg font-black text-slate-950">{item.durationMinutes} phut</p>
+                  <p className="mt-2 text-lg font-extrabold text-slate-950">{item.durationMinutes} phut</p>
                 </div>
                 <div className="rounded-2xl bg-white px-4 py-4 text-sm text-slate-700">
                   <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Assigned courses</p>
-                  <p className="mt-2 text-lg font-black text-slate-950">{item.assignedCourseIds.length}</p>
+                  <p className="mt-2 text-lg font-extrabold text-slate-950">{item.assignedCourseIds.length}</p>
                 </div>
               </div>
 

@@ -195,18 +195,18 @@ export function CourseLessonsManagePage() {
   useEffect(() => {
     document.title = course ? `Lesson List | ${course.title}` : 'Lesson List';
     return () => {
-      document.title = 'IVYTS 1997';
+      document.title = 'IVYTS 1998';
     };
   }, [course]);
 
   return (
     <div className="min-h-screen bg-[radial-gradient(circle_at_top,rgba(139,92,246,0.12),transparent_40%),linear-gradient(180deg,#f8fafc,#eef2ff)] px-4 py-8 sm:px-6 lg:px-8">
       <div className="mx-auto flex w-full max-w-7xl flex-col gap-6">
-        <header className="overflow-hidden rounded-[2rem] border border-white/70 bg-white/90 p-8 shadow-[0_24px_70px_rgba(15,23,42,0.08)]">
+        <header className="overflow-hidden rounded-[2rem] border border-stroke bg-white/90 p-8 shadow-[0_24px_70px_rgba(15,23,42,0.08)]">
           <div className="flex flex-wrap items-start justify-between gap-5">
             <div className="max-w-4xl">
               <p className="text-xs font-semibold uppercase tracking-[0.32em] text-violet-700">lesson list workspace</p>
-              <h1 className="mt-4 text-4xl font-black tracking-tight text-slate-950">
+              <h1 className="mt-4 text-4xl font-extrabold tracking-tight text-slate-950">
                 {course?.title ?? 'Dang tai khoa hoc...'}
               </h1>
               <p className="mt-4 text-sm leading-8 text-slate-600">
@@ -237,7 +237,7 @@ export function CourseLessonsManagePage() {
             {summary.map((item) => (
               <article key={item.label} className="rounded-[1.4rem] border border-stroke bg-slate-50 px-5 py-4">
                 <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">{item.label}</p>
-                <p className="mt-2 text-xl font-black tracking-tight text-slate-950">{item.value}</p>
+                <p className="mt-2 text-xl font-extrabold tracking-tight text-slate-950">{item.value}</p>
               </article>
             ))}
           </div>
@@ -262,7 +262,7 @@ export function CourseLessonsManagePage() {
                 <div className="flex items-start justify-between gap-4">
                   <div>
                     <p className="text-xs font-semibold uppercase tracking-[0.28em] text-violet-700">search and sort lesson</p>
-                    <h2 className="mt-3 text-2xl font-black tracking-tight text-slate-950">Lesson list</h2>
+                    <h2 className="mt-3 text-2xl font-extrabold tracking-tight text-slate-950">Lesson list</h2>
                   </div>
                   <button
                     type="button"
@@ -271,7 +271,7 @@ export function CourseLessonsManagePage() {
                       setSystemMessage(null);
                       setCreateDraft(createLessonDraft());
                     }}
-                    className="inline-flex h-11 w-11 items-center justify-center rounded-2xl border border-violet-200 bg-violet-50 text-2xl font-black text-violet-700 transition hover:bg-violet-100"
+                    className="inline-flex h-11 w-11 items-center justify-center rounded-2xl border border-violet-200 bg-violet-50 text-2xl font-extrabold text-violet-700 transition hover:bg-violet-100"
                     aria-label="Create lesson"
                   >
                     +
@@ -329,7 +329,7 @@ export function CourseLessonsManagePage() {
                             </span>
                           </div>
                         </div>
-                        <h3 className="mt-3 line-clamp-2 text-base font-black tracking-tight text-slate-950">{lesson.title}</h3>
+                        <h3 className="mt-3 line-clamp-2 text-base font-extrabold tracking-tight text-slate-950">{lesson.title}</h3>
                         <p className="mt-2 line-clamp-2 text-sm leading-6 text-slate-600">{lesson.description}</p>
                       </button>
                     );
@@ -347,7 +347,7 @@ export function CourseLessonsManagePage() {
                 <div className="flex items-start justify-between gap-4">
                   <div>
                     <p className="text-xs font-semibold uppercase tracking-[0.28em] text-violet-700">lesson body</p>
-                    <h2 className="mt-2 text-xl font-black tracking-tight text-slate-950">
+                    <h2 className="mt-2 text-xl font-extrabold tracking-tight text-slate-950">
                       {panelMode === 'create'
                         ? 'Create lesson'
                         : panelMode === 'edit'
@@ -571,7 +571,7 @@ export function CourseLessonsManagePage() {
                           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
                             Lesson {selectedLesson.order}
                           </p>
-                          <h3 className="mt-1 truncate text-xl font-black tracking-tight text-slate-950">{selectedLesson.title}</h3>
+                          <h3 className="mt-1 truncate text-xl font-extrabold tracking-tight text-slate-950">{selectedLesson.title}</h3>
                         </div>
                         <div className="flex flex-wrap gap-2">
                           {selectedLesson.isPreview ? (
@@ -647,7 +647,7 @@ export function CourseLessonsManagePage() {
               </section>
             </main>
 
-            <footer className="rounded-[2rem] border border-white/70 bg-white/85 p-6 text-sm leading-7 text-slate-600 shadow-[0_18px_55px_rgba(15,23,42,0.05)]">
+            <footer className="rounded-[2rem] border border-stroke bg-white/85 p-6 text-sm leading-7 text-slate-600 shadow-[0_18px_55px_rgba(15,23,42,0.05)]">
               Footer workspace nay duoc tach rieng de sau nay mo rong them bai tap, quiz theo lesson, attachments, assignment
               va workflow review noi dung ma khong can dap lai bo cuc course detail.
             </footer>

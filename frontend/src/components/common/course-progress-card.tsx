@@ -33,7 +33,7 @@ export function CourseProgressCard({ enrollment }: { enrollment: Enrollment }) {
           <span className="text-sm font-semibold text-slate-500">{enrollment.progressPercent}%</span>
         </div>
 
-        <h3 className="mt-4 text-2xl font-black tracking-tight text-slate-950">
+        <h3 className="mt-4 text-2xl font-extrabold tracking-tight text-slate-950">
           {enrollment.course.title ?? 'Course'}
         </h3>
         <p className="mt-2 text-sm text-slate-500">
