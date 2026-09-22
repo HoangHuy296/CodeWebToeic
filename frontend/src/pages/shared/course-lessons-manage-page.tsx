@@ -200,7 +200,7 @@ export function CourseLessonsManagePage() {
   }, [course]);
 
   return (
-    <div className="min-h-screen bg-[radial-gradient(circle_at_top,rgba(139,92,246,0.12),transparent_40%),linear-gradient(180deg,#f8fafc,#eef2ff)] px-4 py-8 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-page px-4 py-8 sm:px-6 lg:px-8">
       <div className="mx-auto flex w-full max-w-7xl flex-col gap-6">
         <header className="overflow-hidden rounded-[2rem] border border-stroke bg-white/90 p-8 shadow-[0_24px_70px_rgba(15,23,42,0.08)]">
           <div className="flex flex-wrap items-start justify-between gap-5">

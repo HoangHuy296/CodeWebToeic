@@ -15,7 +15,7 @@ const contentMap = {
   user: {
     eyebrow: 'Dang nhap',
     title: 'Ket noi vao workspace cua ban',
-    description: 'Form nay ket noi truc tiep den backend auth APIs da duoc test.',
+    description: 'Đăng nhập để tiếp tục học tập và theo dõi tiến độ của bạn.',
     defaultEmail: 'student1@ivyts.dev',
     defaultPassword: 'Password@123',
     submitLabel: 'Dang nhap',

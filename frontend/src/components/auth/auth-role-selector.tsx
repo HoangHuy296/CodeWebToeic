@@ -17,13 +17,13 @@ const roleCards: Array<{
     role: 'student',
     title: 'Hoc vien',
     subtitle: 'Hoc course, lam bai tap, lam bai thi va theo doi tien do hoc.',
-    accent: 'from-teal-600 via-cyan-600 to-emerald-600',
+    accent: 'bg-teal-700',
   },
   {
     role: 'teacher',
     title: 'Giang vien',
     subtitle: 'Quan ly course, lesson, bai tap va bai thi cua hoc vien.',
-    accent: 'from-slate-900 via-blue-900 to-cyan-700',
+    accent: 'bg-teal-900',
   },
 ];
 
@@ -75,16 +75,16 @@ export function AuthRoleSelector({ selectedRole, onSelect, onContinue, mode }: A
               type="button"
               onClick={() => onSelect(card.role)}
               className={[
-                'group rounded-[1.8rem] border px-5 py-5 text-left transition',
+                'group rounded-xl border p-4 text-left transition',
                 isSelected
                   ? 'border-teal-300 bg-white shadow-[0_18px_40px_rgba(15,118,110,0.12)] ring-2 ring-teal-200/70'
-                  : 'border-stroke bg-white/70 hover:border-teal-150 hover:bg-white',
+                  : 'border-stroke bg-white/70 hover:border-teal-300 hover:bg-white',
               ].join(' ')}
             >
               <div
                 className={[
-                  'flex min-h-24 items-center justify-between rounded-[1.4rem] px-4 py-4 text-white',
-                  `bg-linear-to-br ${card.accent}`,
+                  'flex min-h-24 flex-wrap items-center justify-between gap-2 rounded-lg px-4 py-4 text-white',
+                  card.accent,
                 ].join(' ')}
               >
                 <div>

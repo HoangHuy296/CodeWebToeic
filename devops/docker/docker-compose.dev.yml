@@ -35,7 +35,7 @@ services:
       MYSQL_URL: ${MYSQL_URL:-jdbc:mysql://mysql:3306/ivyts_1997?createDatabaseIfNotExist=true&useUnicode=true&characterEncoding=utf8&serverTimezone=UTC}
       MYSQL_USERNAME: ${MYSQL_USERNAME:-ivyts}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD:-ivyts}
-      CLIENT_URL: ${DEV_CLIENT_URL:-http://localhost:5173,http://localhost:5174,http://localhost:5175}
+      CLIENT_URL: ${DEV_CLIENT_URL:-http://localhost,http://localhost:5173,http://localhost:5174,http://localhost:5175}
       JWT_ACCESS_SECRET: ${JWT_ACCESS_SECRET:-replace-me1}
       JWT_REFRESH_SECRET: ${JWT_REFRESH_SECRET:-replace-me}
       CLOUDINARY_CLOUD_NAME: ${CLOUDINARY_CLOUD_NAME:-}

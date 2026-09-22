@@ -79,7 +79,7 @@ export function AvatarDropdown() {
         aria-expanded={isOpen}
         aria-haspopup="menu"
       >
-        <span className="relative inline-flex h-11 w-11 items-center justify-center overflow-hidden rounded-full border border-white/80 bg-gradient-to-br from-teal-500 via-cyan-500 to-blue-600 shadow-[0_12px_26px_rgba(14,116,144,0.22)]">
+        <span className="brand-mark relative inline-flex h-11 w-11 items-center justify-center overflow-hidden rounded-full border border-stroke">
           {user.avatarUrl ? (
             <img
               src={user.avatarUrl}
@@ -113,9 +113,9 @@ export function AvatarDropdown() {
 
       {isOpen ? (
         <div className="absolute right-0 z-40 mt-3 w-[min(88vw,22rem)] rounded-[2rem] border border-stroke bg-white/95 p-3 shadow-[0_24px_70px_rgba(15,23,42,0.16)] backdrop-blur-xl">
-          <div className="rounded-[1.5rem] border border-stroke bg-[linear-gradient(135deg,rgba(45,212,191,0.12),rgba(96,165,250,0.08))] px-4 py-4">
+          <div className="surface-soft rounded-xl px-4 py-4">
             <div className="flex items-center gap-3">
-              <span className="inline-flex h-14 w-14 items-center justify-center overflow-hidden rounded-full border border-white/80 bg-gradient-to-br from-teal-500 via-cyan-500 to-blue-600 shadow-[0_14px_32px_rgba(14,116,144,0.22)]">
+              <span className="brand-mark inline-flex h-14 w-14 items-center justify-center overflow-hidden rounded-full border border-stroke">
                 {user.avatarUrl ? (
                   <img
                     src={user.avatarUrl}

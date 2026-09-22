@@ -2,14 +2,14 @@ import { Link } from 'react-router-dom';
 
 export function SiteFooter() {
   return (
-    <footer className="border-t border-stroke bg-slate-950 text-slate-200">
+    <footer className="brand-panel border-t">
       <div className="mx-auto grid max-w-7xl gap-10 px-5 py-16 lg:grid-cols-[1.2fr_0.8fr_0.8fr] lg:px-8">
         <div>
-          <p className="text-xs font-semibold tracking-[0.35em] text-teal-300 uppercase">IVYTS 1998</p>
+          <p className="panel-eyebrow text-xs font-semibold tracking-[0.3em] uppercase">IVYTS 1998</p>
           <h3 className="mt-4 text-3xl font-extrabold tracking-tight text-white">
             English learning CRM cho TOEIC, IELTS va lop hoc online co tien do ro rang.
           </h3>
-          <p className="mt-4 max-w-xl text-sm leading-7 text-slate-400">
+          <p className="panel-muted mt-4 max-w-xl text-sm leading-7">
             Khoa hoc, mock test, learning progress va inbox noi bo duoc gom trong mot he thong cho hoc vien, giang vien va admin.
           </p>
         </div>

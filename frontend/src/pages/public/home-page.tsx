@@ -64,15 +64,15 @@ export function HomePage() {
       />
 
       <section className="grid gap-4 lg:grid-cols-[1.2fr_0.8fr]">
-        <article className="rounded-[2rem] border border-white/20 bg-[linear-gradient(135deg,rgba(15,23,42,0.98),rgba(15,118,110,0.9),rgba(29,78,216,0.86))] p-8 text-white shadow-[0_26px_70px_rgba(15,23,42,0.2)] lg:p-10">
-          <p className="text-xs font-semibold tracking-[0.35em] text-cyan-100 uppercase">english academy crm</p>
+        <article className="brand-panel rounded-[1.5rem] p-6 sm:p-8 lg:p-10">
+          <p className="panel-eyebrow text-xs font-semibold tracking-[0.3em] uppercase">english academy crm</p>
           <h2 className="mt-4 text-3xl font-extrabold tracking-tight">Hoc vien thay duoc diem den. Giang vien thay duoc tien do.</h2>
-          <p className="mt-4 max-w-2xl text-sm leading-7 text-slate-300">
+          <p className="panel-muted mt-4 max-w-2xl text-sm leading-7">
             Tu landing page den trang hoc, he thong tap trung vao nhung viec quan trong: chon khoa hoc dung trinh do, lam bai thi dung thoi diem, va nhan feedback dung nguoi.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
-            <Link to="/courses" className="rounded-full bg-white px-5 py-3 text-sm font-semibold text-slate-950">Xem khoa hoc</Link>
-            <Link to="/mock-test" className="rounded-full border border-white/20 px-5 py-3 text-sm font-semibold text-white">Luyen thi ngay</Link>
+            <Link to="/courses" className="btn-paper px-5 py-3 text-sm">Xem khoa hoc</Link>
+            <Link to="/mock-test" className="btn-on-panel px-5 py-3 text-sm">Luyen thi ngay</Link>
           </div>
         </article>
 

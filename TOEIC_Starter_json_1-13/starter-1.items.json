@@ -1,0 +1,196 @@
+[
+  {
+    "ex": {
+      "en": "Sam wants to quit a job because it is boring.",
+      "vi": "Sam muốn từ bỏ một công việc vì nó nhàm chán."
+    },
+    "en": "quit a job",
+    "vi": "từ bỏ một công việc",
+    "part": "Vocab",
+    "topic": "Collocation",
+    "note": "",
+    "alts": []
+  },
+  {
+    "ex": {
+      "en": "We can solve a problem together.",
+      "vi": "Chúng ta có thể cùng nhau giải quyết một vấn đề."
+    },
+    "en": "solve a problem",
+    "vi": "giải quyết một vấn đề",
+    "part": "Vocab",
+    "topic": "Collocation",
+    "note": "",
+    "alts": []
+  },
+  {
+    "ex": {
+      "en": "I want to participate in an event next week.",
+      "vi": "Tôi muốn tham gia vào một sự kiện vào tuần sau."
+    },
+    "en": "participate in an event",
+    "vi": "tham gia vào một sự kiện",
+    "part": "Vocab",
+    "topic": "Collocation",
+    "note": "Giới từ: participate + IN",
+    "alts": []
+  },
+  {
+    "ex": {
+      "en": "Please make an appointment with the doctor.",
+      "vi": "Vui lòng đặt một cuộc hẹn với bác sĩ."
+    },
+    "en": "make an appointment",
+    "vi": "đặt một cuộc hẹn",
+    "part": "Vocab",
+    "topic": "Collocation",
+    "note": "",
+    "alts": []
+  },
+  {
+    "ex": {
+      "en": "Mr. Lee will return from a business trip on Friday.",
+      "vi": "Ông Lee sẽ trở về từ một chuyến công tác vào thứ Sáu."
+    },
+    "en": "return from a business trip",
+    "vi": "trở về từ một chuyến công tác",
+    "part": "Vocab",
+    "topic": "Collocation",
+    "note": "Giới từ: return + FROM",
+    "alts": []
+  },
+  {
+    "ex": {
+      "en": "Please fill out a form at the front desk.",
+      "vi": "Vui lòng điền vào một biểu mẫu tại quầy lễ tân."
+    },
+    "en": "fill out a form",
+    "vi": "điền vào một biểu mẫu",
+    "part": "Vocab",
+    "topic": "Collocation",
+    "note": "fill out và fill in đều đúng",
+    "alts": [
+      "fill in a form"
+    ]
+  },
+  {
+    "ex": {
+      "en": "I must pay for a taxi to the airport.",
+      "vi": "Tôi phải trả tiền cho một chuyến taxi ra sân bay."
+    },
+    "en": "pay for a taxi",
+    "vi": "trả tiền cho một chuyến taxi",
+    "part": "Vocab",
+    "topic": "Collocation",
+    "note": "Giới từ: pay + FOR",
+    "alts": []
+  },
+  {
+    "ex": {
+      "en": "She wants to apply for a job at a bank.",
+      "vi": "Cô ấy muốn nộp đơn xin một công việc tại một ngân hàng."
+    },
+    "en": "apply for a job",
+    "vi": "nộp đơn xin một công việc",
+    "part": "Vocab",
+    "topic": "Collocation",
+    "note": "Giới từ: apply + FOR",
+    "alts": []
+  },
+  {
+    "ex": {
+      "en": "I want to transfer some money to my mother.",
+      "vi": "Tôi muốn chuyển một ít tiền cho mẹ."
+    },
+    "en": "transfer some money",
+    "vi": "chuyển một ít tiền",
+    "part": "Vocab",
+    "topic": "Collocation",
+    "note": "",
+    "alts": []
+  },
+  {
+    "ex": {
+      "en": "Please contact the office if you have a question.",
+      "vi": "Vui lòng liên hệ với văn phòng nếu bạn có câu hỏi."
+    },
+    "en": "contact the office",
+    "vi": "liên hệ với văn phòng",
+    "part": "Vocab",
+    "topic": "Collocation",
+    "note": "contact + tân ngữ, không thêm 'with'",
+    "alts": []
+  },
+  {
+    "ex": {
+      "en": "The new ad can promote sales.",
+      "vi": "Quảng cáo mới có thể thúc đẩy doanh số."
+    },
+    "en": "promote sales",
+    "vi": "thúc đẩy doanh số",
+    "part": "Vocab",
+    "topic": "Collocation",
+    "note": "",
+    "alts": []
+  },
+  {
+    "ex": {
+      "en": "The manager wants to announce something today.",
+      "vi": "Người quản lý muốn thông báo một điều gì đó hôm nay."
+    },
+    "en": "announce something",
+    "vi": "thông báo một điều gì đó",
+    "part": "Vocab",
+    "topic": "Collocation",
+    "note": "",
+    "alts": []
+  },
+  {
+    "ex": {
+      "en": "The shop can repair a car in two days.",
+      "vi": "Cửa hàng có thể sửa chữa một chiếc xe hơi trong hai ngày."
+    },
+    "en": "repair a car",
+    "vi": "sửa chữa một chiếc xe hơi",
+    "part": "Vocab",
+    "topic": "Collocation",
+    "note": "",
+    "alts": []
+  },
+  {
+    "ex": {
+      "en": "Our team will complete a project by May.",
+      "vi": "Nhóm của chúng tôi sẽ hoàn thành một dự án trước tháng Năm."
+    },
+    "en": "complete a project",
+    "vi": "hoàn thành một dự án",
+    "part": "Vocab",
+    "topic": "Collocation",
+    "note": "",
+    "alts": []
+  },
+  {
+    "ex": {
+      "en": "Many people do business online today.",
+      "vi": "Ngày nay nhiều người làm kinh doanh trực tuyến."
+    },
+    "en": "do business",
+    "vi": "làm kinh doanh",
+    "part": "Vocab",
+    "topic": "Collocation",
+    "note": "",
+    "alts": []
+  },
+  {
+    "ex": {
+      "en": "I highly recommend this hotel.",
+      "vi": "Tôi rất khuyên dùng khách sạn này."
+    },
+    "en": "highly recommend",
+    "vi": "rất khuyên dùng",
+    "part": "Vocab",
+    "topic": "Collocation",
+    "note": "",
+    "alts": []
+  }
+]

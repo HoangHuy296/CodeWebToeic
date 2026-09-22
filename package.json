@@ -1,5 +1,5 @@
 {
-  "name": "ivyts-1997-monorepo",
+  "name": "ivyts-1998-monorepo",
   "private": true,
   "version": "0.1.0",
   "workspaces": [
@@ -21,5 +21,9 @@
     "smoke:teacher:exercise": "powershell -ExecutionPolicy Bypass -File .\\scripts\\smoke-teacher-exercise-workspace.ps1",
     "smoke:admin": "powershell -ExecutionPolicy Bypass -File .\\scripts\\smoke-admin-role.ps1",
     "smoke:google": "powershell -ExecutionPolicy Bypass -File .\\scripts\\smoke-google-auth.ps1"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.63.0",
+    "@types/node": "^26.6.2"
   }
 }

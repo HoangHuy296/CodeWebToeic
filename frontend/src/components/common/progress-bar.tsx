@@ -4,10 +4,9 @@ export function ProgressBar({ value }: { value: number }) {
   return (
     <div className="h-3 overflow-hidden rounded-full bg-slate-200">
       <div
-        className="h-full rounded-full bg-[linear-gradient(135deg,var(--color-brand),#14b8a6)] transition-all duration-500"
+        className="h-full rounded-full bg-[var(--color-brand)] transition-all duration-500"
         style={{ width: `${safeValue}%` }}
       />
     </div>
   );
 }
-

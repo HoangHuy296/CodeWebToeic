@@ -106,7 +106,7 @@ export function StudentMockTestSessionPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[radial-gradient(circle_at_top,rgba(30,41,59,0.92),rgba(15,23,42,1)_45%),linear-gradient(180deg,#020617,#111827)] px-4 py-6 text-white sm:px-6 lg:px-8">
+    <div className="brand-panel min-h-screen px-4 py-6 sm:px-6 lg:px-8">
       <div className="mx-auto flex w-full max-w-7xl flex-col gap-6">
         <header className="rounded-[2rem] border border-white/10 bg-white/5 p-6 shadow-[0_24px_70px_rgba(2,6,23,0.38)] backdrop-blur">
           <div className="flex flex-wrap items-start justify-between gap-4">
@@ -131,7 +131,7 @@ export function StudentMockTestSessionPage() {
                 type="button"
                 onClick={handleSubmit}
                 disabled={submitMutation.isPending || Boolean(result)}
-                className="rounded-full bg-[linear-gradient(135deg,#22c55e,#0f766e)] px-5 py-3 text-sm font-semibold text-white disabled:opacity-60"
+                className="btn-brand px-5 py-3 text-sm disabled:opacity-60"
               >
                 {submitMutation.isPending ? 'Dang nop bai...' : result ? 'Da nop bai' : 'Nop bai'}
               </button>

@@ -10,13 +10,14 @@ WORKDIR /app
 COPY src ./src
 RUN mvn -B -q clean package -DskipTests
 
+FROM deps AS development
+WORKDIR /app
+EXPOSE 5000
+CMD ["mvn", "-T", "1C", "-B", "spring-boot:run"]
+
+# Kept last: platforms that build a Dockerfile without --target (e.g. Railway) use the final stage by default.
 FROM eclipse-temurin:21-jre-alpine AS production
 WORKDIR /app
 COPY --from=build /app/target/*.jar ./app.jar
 EXPOSE 5000
 CMD ["java", "-jar", "/app/app.jar"]
-
-FROM deps AS development
-WORKDIR /app
-EXPOSE 5000
-CMD ["mvn", "-T", "1C", "-B", "spring-boot:run"]

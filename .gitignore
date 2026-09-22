@@ -1,8 +1,20 @@
 node_modules/
 dist/
+.vercel/
 .env
 .DS_Store
 coverage/
 *.log
 target/
 .mvn/
+*.tsbuildinfo
+.scratch-*
+
+.vercel
+
+# Playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+/playwright/.auth/

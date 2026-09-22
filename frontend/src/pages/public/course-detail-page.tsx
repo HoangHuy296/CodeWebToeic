@@ -238,7 +238,7 @@ export function CourseDetailPage() {
               </div>
 
               {canManageCourse ? (
-                <article className="rounded-[2rem] border border-teal-200 bg-[linear-gradient(135deg,rgba(255,255,255,0.96),rgba(240,253,250,0.96))] p-8 shadow-[0_24px_70px_rgba(15,23,42,0.08)]">
+                <article className="surface-soft rounded-[1.5rem] p-8">
                   <div className="flex flex-wrap items-start justify-between gap-4">
                     <div>
                       <span className="rounded-full bg-teal-100 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-teal-700">
@@ -513,7 +513,7 @@ export function CourseDetailPage() {
 
                     void enrollMutation.mutate(course.id);
                   }}
-                  className="mt-6 w-full rounded-2xl bg-[linear-gradient(135deg,var(--color-brand),var(--color-brand-deep))] px-5 py-4 text-sm font-semibold text-white shadow-[0_16px_40px_rgba(13,148,136,0.24)] transition disabled:cursor-not-allowed disabled:opacity-60"
+                  className="btn-brand mt-6 w-full px-5 py-4 text-sm disabled:cursor-not-allowed disabled:opacity-60"
                 >
                   {sidebarActionLabel}
                 </button>

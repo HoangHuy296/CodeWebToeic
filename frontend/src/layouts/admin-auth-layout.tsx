@@ -3,8 +3,8 @@ import { Outlet } from 'react-router-dom';
 export function AdminAuthLayout() {
   return (
     <div className="mx-auto grid max-w-6xl gap-6 lg:grid-cols-[1.1fr_440px] lg:items-stretch">
-      <section className="rounded-[2rem] border border-white/60 bg-[linear-gradient(135deg,rgba(15,23,42,0.98),rgba(30,41,59,0.92),rgba(14,116,144,0.88))] p-8 text-white shadow-[0_30px_90px_rgba(15,23,42,0.18)] lg:p-10">
-        <p className="text-xs font-semibold uppercase tracking-[0.35em] text-cyan-200">
+      <section className="brand-panel rounded-[1.5rem] p-6 sm:p-8 lg:p-10">
+        <p className="panel-eyebrow text-xs font-semibold uppercase tracking-[0.3em]">
           Admin access
         </p>
         <h1 className="mt-5 max-w-2xl text-4xl font-extrabold tracking-tight">
@@ -27,7 +27,7 @@ export function AdminAuthLayout() {
         </div>
       </section>
 
-      <section className="rounded-[2rem] border border-stroke bg-white/92 p-6 shadow-[0_24px_70px_rgba(15,23,42,0.08)] lg:p-8">
+      <section className="surface-card min-w-0 rounded-[1.5rem] p-6 lg:p-8">
         <Outlet />
       </section>
     </div>

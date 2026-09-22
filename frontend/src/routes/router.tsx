@@ -32,6 +32,8 @@ import { ExerciseTopicPage } from '../pages/public/exercise-topic-page';
 import { HomePage } from '../pages/public/home-page';
 import { MockTestLandingPage } from '../pages/public/mock-test-landing-page';
 import { PortfolioPage } from '../pages/public/portfolio-page';
+import { WordCheckPage } from '../pages/public/word-check-page';
+import { WordReviewPage } from '../pages/public/word-review-page';
 import { CourseLessonsManagePage } from '../pages/shared/course-lessons-manage-page';
 import { StudentDashboardPage } from '../pages/student/student-dashboard-page';
 import { StudentLearningPage } from '../pages/student/student-learning-page';
@@ -87,6 +89,8 @@ export const router = createBrowserRouter([
           { path: 'blog', Component: BlogListPage },
           { path: 'blog/:slug', Component: BlogDetailPage },
           { path: 'portfolio', Component: PortfolioPage },
+          { path: 'wordcheck', Component: WordCheckPage },
+          { path: 'review', Component: WordReviewPage },
           {
             Component: AuthRedirectRoute,
             children: [

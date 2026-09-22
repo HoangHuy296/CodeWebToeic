@@ -15,10 +15,8 @@ interface DashboardShellProps {
 
 export function DashboardShell({ title, accent, navItems }: DashboardShellProps) {
   const location = useLocation();
-  const activeNavClasses =
-    'bg-cyan-50 text-cyan-900 ring-1 ring-cyan-100 shadow-[0_12px_28px_rgba(37,99,235,0.10)]';
-  const activeChildNavClasses =
-    'bg-cyan-50 text-cyan-900 ring-1 ring-cyan-100 shadow-[0_10px_22px_rgba(37,99,235,0.10)]';
+  const activeNavClasses = 'dashboard-nav-active';
+  const activeChildNavClasses = 'dashboard-nav-active';
   const inactiveNavClasses = 'text-slate-600 hover:bg-slate-50 hover:text-slate-950';
   const initialExpanded = useMemo(() => {
     const expandedParents = navItems
@@ -30,9 +28,9 @@ export function DashboardShell({ title, accent, navItems }: DashboardShellProps)
 
   return (
     <div className="grid gap-6 lg:grid-cols-[280px_minmax(0,1fr)]">
-      <aside className="rounded-[2rem] border border-stroke bg-white/85 p-5 shadow-[0_24px_70px_rgba(15,23,42,0.08)]">
-        <div className="rounded-[1.5rem] bg-slate-950 p-5 text-white">
-          <p className="text-xs font-semibold tracking-[0.3em] uppercase text-slate-300">{accent}</p>
+      <aside className="surface-card rounded-[1.5rem] p-5">
+        <div className="brand-panel rounded-xl p-5">
+          <p className="panel-eyebrow text-xs font-semibold tracking-[0.3em] uppercase">{accent}</p>
           <h2 className="mt-3 text-2xl font-extrabold tracking-tight">{title}</h2>
         </div>
 
@@ -44,7 +42,7 @@ export function DashboardShell({ title, accent, navItems }: DashboardShellProps)
                   to={item.to}
                   className={({ isActive }) =>
                     [
-                      'min-w-0 flex-1 rounded-2xl px-4 py-3 text-sm font-semibold transition',
+                      'min-w-0 flex-1 rounded-lg px-4 py-3 text-sm font-semibold transition',
                       isActive || item.children?.some((child) => location.pathname.startsWith(child.to))
                         ? activeNavClasses
                         : inactiveNavClasses,
@@ -73,7 +71,7 @@ export function DashboardShell({ title, accent, navItems }: DashboardShellProps)
                     className={[
                       'inline-flex h-11 w-11 items-center justify-center rounded-2xl border border-stroke text-sm font-extrabold transition',
                       expandedItems.has(item.to) || item.children?.some((child) => location.pathname.startsWith(child.to))
-                        ? 'bg-cyan-50 text-cyan-900'
+                        ? 'dashboard-nav-active'
                         : 'bg-white text-slate-700 hover:bg-slate-50',
                     ].join(' ')}
                   >
@@ -90,7 +88,7 @@ export function DashboardShell({ title, accent, navItems }: DashboardShellProps)
                       to={child.to}
                       className={({ isActive }) =>
                         [
-                          'rounded-2xl px-4 py-3 text-sm font-semibold transition',
+                          'rounded-lg px-4 py-3 text-sm font-semibold transition',
                           isActive ? activeChildNavClasses : 'text-slate-500 hover:bg-slate-50 hover:text-slate-950',
                         ].join(' ')
                       }

@@ -39,7 +39,7 @@ export function CourseCard({ course, isEnrolled = false }: CourseCardProps) {
   const benefitPreview = course.benefits.slice(0, 2);
 
   return (
-    <article className="group grid overflow-hidden rounded-[1.55rem] border border-stroke bg-[linear-gradient(180deg,rgba(255,255,255,0.98),rgba(246,252,252,0.98))] shadow-[0_18px_44px_rgba(15,23,42,0.08)] transition duration-300 hover:-translate-y-1.5 hover:border-teal-200 hover:shadow-[0_28px_64px_rgba(15,23,42,0.13)]">
+    <article className="surface-card group grid overflow-hidden rounded-[1.5rem] transition duration-300 hover:-translate-y-1 hover:border-teal-300">
       <div className="relative">
         <div className="relative aspect-[16/10] overflow-hidden bg-slate-100">
           <img
@@ -119,7 +119,7 @@ export function CourseCard({ course, isEnrolled = false }: CourseCardProps) {
           ))}
         </div>
 
-        <div className="rounded-[1.2rem] border border-teal-100 bg-[linear-gradient(135deg,rgba(240,253,250,0.92),rgba(239,246,255,0.92))] p-4">
+        <div className="surface-soft rounded-xl p-4">
           <div className="flex items-start justify-between gap-4">
             <div className="min-w-0">
               <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-teal-700">

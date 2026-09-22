@@ -174,7 +174,7 @@ export function CourseListPage() {
           </div>
         </article>
 
-        <article className="rounded-[1.8rem] border border-stroke bg-[linear-gradient(135deg,rgba(15,23,42,0.96),rgba(15,118,110,0.9),rgba(249,115,22,0.78))] p-6 text-white shadow-[0_20px_60px_rgba(15,23,42,0.22)]">
+        <article className="brand-panel rounded-[1.5rem] p-6">
           <p className="text-xs font-semibold uppercase tracking-[0.28em] text-amber-100">deal spotlight</p>
           <h3 className="mt-3 text-2xl font-extrabold tracking-tight">Chon dung khoa hoc theo target score va uu dai hien tai.</h3>
           <div className="mt-5 grid gap-3">
