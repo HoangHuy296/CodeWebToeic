@@ -29,7 +29,7 @@ export function DarkModeToggle() {
       ) : (
         <svg
           viewBox="0 0 24 24"
-          className="relative h-5 w-5"
+          className="relative h-5 w-5 text-slate-900"
           fill="none"
           stroke="currentColor"
           strokeWidth="1.9"

@@ -1,5 +1,5 @@
 import { unwrapResponse, api } from './api';
-import type { AdminUser, EnrollmentChartPoint, RevenueChartPoint } from '../types/admin';
+import type { AdminUser, AdminWordScore, EnrollmentChartPoint, RevenueChartPoint } from '../types/admin';
 
 export interface AdminStats {
   users: {
@@ -49,5 +49,9 @@ export const adminApi = {
   },
   deactivateUser(id: string) {
     return unwrapResponse<AdminUser>(api.delete(`/admin/users/${id}`));
+  },
+  /** `extra` = /wordcheck sessions, `schedule` = /review (spaced-repetition) sessions. */
+  wordScores(mode: 'extra' | 'schedule') {
+    return unwrapResponse<AdminWordScore[]>(api.get('/admin/word-scores', { params: { mode } }));
   },
 };

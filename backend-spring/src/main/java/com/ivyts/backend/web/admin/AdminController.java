@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @Validated
@@ -61,5 +62,10 @@ public class AdminController {
     @DeleteMapping("/users/{id}")
     public ApiSuccessResponse<?> deactivateUser(@PathVariable String id, HttpServletRequest request) {
         return ApiSuccessResponse.of("User deactivated successfully", adminService.deactivateUser(id, requestAuthService.requireUser(request)));
+    }
+
+    @GetMapping("/word-scores")
+    public ApiSuccessResponse<?> listWordScores(@RequestParam String mode, HttpServletRequest request) {
+        return ApiSuccessResponse.of("Word scores fetched successfully", adminService.listWordScores(mode, requestAuthService.requireUser(request)));
     }
 }

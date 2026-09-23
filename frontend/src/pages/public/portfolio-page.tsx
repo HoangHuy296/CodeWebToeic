@@ -172,7 +172,7 @@ export function PortfolioPage() {
           </p>
           <p className="vy-hello">Xin chào, mình là</p>
           <h1 id="vy-name">
-            Trịnh Đình
+            Trịnh Đinh
             <br />
             <span>Thúy Vy.</span>
           </h1>
@@ -203,7 +203,7 @@ export function PortfolioPage() {
           <img
             className="vy-hero-photo"
             src="/portfolio/thuy-vy-teaching.jpg"
-            alt="Cô Trịnh Đình Thúy Vy hướng dẫn khẩu hình phát âm bên laptop — ảnh gốc được cung cấp."
+            alt="Cô Trịnh Đinh Thúy Vy hướng dẫn khẩu hình phát âm bên laptop — ảnh gốc được cung cấp."
             width="2560"
             height="1920"
             fetchPriority="high"
@@ -422,16 +422,23 @@ export function PortfolioPage() {
           </p>
         </div>
         <div className="vy-contact-cards">
-          <article className="vy-contact-card" aria-labelledby="vy-contact-card-name">
+          <article
+            className="vy-contact-card"
+            aria-labelledby="vy-contact-card-name"
+          >
             <p className="vy-contact-card-role">Giảng viên</p>
-            <h3 id="vy-contact-card-name">Trịnh Đình Thúy Vy</h3>
+            <h3 id="vy-contact-card-name">Trịnh Đinh Thúy Vy</h3>
             <p className="vy-contact-card-note">
               Trao đổi về mục tiêu TOEIC, phát âm và tiếng Anh giao tiếp để tìm
               cách học phù hợp với bạn.
             </p>
             <div className="vy-contact-card-actions">
               {contactActions.map((action) => (
-                <a key={action.href} href={action.href} className="vy-social-link">
+                <a
+                  key={action.href}
+                  href={action.href}
+                  className="vy-social-link"
+                >
                   <span className="vy-social-link-main">
                     <span className="vy-social-icon">
                       <SocialIcon icon={action.icon} />

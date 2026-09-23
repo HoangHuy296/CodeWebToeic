@@ -22,6 +22,7 @@ const adminNav = [
     ],
   },
   { label: 'Bang diem', to: '/admin/results' },
+  { label: 'Diem Wordcheck', to: '/admin/resultswordcheck' },
   { label: 'Posts', to: '/admin/posts' },
   { label: 'Messages', to: '/admin/messages' },
   { label: 'Settings', to: '/admin/settings' },

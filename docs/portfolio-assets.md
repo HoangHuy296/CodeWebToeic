@@ -1,4 +1,4 @@
-# Portfolio: Trịnh Đình Thùy Vy
+# Portfolio: Trịnh Đinh Thùy Vy
 
 ## Content sources
 

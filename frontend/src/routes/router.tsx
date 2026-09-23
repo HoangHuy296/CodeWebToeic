@@ -21,6 +21,7 @@ import { AdminMockTestEditorPage } from '../pages/admin/admin-mock-test-editor-p
 import { AdminMockTestsPage } from '../pages/admin/admin-mock-tests-page';
 import { AdminPostsPage } from '../pages/admin/admin-posts-page';
 import { AdminResultsPage } from '../pages/admin/admin-results-page';
+import { AdminResultsWordcheckPage } from '../pages/admin/admin-results-wordcheck-page';
 import { AdminSettingsPage } from '../pages/admin/admin-settings-page';
 import { AdminUsersPage } from '../pages/admin/admin-users-page';
 import { BlogDetailPage } from '../pages/public/blog-detail-page';
@@ -170,6 +171,7 @@ export const router = createBrowserRouter([
                       { path: 'exercises/items', Component: AdminExerciseItemsPage },
                       { path: 'mock-tests', Component: AdminMockTestsPage },
                       { path: 'results', Component: AdminResultsPage },
+          { path: 'resultswordcheck', Component: AdminResultsWordcheckPage },
                       { path: 'posts', Component: AdminPostsPage },
                       { path: 'messages', Component: AdminMessagesPage },
                       { path: 'settings', Component: AdminSettingsPage },

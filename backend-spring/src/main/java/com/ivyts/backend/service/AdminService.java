@@ -9,6 +9,8 @@ import com.ivyts.backend.domain.order.OrderStatus;
 import com.ivyts.backend.domain.post.BlogPostStatus;
 import com.ivyts.backend.domain.user.User;
 import com.ivyts.backend.domain.user.UserRole;
+import com.ivyts.backend.relational.wordcheck.WordScoreEntity;
+import com.ivyts.backend.relational.wordcheck.WordScoreJpaRepository;
 import com.ivyts.backend.security.AuthUser;
 import com.ivyts.backend.service.coursestore.CourseStore;
 import com.ivyts.backend.service.enrollmentstore.EnrollmentStore;
@@ -40,6 +42,7 @@ public class AdminService {
     private final PostStore postStore;
     private final OrderStore orderStore;
     private final AdminMapper adminMapper;
+    private final WordScoreJpaRepository wordScoreJpaRepository;
 
     public AdminService(
         UserStore userStore,
@@ -48,7 +51,8 @@ public class AdminService {
         MockTestStore mockTestStore,
         PostStore postStore,
         OrderStore orderStore,
-        AdminMapper adminMapper
+        AdminMapper adminMapper,
+        WordScoreJpaRepository wordScoreJpaRepository
     ) {
         this.userStore = userStore;
         this.courseStore = courseStore;
@@ -57,6 +61,7 @@ public class AdminService {
         this.postStore = postStore;
         this.orderStore = orderStore;
         this.adminMapper = adminMapper;
+        this.wordScoreJpaRepository = wordScoreJpaRepository;
     }
 
     public Map<String, Object> getStats(AuthUser authUser) {
@@ -205,6 +210,32 @@ public class AdminService {
         user.setRefreshToken(null);
         userStore.save(user);
         return adminMapper.toAdminUserView(user, getOwnedCourseCountForUser(user));
+    }
+
+    /** `mode` is "extra" for /wordcheck sessions, "schedule" for /review (spaced-repetition) sessions. */
+    public List<Map<String, Object>> listWordScores(String mode, AuthUser authUser) {
+        ensureAdmin(authUser);
+        return wordScoreJpaRepository.findByModeOrderByFinishedAtDesc(mode).stream()
+            .map(this::toWordScoreView)
+            .toList();
+    }
+
+    private Map<String, Object> toWordScoreView(WordScoreEntity score) {
+        Map<String, Object> view = new LinkedHashMap<>();
+        view.put("id", score.getId());
+        view.put("setName", score.getSetName());
+        view.put("setSlug", score.getSetSlug());
+        view.put("studentName", score.getStudentName());
+        view.put("studentId", score.getStudentId());
+        view.put("mode", score.getMode());
+        view.put("correctFirstTry", score.getCorrectFirstTry());
+        view.put("totalAnswered", score.getTotalAnswered());
+        view.put("totalInSet", score.getTotalInSet());
+        view.put("rounds", score.getRounds());
+        view.put("totalAttempts", score.getTotalAttempts());
+        view.put("durationSeconds", score.getDurationSeconds());
+        view.put("finishedAt", score.getFinishedAt());
+        return view;
     }
 
     private long getOwnedCourseCountForUser(User user) {

@@ -16,6 +16,8 @@ const contentMap = {
     eyebrow: 'Dang nhap',
     title: 'Ket noi vao workspace cua ban',
     description: 'Đăng nhập để tiếp tục học tập và theo dõi tiến độ của bạn.',
+    emailLabel: 'Email',
+    emailInputType: 'email' as const,
     defaultEmail: 'student1@ivyts.dev',
     defaultPassword: 'Password@123',
     submitLabel: 'Dang nhap',
@@ -31,8 +33,10 @@ const contentMap = {
     eyebrow: 'Admin login',
     title: 'Dang nhap khu vuc quan tri IVYTS 1998',
     description: 'Chi tai khoan admin moi co the truy cap workspace quan tri rieng.',
-    defaultEmail: 'admin@ivyts.dev',
-    defaultPassword: 'Password@123',
+    emailLabel: 'Tai khoan',
+    emailInputType: 'text' as const,
+    defaultEmail: '',
+    defaultPassword: '',
     submitLabel: 'Vao admin dashboard',
     altLabel: 'Muon dang nhap hoc vien hoac giang vien?',
     altLinkLabel: 'Ve trang dang nhap chung',
@@ -99,12 +103,13 @@ export function LoginForm({ variant = 'user', selectedRole }: LoginFormProps) {
         }}
       >
         <label className="grid gap-2">
-          <span className="text-sm font-semibold text-slate-700">Email</span>
+          <span className="text-sm font-semibold text-slate-700">{content.emailLabel}</span>
           <input
             className="h-12 rounded-2xl border border-stroke bg-slate-50 px-4 text-sm outline-none transition focus:border-teal-500 focus:bg-white"
             value={email}
             onChange={(event) => setEmail(event.target.value)}
-            type="email"
+            type={content.emailInputType}
+            autoComplete={variant === 'admin' ? 'username' : 'email'}
             required
           />
         </label>
