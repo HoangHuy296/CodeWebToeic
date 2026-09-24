@@ -1,5 +1,6 @@
 import { useQueries, useQuery } from '@tanstack/react-query';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { MetricCard } from '../../components/common/metric-card';
 import { PageHero } from '../../components/common/page-hero';
 import { QueryErrorState, QueryLoadingState } from '../../components/common/query-state';
@@ -8,6 +9,8 @@ import { enrollmentApi } from '../../lib/enrollment-api';
 import { getApiErrorMessage } from '../../lib/api';
 
 export function TeacherDashboardPage() {
+  const { t } = useTranslation('teacher');
+  const { t: tCommon } = useTranslation('common');
   const managedCoursesQuery = useQuery({
     queryKey: ['teacher', 'courses', 'mine'],
     queryFn: courseApi.manageMine,
@@ -33,35 +36,35 @@ export function TeacherDashboardPage() {
   return (
     <div className="space-y-8">
       <PageHero
-        eyebrow="teacher dashboard"
-        title="Bang dieu khien giang vien voi so lieu khoa hoc va hoc vien that."
-        description="Teacher dashboard nay tong hop khoa hoc dang quan ly, hoc vien dang theo hoc va muc do hoan thanh de giang vien biet nen tac dong vao dau."
+        eyebrow={t('dashboard.eyebrow')}
+        title={t('dashboard.title')}
+        description={t('dashboard.description')}
       />
 
       <section className="grid gap-4 md:grid-cols-4">
-        <MetricCard label="Khoa hoc quan ly" value={String((managedCoursesQuery.data ?? []).length)} hint="Owned courses" />
-        <MetricCard label="Tong hoc vien" value={String(totalStudents)} hint="Tu enrollments theo course" />
-        <MetricCard label="Dang hoc" value={String(activeStudents)} hint="Status active" />
-        <MetricCard label="Lessons da dong goi" value={String(totalLessons)} hint="Tong lesson cua teacher" />
+        <MetricCard label={t('dashboard.managedCourses')} value={String((managedCoursesQuery.data ?? []).length)} hint={t('dashboard.managedHint')} />
+        <MetricCard label={t('dashboard.totalEnrollments')} value={String(totalStudents)} hint={t('dashboard.enrollmentsHint')} />
+        <MetricCard label={t('dashboard.activeEnrollments')} value={String(activeStudents)} hint={t('dashboard.activeHint')} />
+        <MetricCard label={t('dashboard.totalLessons')} value={String(totalLessons)} hint={t('dashboard.lessonsHint')} />
       </section>
 
-      {isLoading ? <QueryLoadingState title="Dang tai dashboard giang vien..." /> : null}
+      {isLoading ? <QueryLoadingState title={t('dashboard.loading')} /> : null}
       {managedCoursesQuery.error ? (
-        <QueryErrorState title="Khong tai duoc danh sach khoa hoc" description={getApiErrorMessage(managedCoursesQuery.error)} />
+        <QueryErrorState title={t('dashboard.coursesError')} description={getApiErrorMessage(managedCoursesQuery.error)} />
       ) : null}
       {enrollmentErrors ? (
-        <QueryErrorState title="Khong tai duoc roster hoc vien" description={getApiErrorMessage(enrollmentErrors)} />
+        <QueryErrorState title={t('dashboard.studentsError')} description={getApiErrorMessage(enrollmentErrors)} />
       ) : null}
 
       <section className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
         <article className="rounded-[2rem] border border-stroke bg-white p-8 shadow-[0_18px_55px_rgba(15,23,42,0.06)]">
           <div className="flex items-end justify-between gap-4">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.3em] text-teal-700">courses</p>
-              <h2 className="mt-2 text-3xl font-extrabold tracking-tight text-slate-950">Khoa hoc gan day</h2>
+              <p className="text-xs font-semibold uppercase tracking-[0.3em] text-teal-700">{t('courses.eyebrow')}</p>
+              <h2 className="mt-2 text-3xl font-extrabold tracking-tight text-slate-950">{t('dashboard.recentCourses')}</h2>
             </div>
             <Link to="/teacher/courses" className="text-sm font-semibold text-teal-700">
-              Xem tat ca
+              {tCommon('actions.viewAll')}
             </Link>
           </div>
 
@@ -71,12 +74,12 @@ export function TeacherDashboardPage() {
                 <div className="flex items-center justify-between gap-4">
                   <div>
                     <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
-                      {course.category} · {course.level}
+                      {course.category} · {tCommon(`levels.${course.level}`)}
                     </p>
                     <h3 className="mt-2 text-xl font-extrabold tracking-tight text-slate-950">{course.title}</h3>
                   </div>
                   <span className="rounded-full bg-white px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-slate-700">
-                    {course.isPublished ? 'Published' : 'Draft'}
+                    {course.isPublished ? tCommon('statuses.published') : tCommon('statuses.draft')}
                   </span>
                 </div>
                 <p className="mt-3 text-sm leading-7 text-slate-600">{course.shortDescription}</p>
@@ -86,22 +89,22 @@ export function TeacherDashboardPage() {
         </article>
 
         <article className="rounded-[2rem] border border-stroke bg-white p-8 shadow-[0_18px_55px_rgba(15,23,42,0.06)]">
-          <p className="text-xs font-semibold uppercase tracking-[0.3em] text-teal-700">student health</p>
-          <h2 className="mt-2 text-3xl font-extrabold tracking-tight text-slate-950">Tien do hoc vien</h2>
+          <p className="text-xs font-semibold uppercase tracking-[0.3em] text-teal-700">{t('dashboard.completion')}</p>
+          <h2 className="mt-2 text-3xl font-extrabold tracking-tight text-slate-950">{t('students.title')}</h2>
           <Link to="/teacher/results" className="mt-4 inline-flex text-sm font-semibold text-cyan-700">
-            Xem bang diem bai lam
+            {t('dashboard.viewResults')}
           </Link>
           <div className="mt-6 grid gap-4">
             <div className="rounded-[1.5rem] bg-slate-50 px-5 py-5">
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Dang hoc</p>
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">{t('dashboard.activeEnrollments')}</p>
               <p className="mt-2 text-3xl font-extrabold tracking-tight text-slate-950">{activeStudents}</p>
             </div>
             <div className="rounded-[1.5rem] bg-slate-50 px-5 py-5">
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Da hoan thanh</p>
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">{t('dashboard.completedEnrollments')}</p>
               <p className="mt-2 text-3xl font-extrabold tracking-tight text-slate-950">{completedStudents}</p>
             </div>
             <div className="rounded-[1.5rem] bg-slate-50 px-5 py-5">
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Ti le hoan thanh</p>
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">{t('dashboard.completionRate')}</p>
               <p className="mt-2 text-3xl font-extrabold tracking-tight text-slate-950">
                 {totalStudents > 0 ? Math.round((completedStudents / totalStudents) * 100) : 0}%
               </p>
@@ -115,44 +118,36 @@ export function TeacherDashboardPage() {
           to="/teacher/profile"
           className="rounded-[1.6rem] border border-stroke bg-white p-5 shadow-[0_16px_50px_rgba(15,23,42,0.06)] transition hover:-translate-y-0.5"
         >
-          <p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-500">teacher tools</p>
-          <h3 className="mt-3 text-2xl font-extrabold tracking-tight text-slate-950">Ho so giang vien</h3>
-          <p className="mt-2 text-sm leading-7 text-slate-600">
-            CRUD thong tin giang vien, doi mat khau, email va so dien thoai ngay trong workspace.
-          </p>
+          <p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-500">{t('dashboard.quickLinksEyebrow')}</p>
+          <h3 className="mt-3 text-2xl font-extrabold tracking-tight text-slate-950">{t('dashboard.profileTitle')}</h3>
+          <p className="mt-2 text-sm leading-7 text-slate-600">{t('dashboard.profileDescription')}</p>
         </Link>
 
         <Link
           to="/teacher/courses"
           className="rounded-[1.6rem] border border-stroke bg-white p-5 shadow-[0_16px_50px_rgba(15,23,42,0.06)] transition hover:-translate-y-0.5"
         >
-          <p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-500">teacher tools</p>
-          <h3 className="mt-3 text-2xl font-extrabold tracking-tight text-slate-950">Quan ly khoa hoc</h3>
-          <p className="mt-2 text-sm leading-7 text-slate-600">
-            Mo danh sach khoa hoc, vao lesson list workspace va theo doi review status cua tung khoa hoc.
-          </p>
+          <p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-500">{t('dashboard.quickLinksEyebrow')}</p>
+          <h3 className="mt-3 text-2xl font-extrabold tracking-tight text-slate-950">{t('dashboard.coursesTitle')}</h3>
+          <p className="mt-2 text-sm leading-7 text-slate-600">{t('dashboard.coursesDescription')}</p>
         </Link>
 
         <Link
           to="/teacher/exercises/items"
           className="rounded-[1.6rem] border border-stroke bg-white p-5 shadow-[0_16px_50px_rgba(15,23,42,0.06)] transition hover:-translate-y-0.5"
         >
-          <p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-500">teacher tools</p>
-          <h3 className="mt-3 text-2xl font-extrabold tracking-tight text-slate-950">Bai tap ca nhan hoa</h3>
-          <p className="mt-2 text-sm leading-7 text-slate-600">
-            Tao va quan ly bai tap on tap rieng cho hoc vien, tach khoi luong luyen thi de phat trien ca nhan hoa lau dai.
-          </p>
+          <p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-500">{t('dashboard.quickLinksEyebrow')}</p>
+          <h3 className="mt-3 text-2xl font-extrabold tracking-tight text-slate-950">{t('dashboard.exercisesTitle')}</h3>
+          <p className="mt-2 text-sm leading-7 text-slate-600">{t('dashboard.exercisesDescription')}</p>
         </Link>
 
         <Link
           to="/teacher/results"
           className="rounded-[1.6rem] border border-stroke bg-white p-5 shadow-[0_16px_50px_rgba(15,23,42,0.06)] transition hover:-translate-y-0.5"
         >
-          <p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-500">teacher tools</p>
-          <h3 className="mt-3 text-2xl font-extrabold tracking-tight text-slate-950">Ket qua bai lam</h3>
-          <p className="mt-2 text-sm leading-7 text-slate-600">
-            Xem diem va bai nop cua hoc vien tren cac bai luyen thi va bai tap do ban tao.
-          </p>
+          <p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-500">{t('dashboard.quickLinksEyebrow')}</p>
+          <h3 className="mt-3 text-2xl font-extrabold tracking-tight text-slate-950">{t('dashboard.resultsTitle')}</h3>
+          <p className="mt-2 text-sm leading-7 text-slate-600">{t('dashboard.resultsDescription')}</p>
         </Link>
       </section>
     </div>

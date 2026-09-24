@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
+import { useTranslation } from 'react-i18next';
 import {
   Bar,
   BarChart,
@@ -22,6 +23,8 @@ import { messageApi } from '../../lib/message-api';
 import { postApi } from '../../lib/post-api';
 
 export function AdminDashboardPage() {
+  const { t } = useTranslation('admin');
+  const { t: tCommon } = useTranslation('common');
   const statsQuery = useQuery({
     queryKey: ['admin', 'stats'],
     queryFn: adminApi.stats,
@@ -57,14 +60,9 @@ export function AdminDashboardPage() {
       <section className="rounded-[2rem] border border-stroke bg-white/90 p-8 shadow-[0_24px_70px_rgba(15,23,42,0.08)]">
         <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
           <div>
-            <p className="text-xs font-semibold tracking-[0.35em] text-teal-700 uppercase">admin dashboard</p>
-            <h1 className="mt-4 text-4xl font-extrabold tracking-tight text-slate-950">
-              Control center cho van hanh noi dung, hoc vien va doanh thu.
-            </h1>
-            <p className="mt-4 max-w-3xl text-sm leading-8 text-slate-600">
-              Dashboard nay da noi truc tiep `stats`, `revenue chart`, `enrollment chart`, courses, posts va inbox messages
-              de admin nhin ra ngay khu vuc nao can xu ly.
-            </p>
+            <p className="text-xs font-semibold tracking-[0.35em] text-teal-700 uppercase">{t('dashboard.eyebrow')}</p>
+            <h1 className="mt-4 text-4xl font-extrabold tracking-tight text-slate-950">{t('dashboard.title')}</h1>
+            <p className="mt-4 max-w-3xl text-sm leading-8 text-slate-600">{t('dashboard.description')}</p>
           </div>
 
           <div className="grid gap-3 sm:grid-cols-3">
@@ -72,56 +70,60 @@ export function AdminDashboardPage() {
               to="/admin/courses/create"
               className="rounded-2xl bg-slate-950 px-5 py-3 text-sm font-semibold text-white transition hover:bg-slate-800"
             >
-              Tao khoa hoc
+              {t('dashboard.createCourse')}
             </Link>
             <Link
               to="/admin/mock-tests"
               className="rounded-2xl border border-stroke bg-white px-5 py-3 text-sm font-semibold text-slate-900 transition hover:bg-slate-50"
             >
-              Quan ly mock tests
+              {t('dashboard.manageMockTests')}
             </Link>
             <Link
               to="/admin/results"
               className="rounded-2xl border border-stroke bg-white px-5 py-3 text-sm font-semibold text-slate-900 transition hover:bg-slate-50"
             >
-              Xem bang diem
+              {t('dashboard.viewScores')}
             </Link>
           </div>
         </div>
       </section>
 
       <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-        <MetricCard label="Tong users" value={String(stats?.users.total ?? '--')} hint={`${stats?.users.students ?? 0} hoc vien`} />
         <MetricCard
-          label="Published courses"
+          label={t('dashboard.totalUsers')}
+          value={String(stats?.users.total ?? '--')}
+          hint={tCommon('counts.students', { count: stats?.users.students ?? 0 })}
+        />
+        <MetricCard
+          label={t('dashboard.publishedCourses')}
           value={String(stats?.content.publishedCourses ?? '--')}
-          hint={`${courses.filter((course) => !course.isPublished).length} draft`}
+          hint={tCommon('counts.drafts', { count: courses.filter((course) => !course.isPublished).length })}
         />
         <MetricCard
-          label="Tong enrollments"
+          label={t('dashboard.totalEnrollments')}
           value={String(stats?.enrollments.total ?? '--')}
-          hint={`${stats?.enrollments.completionRate ?? 0}% completion`}
+          hint={t('dashboard.completionRate', { percent: stats?.enrollments.completionRate ?? 0 })}
         />
         <MetricCard
-          label="Revenue"
+          label={t('dashboard.revenue')}
           value={stats ? formatCurrency(stats.revenue.total, stats.revenue.currency) : '--'}
-          hint={`${stats?.revenue.paidOrders ?? 0} paid orders`}
+          hint={tCommon('counts.paidOrders', { count: stats?.revenue.paidOrders ?? 0 })}
         />
       </section>
 
       {statsQuery.isPending || revenueQuery.isPending || enrollmentChartQuery.isPending ? (
-        <QueryLoadingState title="Dang tai du lieu dashboard..." />
+        <QueryLoadingState title={t('dashboard.loading')} />
       ) : null}
 
       {statsQuery.error ? (
-        <QueryErrorState title="Khong tai duoc stats" description={getApiErrorMessage(statsQuery.error)} />
+        <QueryErrorState title={t('dashboard.statsError')} description={getApiErrorMessage(statsQuery.error)} />
       ) : null}
       {revenueQuery.error ? (
-        <QueryErrorState title="Khong tai duoc revenue chart" description={getApiErrorMessage(revenueQuery.error)} />
+        <QueryErrorState title={t('dashboard.revenueError')} description={getApiErrorMessage(revenueQuery.error)} />
       ) : null}
       {enrollmentChartQuery.error ? (
         <QueryErrorState
-          title="Khong tai duoc enrollment chart"
+          title={t('dashboard.enrollmentsError')}
           description={getApiErrorMessage(enrollmentChartQuery.error)}
         />
       ) : null}
@@ -130,8 +132,8 @@ export function AdminDashboardPage() {
         <article className="rounded-[1.8rem] border border-stroke bg-white p-6 shadow-[0_16px_50px_rgba(15,23,42,0.06)]">
           <div className="flex items-center justify-between gap-4">
             <div>
-              <p className="text-xs font-semibold tracking-[0.3em] text-slate-500 uppercase">revenue trend</p>
-              <h2 className="mt-2 text-2xl font-extrabold tracking-tight text-slate-950">Dong doanh thu 6 thang</h2>
+              <p className="text-xs font-semibold tracking-[0.3em] text-slate-500 uppercase">{t('dashboard.revenueTrend')}</p>
+              <h2 className="mt-2 text-2xl font-extrabold tracking-tight text-slate-950">{t('dashboard.revenueTitle')}</h2>
             </div>
           </div>
 
@@ -147,15 +149,23 @@ export function AdminDashboardPage() {
                   }
                 />
                 <Legend />
-                <Line type="monotone" dataKey="revenue" stroke="#0f766e" strokeWidth={3} dot={{ r: 4 }} activeDot={{ r: 6 }} />
+                <Line
+                  type="monotone"
+                  dataKey="revenue"
+                  name={t('dashboard.revenue')}
+                  stroke="#0f766e"
+                  strokeWidth={3}
+                  dot={{ r: 4 }}
+                  activeDot={{ r: 6 }}
+                />
               </LineChart>
             </ResponsiveContainer>
           </div>
         </article>
 
         <article className="rounded-[1.8rem] border border-stroke bg-white p-6 shadow-[0_16px_50px_rgba(15,23,42,0.06)]">
-          <p className="text-xs font-semibold tracking-[0.3em] text-slate-500 uppercase">support inbox</p>
-          <h2 className="mt-2 text-2xl font-extrabold tracking-tight text-slate-950">Tin nhan moi can xu ly</h2>
+          <p className="text-xs font-semibold tracking-[0.3em] text-slate-500 uppercase">{t('dashboard.supportInbox')}</p>
+          <h2 className="mt-2 text-2xl font-extrabold tracking-tight text-slate-950">{t('dashboard.pendingMessages')}</h2>
 
           <div className="mt-6 grid gap-4">
             {messages.slice(0, 4).map((message) => (
@@ -172,7 +182,7 @@ export function AdminDashboardPage() {
                       message.status === 'unread' ? 'bg-amber-100 text-amber-800' : message.status === 'replied' ? 'bg-teal-100 text-teal-800' : 'bg-slate-200 text-slate-700',
                     ].join(' ')}
                   >
-                    {message.status}
+                    {tCommon(`statuses.${message.status}`)}
                   </span>
                 </div>
                 <p className="mt-2 text-sm text-slate-600">{message.name} - {message.email}</p>
@@ -182,7 +192,7 @@ export function AdminDashboardPage() {
 
             {messages.length === 0 ? (
               <div className="rounded-2xl border border-dashed border-stroke px-4 py-6 text-sm text-slate-500">
-                Chua co tin nhan moi.
+                {t('dashboard.noMessages')}
               </div>
             ) : null}
           </div>
@@ -191,8 +201,8 @@ export function AdminDashboardPage() {
 
       <section className="grid gap-6 xl:grid-cols-[0.95fr_1.05fr]">
         <article className="rounded-[1.8rem] border border-stroke bg-white p-6 shadow-[0_16px_50px_rgba(15,23,42,0.06)]">
-          <p className="text-xs font-semibold tracking-[0.3em] text-slate-500 uppercase">enrollment chart</p>
-          <h2 className="mt-2 text-2xl font-extrabold tracking-tight text-slate-950">Toc do dang ky va hoan thanh</h2>
+          <p className="text-xs font-semibold tracking-[0.3em] text-slate-500 uppercase">{t('dashboard.enrollmentChart')}</p>
+          <h2 className="mt-2 text-2xl font-extrabold tracking-tight text-slate-950">{t('dashboard.enrollmentTitle')}</h2>
 
           <div className="mt-6 h-80">
             <ResponsiveContainer width="100%" height="100%">
@@ -202,8 +212,8 @@ export function AdminDashboardPage() {
                 <YAxis tick={{ fill: '#475569', fontSize: 12 }} />
                 <Tooltip />
                 <Legend />
-                <Bar dataKey="enrollments" fill="#0f172a" radius={[8, 8, 0, 0]} />
-                <Bar dataKey="completed" fill="#14b8a6" radius={[8, 8, 0, 0]} />
+                <Bar dataKey="enrollments" name={t('dashboard.enrollments')} fill="#0f172a" radius={[8, 8, 0, 0]} />
+                <Bar dataKey="completed" name={t('dashboard.completed')} fill="#14b8a6" radius={[8, 8, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -212,11 +222,11 @@ export function AdminDashboardPage() {
         <article className="rounded-[1.8rem] border border-stroke bg-white p-6 shadow-[0_16px_50px_rgba(15,23,42,0.06)]">
           <div className="flex items-center justify-between gap-4">
             <div>
-              <p className="text-xs font-semibold tracking-[0.3em] text-slate-500 uppercase">content pipeline</p>
-              <h2 className="mt-2 text-2xl font-extrabold tracking-tight text-slate-950">Khoa hoc va bai viet gan day</h2>
+              <p className="text-xs font-semibold tracking-[0.3em] text-slate-500 uppercase">{t('dashboard.contentPipelineEyebrow')}</p>
+              <h2 className="mt-2 text-2xl font-extrabold tracking-tight text-slate-950">{t('dashboard.recentContent')}</h2>
             </div>
             <Link to="/admin/courses" className="text-sm font-semibold text-teal-700">
-              Mo workspace
+              {t('dashboard.openWorkspace')}
             </Link>
           </div>
 
@@ -231,7 +241,7 @@ export function AdminDashboardPage() {
                       course.isPublished ? 'bg-teal-100 text-teal-800' : 'bg-amber-100 text-amber-800',
                     ].join(' ')}
                   >
-                    {course.isPublished ? 'published' : 'draft'}
+                    {course.isPublished ? tCommon('statuses.published') : tCommon('statuses.draft')}
                   </span>
                 </div>
                 <p className="mt-2 text-sm leading-7 text-slate-600">{course.shortDescription}</p>
@@ -243,7 +253,7 @@ export function AdminDashboardPage() {
                 <div className="flex items-center justify-between gap-3">
                   <p className="text-sm font-semibold text-slate-950">{post.title}</p>
                   <span className="rounded-full bg-slate-200 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-700">
-                    {post.status}
+                    {tCommon(`statuses.${post.status}`)}
                   </span>
                 </div>
                 <p className="mt-2 text-sm leading-7 text-slate-600">{post.excerpt}</p>

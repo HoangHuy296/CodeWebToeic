@@ -65,6 +65,7 @@ public class MySqlUserStore implements UserStore {
         entity.setAvatarUrl(user.getAvatarUrl());
         entity.setPhone(user.getPhone());
         entity.setBio(user.getBio());
+        entity.setPreferredLanguage(user.getPreferredLanguage());
         entity.setActive(user.isActive());
         entity.setRefreshToken(user.getRefreshToken());
         entity.setOwnedCourseIdsJson(userJsonCodec.write(user.getOwnedCourseIds()));
@@ -90,6 +91,7 @@ public class MySqlUserStore implements UserStore {
         user.setAvatarUrl(entity.getAvatarUrl());
         user.setPhone(entity.getPhone());
         user.setBio(entity.getBio());
+        user.setPreferredLanguage(entity.getPreferredLanguage());
         user.setActive(entity.isActive());
         user.setRefreshToken(entity.getRefreshToken());
         user.setOwnedCourseIds(new ArrayList<>(userJsonCodec.readStringList(entity.getOwnedCourseIdsJson())));

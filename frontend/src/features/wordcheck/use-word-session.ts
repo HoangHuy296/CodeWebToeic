@@ -1,4 +1,5 @@
 import { useCallback, useMemo, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { wordCheckApi } from '../../lib/word-check-api';
 import { createSession, transition, type MachineEnv } from './state/machine';
 import type { Mode, SessionEvent, SessionState } from './state/types';
@@ -39,6 +40,7 @@ export type SaveStatus = 'idle' | 'saving' | 'saved' | 'failed';
  * twice under React 18 StrictMode, which would double-submit the grade/finish requests.
  */
 export function useWordSession({ setId, questions, name, mode, pool, freshIdx, maxRounds }: UseWordSessionArgs) {
+  const { t } = useTranslation('wordcheck');
   const sessionIdRef = useRef(createSessionId());
   const env = useMemo<MachineEnv>(() => ({ questions, shuffle }), [questions]);
   const initialState = useMemo(
@@ -63,12 +65,12 @@ export function useWordSession({ setId, questions, name, mode, pool, freshIdx, m
 
       for (const effect of result.effects) {
         if (effect.type === 'emptyAnswer') {
-          setMessage('Hay go cau tra loi truoc khi nop.');
+          setMessage(t('messages.emptyAnswer'));
         } else if (effect.type === 'gradeFailed') {
           setMessage(
             effect.reason === 'network'
-              ? 'Khong ket noi duoc may chu. Hay kiem tra mang roi bam nop lai.'
-              : 'Bo cau hoi vua duoc cap nhat. Hay tai lai trang de tiep tuc.',
+              ? t('messages.networkError')
+              : t('messages.staleQuestion'),
           );
         } else if (effect.type === 'grade') {
           setMessage(null);
@@ -95,7 +97,7 @@ export function useWordSession({ setId, questions, name, mode, pool, freshIdx, m
         }
       }
     },
-    [env, name, mode, setId],
+    [env, name, mode, setId, t],
   );
 
   const submit = useCallback((typed: string) => dispatch({ type: 'SUBMIT', typed, now: Date.now() }), [dispatch]);

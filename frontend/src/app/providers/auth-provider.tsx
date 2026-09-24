@@ -10,7 +10,15 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { authApi } from '../../lib/auth-api';
 import { clearStoredAuthTokens, getStoredAccessToken, getStoredRefreshToken, storeAuthTokens } from '../../lib/storage';
 import { getApiErrorMessage, isUnauthorizedError } from '../../lib/api';
-import type { AppRole, AuthPayload, GoogleAuthInput, LoginInput, PublicUser, RegisterInput } from '../../types/auth';
+import type {
+  AppRole,
+  AuthPayload,
+  GoogleAuthInput,
+  LanguageCode,
+  LoginInput,
+  PublicUser,
+  RegisterInput,
+} from '../../types/auth';
 
 interface AuthContextValue {
   user: PublicUser | null;
@@ -25,6 +33,12 @@ interface AuthContextValue {
   refreshCurrentUser: () => Promise<PublicUser | null>;
   syncAuthPayload: (payload: AuthPayload) => PublicUser;
   syncCurrentUser: (user: PublicUser) => void;
+  /**
+   * Merges the new language into the cached user for `userId` only — if the account has since
+   * changed (e.g. a slow request outlives a logout/login), the stale response is a no-op rather
+   * than overwriting the new session's cached preference.
+   */
+  updatePreferredLanguage: (userId: string, language: LanguageCode) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextValue | null>(null);
@@ -150,6 +164,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         return user;
       },
       syncAuthPayload: (payload) => handleAuthSuccess(payload),
+      updatePreferredLanguage: async (userId, language) => {
+        const result = await authApi.updatePreferences({ preferredLanguage: language });
+        queryClient.setQueryData(AUTH_ME_QUERY_KEY, (old: PublicUser | null | undefined) =>
+          old && old.id === userId ? { ...old, preferredLanguage: result.preferredLanguage } : old,
+        );
+      },
       syncCurrentUser: (user) => {
         setHasSession(true);
         setAuthError(null);

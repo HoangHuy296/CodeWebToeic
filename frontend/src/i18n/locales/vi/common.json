@@ -1,0 +1,161 @@
+{
+  "counts": {
+    "minutes": "{{count}} phút",
+    "minutes_other": "{{count}} phút",
+    "seconds": "{{count}} giây",
+    "seconds_other": "{{count}} giây",
+    "courses": "{{count}} khóa học",
+    "courses_other": "{{count}} khóa học",
+    "lessons": "{{count}} bài học",
+    "lessons_other": "{{count}} bài học",
+    "questions": "{{count}} câu hỏi",
+    "questions_other": "{{count}} câu hỏi",
+    "students": "{{count}} học viên",
+    "students_other": "{{count}} học viên",
+    "attempts": "{{count}} lần làm",
+    "attempts_other": "{{count}} lần làm",
+    "drafts": "{{count}} bản nháp",
+    "drafts_other": "{{count}} bản nháp",
+    "paidOrders": "{{count}} đơn đã thanh toán",
+    "paidOrders_other": "{{count}} đơn đã thanh toán"
+  },
+  "actions": {
+    "save": "Lưu",
+    "saveChanges": "Lưu thay đổi",
+    "cancel": "Hủy",
+    "close": "Đóng",
+    "edit": "Chỉnh sửa",
+    "create": "Tạo mới",
+    "delete": "Xóa",
+    "confirm": "Xác nhận",
+    "retry": "Thử lại",
+    "search": "Tìm kiếm",
+    "resetFilters": "Xóa bộ lọc",
+    "viewAll": "Xem tất cả",
+    "viewDetails": "Xem chi tiết",
+    "back": "Quay lại",
+    "next": "Tiếp theo",
+    "previous": "Trước",
+    "add": "Thêm",
+    "remove": "Loại bỏ",
+    "selectAll": "Chọn tất cả",
+    "clearSelection": "Bỏ chọn tất cả",
+    "publish": "Xuất bản",
+    "unpublish": "Ngừng xuất bản",
+    "archive": "Lưu trữ",
+    "submit": "Nộp bài",
+    "continue": "Tiếp tục",
+    "preview": "Xem trước"
+  },
+  "states": {
+    "loading": "Đang tải...",
+    "saving": "Đang lưu...",
+    "deleting": "Đang xóa...",
+    "sending": "Đang gửi...",
+    "submitting": "Đang nộp bài...",
+    "processing": "Đang xử lý...",
+    "empty": "Chưa có dữ liệu.",
+    "noResults": "Không có kết quả phù hợp với bộ lọc.",
+    "notUpdated": "Chưa cập nhật",
+    "notRecorded": "Chưa ghi nhận",
+    "notSelected": "Chưa chọn",
+    "noEmail": "Chưa có email",
+    "noPhone": "Chưa có số điện thoại",
+    "loadError": "Không tải được dữ liệu.",
+    "saveError": "Không lưu được thay đổi. Vui lòng thử lại.",
+    "saveSuccess": "Đã lưu thay đổi.",
+    "deleteError": "Không xóa được dữ liệu. Vui lòng thử lại."
+  },
+  "roles": {
+    "guest": "Khách",
+    "student": "Học viên",
+    "teacher": "Giảng viên",
+    "admin": "Quản trị viên"
+  },
+  "statuses": {
+    "active": "Đang hoạt động",
+    "inactive": "Bị khóa",
+    "draft": "Bản nháp",
+    "published": "Đã xuất bản",
+    "archived": "Đã lưu trữ",
+    "pending_review": "Chờ duyệt",
+    "changes_requested": "Cần chỉnh sửa",
+    "rejected": "Bị từ chối",
+    "approved": "Đã duyệt",
+    "completed": "Đã hoàn thành",
+    "cancelled": "Đã hủy",
+    "unread": "Chưa đọc",
+    "read": "Đã đọc",
+    "replied": "Đã phản hồi"
+  },
+  "levels": {
+    "beginner": "Cơ bản",
+    "intermediate": "Trung cấp",
+    "advanced": "Nâng cao",
+    "easy": "Dễ",
+    "medium": "Trung bình",
+    "hard": "Khó"
+  },
+  "sections": {
+    "mixed": "Tổng hợp",
+    "listening": "Nghe",
+    "reading": "Đọc",
+    "speaking": "Nói",
+    "writing": "Viết",
+    "grammar": "Ngữ pháp",
+    "vocabulary": "Từ vựng"
+  },
+  "testTypes": {
+    "practice-set": "Bộ luyện tập",
+    "mini-test": "Bài thi ngắn",
+    "full-test": "Bài thi đầy đủ"
+  },
+  "fields": {
+    "fullName": "Họ và tên",
+    "email": "Email",
+    "phone": "Số điện thoại",
+    "title": "Tiêu đề",
+    "description": "Mô tả",
+    "content": "Nội dung",
+    "role": "Vai trò",
+    "status": "Trạng thái",
+    "level": "Trình độ",
+    "category": "Danh mục",
+    "createdAt": "Ngày tạo",
+    "updatedAt": "Ngày cập nhật",
+    "actions": "Thao tác",
+    "search": "Tìm kiếm",
+    "all": "Tất cả",
+    "allStatuses": "Tất cả trạng thái",
+    "allRoles": "Tất cả vai trò"
+  },
+  "validation": {
+    "required": "Vui lòng nhập {{field}}.",
+    "minLength": "{{field}} cần ít nhất {{min}} ký tự.",
+    "invalidEmail": "Vui lòng nhập địa chỉ email hợp lệ.",
+    "invalidNumber": "Vui lòng nhập số hợp lệ.",
+    "passwordMismatch": "Mật khẩu xác nhận không khớp.",
+    "imageOnly": "Vui lòng chọn tệp hình ảnh.",
+    "imageTooLarge": "Ảnh không được vượt quá {{max}} MB.",
+    "imageReadFailed": "Không đọc được tệp hình ảnh."
+  },
+  "pagination": {
+    "label": "Phân trang",
+    "page": "Trang {{current}} / {{total}}",
+    "range": "Hiển thị {{from}}–{{to}} trên {{total}} kết quả",
+    "perPage": "Số mục mỗi trang"
+  },
+  "languageName": {
+    "vi": "Tiếng Việt",
+    "en": "English"
+  },
+  "language": {
+    "switcherLabel": "Ngôn ngữ",
+    "comingSoon": "Sắp ra mắt"
+  },
+  "status": {
+    "saving": "Đang lưu...",
+    "saved": "Đã lưu.",
+    "error": "Không lưu được, vui lòng thử lại."
+  }
+}

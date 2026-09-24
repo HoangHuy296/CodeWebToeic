@@ -1,0 +1,88 @@
+{
+  "dashboard": {
+    "eyebrow": "Learning overview",
+    "title": "Hello, {{name}}",
+    "fallbackName": "student",
+    "description": "Track your courses, progress, and recommended tests to plan your next step.",
+    "totalCourses": "Total courses",
+    "enrolledHint": "Enrolled",
+    "activeCourses": "In progress",
+    "activeHint": "Continue learning",
+    "completedCourses": "Completed",
+    "completedHint": "Finished",
+    "averageProgress": "Average progress",
+    "progressHint": "Across all courses",
+    "loading": "Loading your learning overview...",
+    "coursesError": "Could not load courses",
+    "testsError": "Could not load recommended tests",
+    "continueLearning": "Continue learning",
+    "currentCourses": "Courses in progress",
+    "recommendedTests": "Recommended tests",
+    "viewScores": "View results"
+  },
+  "myCourses": {
+    "eyebrow": "My courses",
+    "title": "Your enrolled courses",
+    "description": "Track your progress and continue your enrolled courses.",
+    "loading": "Loading your courses...",
+    "loadError": "Could not load your courses",
+    "empty": "You have not enrolled in any courses yet.",
+    "browseCourses": "Browse courses",
+    "continueLearning": "Continue learning"
+  },
+  "mockTests": {
+    "eyebrow": "Test practice",
+    "title": "Choose a practice test",
+    "description": "Practice with public tests and assessments from your courses.",
+    "loading": "Loading tests...",
+    "loadError": "Could not load tests",
+    "empty": "No matching tests yet.",
+    "start": "Start test"
+  },
+  "learning": {
+    "loading": "Loading your lesson...",
+    "loadError": "Could not load learning content",
+    "progress": "Learning progress",
+    "currentProgress": "Current progress",
+    "progressSaved": "Learning progress updated.",
+    "markComplete": "Mark as complete",
+    "completed": "Lesson completed",
+    "updating": "Updating...",
+    "materials": "Lesson materials"
+  },
+  "session": {
+    "exerciseEyebrow": "Exercise session",
+    "testEyebrow": "Test session",
+    "teacherExercisePreview": "Exercise preview",
+    "teacherTestPreview": "Test preview",
+    "description": "Follow the instructions and check the remaining time before submitting.",
+    "loading": "Loading test...",
+    "timeRemaining": "Time remaining",
+    "submitted": "Submitted",
+    "answered": "Answered questions",
+    "totalQuestions": "Total questions",
+    "loadError": "Could not load the test",
+    "submitError": "Could not submit the test",
+    "previousQuestion": "Previous question",
+    "nextQuestion": "Next question",
+    "results": "Test results",
+    "score": "Score: {{score}}",
+    "summary": "{{correct}}/{{total}} correct. Time spent: {{time}}.",
+    "retake": "Retake test"
+  },
+  "wordcheckResults": {
+    "eyebrow": "Practice results",
+    "title": "Phrase practice results",
+    "description": "Review your scores and progress across practice sessions.",
+    "loading": "Loading practice results...",
+    "loadError": "Could not load practice results",
+    "empty": "You have no practice results yet.",
+    "practice": "Practice now"
+  },
+  "messages": {
+    "eyebrow": "Student messages",
+    "title": "Contact your teachers and administrators",
+    "description": "Read messages, reply, or start a new conversation.",
+    "recipientHint": "You can message administrators or teachers of your enrolled courses."
+  }
+}

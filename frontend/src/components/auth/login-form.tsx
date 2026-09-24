@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../app/providers/auth-provider';
 import { getApiErrorMessage } from '../../lib/api';
 import { getDefaultRolePath } from '../../routes/path-utils';
@@ -11,51 +12,51 @@ interface LoginFormProps {
   selectedRole?: GoogleAuthRole;
 }
 
-const contentMap = {
-  user: {
-    eyebrow: 'Dang nhap',
-    title: 'Ket noi vao workspace cua ban',
-    description: 'Đăng nhập để tiếp tục học tập và theo dõi tiến độ của bạn.',
-    emailLabel: 'Email',
-    emailInputType: 'email' as const,
-    defaultEmail: 'student1@ivyts.dev',
-    defaultPassword: 'Password@123',
-    submitLabel: 'Dang nhap',
-    altLabel: 'Chua co tai khoan?',
-    altLinkLabel: 'Dang ky ngay',
-    altLinkTo: '/register',
-    secondaryLinkLabel: 'Dang nhap quan tri',
-    secondaryLinkTo: '/admin/login',
-    allowedRole: null as AppRole | null,
-    blockedMessage: 'Tai khoan nay khong thuoc khu vuc nguoi dung thong thuong.',
-  },
-  admin: {
-    eyebrow: 'Admin login',
-    title: 'Dang nhap khu vuc quan tri IVYTS 1998',
-    description: 'Chi tai khoan admin moi co the truy cap workspace quan tri rieng.',
-    emailLabel: 'Tai khoan',
-    emailInputType: 'text' as const,
-    defaultEmail: '',
-    defaultPassword: '',
-    submitLabel: 'Vao admin dashboard',
-    altLabel: 'Muon dang nhap hoc vien hoac giang vien?',
-    altLinkLabel: 'Ve trang dang nhap chung',
-    altLinkTo: '/login',
-    secondaryLinkLabel: 'Quay ve trang chu',
-    secondaryLinkTo: '/',
-    allowedRole: 'admin' as AppRole,
-    blockedMessage: 'Trang dang nhap nay chi danh cho tai khoan admin.',
-  },
-};
-
 export function LoginForm({ variant = 'user', selectedRole }: LoginFormProps) {
+  const { t } = useTranslation('auth');
   const navigate = useNavigate();
   const location = useLocation();
   const { login, logout } = useAuth();
+
+  const contentMap = {
+    user: {
+      eyebrow: t('user.eyebrow'),
+      title: t('user.title'),
+      description: t('user.description'),
+      defaultEmail: 'student1@ivyts.dev',
+      defaultPassword: 'Password@123',
+      submitLabel: t('user.submitLabel'),
+      altLabel: t('user.altLabel'),
+      altLinkLabel: t('user.altLinkLabel'),
+      altLinkTo: '/register',
+      secondaryLinkLabel: t('user.secondaryLinkLabel'),
+      secondaryLinkTo: '/admin/login',
+      allowedRole: null as AppRole | null,
+      blockedMessage: t('user.blockedMessage'),
+      emailInputType: 'email' as const,
+    },
+    admin: {
+      eyebrow: t('admin.eyebrow'),
+      title: t('admin.title'),
+      description: t('admin.description'),
+      defaultEmail: '',
+      defaultPassword: '',
+      submitLabel: t('admin.submitLabel'),
+      altLabel: t('admin.altLabel'),
+      altLinkLabel: t('admin.altLinkLabel'),
+      altLinkTo: '/login',
+      secondaryLinkLabel: t('admin.secondaryLinkLabel'),
+      secondaryLinkTo: '/',
+      allowedRole: 'admin' as AppRole,
+      blockedMessage: t('admin.blockedMessage'),
+      emailInputType: 'email' as const,
+    },
+  };
+
   const content = contentMap[variant];
   const roleLabels: Record<GoogleAuthRole, string> = {
-    student: 'hoc vien',
-    teacher: 'giang vien',
+    student: t('roleLabel.student'),
+    teacher: t('roleLabel.teacher'),
   };
   const defaultUserEmail =
     variant === 'user' && selectedRole === 'teacher' ? 'teacher@ivyts.dev' : content.defaultEmail;
@@ -74,7 +75,7 @@ export function LoginForm({ variant = 'user', selectedRole }: LoginFormProps) {
       <h2 className="mt-3 text-3xl font-extrabold tracking-tight text-slate-950">{content.title}</h2>
       <p className="mt-3 text-sm leading-7 text-slate-600">
         {variant === 'user' && selectedRole
-          ? `Ban dang dang nhap voi vai tro ${roleLabels[selectedRole]}.`
+          ? t('loggingInAsRole', { role: roleLabels[selectedRole] })
           : content.description}
       </p>
 
@@ -103,19 +104,19 @@ export function LoginForm({ variant = 'user', selectedRole }: LoginFormProps) {
         }}
       >
         <label className="grid gap-2">
-          <span className="text-sm font-semibold text-slate-700">{content.emailLabel}</span>
+          <span className="text-sm font-semibold text-slate-700">{t('emailLabel')}</span>
           <input
             className="h-12 rounded-2xl border border-stroke bg-slate-50 px-4 text-sm outline-none transition focus:border-teal-500 focus:bg-white"
             value={email}
             onChange={(event) => setEmail(event.target.value)}
             type={content.emailInputType}
-            autoComplete={variant === 'admin' ? 'username' : 'email'}
+            autoComplete="email"
             required
           />
         </label>
 
         <label className="grid gap-2">
-          <span className="text-sm font-semibold text-slate-700">Mat khau</span>
+          <span className="text-sm font-semibold text-slate-700">{t('passwordLabel')}</span>
           <input
             className="h-12 rounded-2xl border border-stroke bg-slate-50 px-4 text-sm outline-none transition focus:border-teal-500 focus:bg-white"
             value={password}
@@ -136,7 +137,7 @@ export function LoginForm({ variant = 'user', selectedRole }: LoginFormProps) {
           disabled={isSubmitting}
           className="btn-brand mt-2 h-12 rounded-2xl text-sm font-semibold text-white disabled:cursor-not-allowed disabled:opacity-70"
         >
-          {isSubmitting ? 'Dang xu ly...' : content.submitLabel}
+          {isSubmitting ? t('submitting') : content.submitLabel}
         </button>
       </form>
 

@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
+import { useTranslation } from 'react-i18next';
 import { getApiErrorMessage } from '../../lib/api';
 import { wordCheckApi } from '../../lib/word-check-api';
 import { QueryErrorState, QueryLoadingState } from '../../components/common/query-state';
@@ -15,6 +16,8 @@ import { nextSetOf } from '../../features/wordcheck/set-order';
  * items. The schedule lives in this browser's `localStorage`, keyed by learner name + set.
  */
 export function WordReviewPage() {
+  const { t, i18n } = useTranslation('wordcheck');
+  const locale = i18n.language === 'en' ? 'en-US' : 'vi-VN';
   const [setId, setSetId] = useState<string | null>(null);
   const [name, setName] = useState(() => loadLastName());
   const [started, setStarted] = useState(false);
@@ -82,19 +85,19 @@ export function WordReviewPage() {
       <PageHeader />
 
       <section className="rounded-[2rem] border border-stroke bg-white p-6 shadow-[0_18px_55px_rgba(15,23,42,0.06)] lg:p-8">
-        <label className="block text-xs font-semibold uppercase tracking-[0.24em] text-slate-500">Ten cua ban</label>
+        <label className="block text-xs font-semibold uppercase tracking-[0.24em] text-slate-500">{t('common.nameLabel')}</label>
         <input
           value={name}
           onChange={(e) => setName(e.target.value)}
-          placeholder="Nhap ten de xem lich on hom nay..."
+          placeholder={t('reviewPage.namePlaceholder')}
           maxLength={60}
           className="mt-2 w-full max-w-sm rounded-2xl border border-stroke bg-white px-4 py-3 text-sm font-semibold text-slate-950 outline-none focus:border-teal-400"
         />
       </section>
 
-      {setsQuery.isPending ? <QueryLoadingState title="Dang tai danh sach bo..." /> : null}
+      {setsQuery.isPending ? <QueryLoadingState title={t('common.loadingSets')} /> : null}
       {setsQuery.error ? (
-        <QueryErrorState title="Khong tai duoc danh sach bo" description={getApiErrorMessage(setsQuery.error)} />
+        <QueryErrorState title={t('common.loadSetsError')} description={getApiErrorMessage(setsQuery.error)} />
       ) : null}
 
       <section className="grid gap-6 sm:grid-cols-2">
@@ -103,32 +106,37 @@ export function WordReviewPage() {
           const currentPlan = isSelected ? plan : null;
           return (
             <div key={set.id} className="rounded-[2rem] border border-stroke bg-white p-6 shadow-[0_18px_55px_rgba(15,23,42,0.06)]">
-              <p className="text-xs font-semibold uppercase tracking-[0.24em] text-teal-700">Bo cau hoi</p>
+              <p className="text-xs font-semibold uppercase tracking-[0.24em] text-teal-700">{t('common.setLabel')}</p>
               <h2 className="mt-2 text-2xl font-extrabold text-slate-950">{set.setName}</h2>
-              <p className="mt-1 text-sm text-slate-600">{set.itemCount} cum tu</p>
+              <p className="mt-1 text-sm text-slate-600">{t('common.itemCount', { count: set.itemCount })}</p>
 
               {!trimmedName ? (
-                <p className="mt-4 text-sm text-slate-500">Nhap ten o tren de xem lich on hom nay.</p>
+                <p className="mt-4 text-sm text-slate-500">{t('reviewPage.enterNameHint')}</p>
               ) : !isSelected || questionsQuery.isPending ? (
                 <button
                   type="button"
                   onClick={() => setSetId(set.id)}
                   className="mt-4 rounded-full border border-stroke bg-white px-4 py-2 text-xs font-semibold text-slate-700"
                 >
-                  Xem lich on
+                  {t('reviewPage.viewSchedule')}
                 </button>
               ) : currentPlan ? (
                 <div className="mt-4 space-y-3">
                   {currentPlan.due.length + currentPlan.fresh.length > 0 ? (
                     <p className="text-sm text-slate-700">
-                      Hom nay: {currentPlan.due.length + currentPlan.fresh.length} cum ({currentPlan.due.length} on lai,{' '}
-                      {currentPlan.fresh.length} cum moi).
+                      {t('reviewPage.todaySummary', {
+                        total: currentPlan.due.length + currentPlan.fresh.length,
+                        due: currentPlan.due.length,
+                        fresh: currentPlan.fresh.length,
+                      })}
                     </p>
                   ) : (
-                    <p className="text-sm text-slate-700">Hom nay ban da on xong.</p>
+                    <p className="text-sm text-slate-700">{t('reviewPage.doneToday')}</p>
                   )}
                   {currentPlan.nextDue !== null && currentPlan.nextDue > today ? (
-                    <p className="text-xs text-slate-500">Lan on tiep theo: {formatDate(currentPlan.nextDue)}.</p>
+                    <p className="text-xs text-slate-500">
+                      {t('reviewPage.nextReviewDate', { date: formatDate(currentPlan.nextDue, locale) })}
+                    </p>
                   ) : null}
                   <button
                     type="button"
@@ -142,8 +150,8 @@ export function WordReviewPage() {
                     className="btn-brand w-full rounded-full px-5 py-3 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:opacity-60"
                   >
                     {currentPlan.due.length + currentPlan.fresh.length > 0
-                      ? `Bat dau on hom nay (${currentPlan.due.length + currentPlan.fresh.length} cum)`
-                      : 'Bat dau on hom nay'}
+                      ? t('reviewPage.startToday', { count: currentPlan.due.length + currentPlan.fresh.length })
+                      : t('reviewPage.startTodayNoCount')}
                   </button>
                 </div>
               ) : null}
@@ -153,24 +161,24 @@ export function WordReviewPage() {
       </section>
 
       {questionsQuery.error ? (
-        <QueryErrorState title="Khong tai duoc cau hoi" description={getApiErrorMessage(questionsQuery.error)} />
+        <QueryErrorState title={t('common.loadQuestionsError')} description={getApiErrorMessage(questionsQuery.error)} />
       ) : null}
     </div>
   );
 }
 
-function formatDate(day: number): string {
-  return dayToDate(day).toLocaleDateString('vi-VN');
+function formatDate(day: number, locale: string): string {
+  return dayToDate(day).toLocaleDateString(locale);
 }
 
 function PageHeader() {
+  const { t } = useTranslation('wordcheck');
   return (
     <section className="rounded-[2rem] border border-stroke bg-white px-6 py-8 shadow-[0_18px_55px_rgba(15,23,42,0.06)]">
-      <p className="text-xs font-semibold uppercase tracking-[0.32em] text-teal-700">on tap</p>
-      <h1 className="mt-4 text-4xl font-extrabold tracking-tight text-slate-950">Lich on cach quang</h1>
+      <p className="text-xs font-semibold uppercase tracking-[0.32em] text-teal-700">{t('reviewPage.eyebrow')}</p>
+      <h1 className="mt-4 text-4xl font-extrabold tracking-tight text-slate-950">{t('reviewPage.title')}</h1>
       <p className="mt-4 max-w-3xl text-sm leading-8 text-slate-600">
-        Cum tu duoc on lai dung luc sap quen (1, 3, 7, 14, 30 ngay). Lich on nay luu trong trinh duyet nay; doi may hay
-        xoa du lieu trinh duyet se mat, hay on deu de khong bi don lai qua nhieu.
+        {t('reviewPage.description')}
       </p>
     </section>
   );

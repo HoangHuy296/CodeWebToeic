@@ -1,0 +1,65 @@
+{
+  "header": {
+    "home": "Home",
+    "wordcheck": "Practice",
+    "checkphrase": "Flashcards",
+    "review": "Review",
+    "contact": "Contact",
+    "login": "Log in",
+    "register": "Sign up",
+    "openMenu": "Open menu"
+  },
+  "footer": {
+    "tagline": "An English learning CRM for TOEIC, IELTS, and online classes with clear progress tracking.",
+    "description": "Courses, mock tests, learning progress, and an internal inbox, all in one system for students, teachers, and admins.",
+    "navigation": "Navigation",
+    "courses": "Courses",
+    "practice": "Practice tests",
+    "blog": "Articles",
+    "resources": "Resources",
+    "teacherFeedback": "Teachers & feedback",
+    "studyGuides": "Study guides",
+    "adminPortal": "Admin portal"
+  },
+  "common": {
+    "dashboard": "Dashboard",
+    "profile": "Profile",
+    "messages": "Messages",
+    "settings": "Settings",
+    "logout": "Log out"
+  },
+  "student": {
+    "workspaceTitle": "Student Workspace",
+    "accent": "student",
+    "myCourses": "My courses",
+    "results": "Test results",
+    "wordcheckResults": "Practice results",
+    "mockTests": "Practice tests"
+  },
+  "teacher": {
+    "workspaceTitle": "Teacher Workspace",
+    "accent": "teacher",
+    "courses": "Courses",
+    "exercises": "Exercises",
+    "mockTests": "Mock tests",
+    "results": "Test results",
+    "students": "Students"
+  },
+  "admin": {
+    "workspaceTitle": "Admin Control",
+    "accent": "admin",
+    "users": "Users",
+    "courses": "Courses",
+    "createCourse": "Create course",
+    "mockTests": "Mock tests",
+    "createMockTest": "Create mock test",
+    "exercises": "Exercises",
+    "exerciseTopics": "Exercise topics",
+    "exerciseWorkspace": "Exercise workspace",
+    "results": "Scoreboard",
+    "wordcheckResults": "Practice scores",
+    "posts": "Posts",
+    "systemSettings": "System settings",
+    "accountSettings": "Account settings"
+  }
+}

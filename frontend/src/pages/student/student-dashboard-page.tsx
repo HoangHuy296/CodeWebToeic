@@ -1,6 +1,7 @@
 import { useAuth } from '../../app/providers/auth-provider';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { CourseProgressCard } from '../../components/common/course-progress-card';
 import { MetricCard } from '../../components/common/metric-card';
 import { PageHero } from '../../components/common/page-hero';
@@ -11,6 +12,8 @@ import { mockTestApi } from '../../lib/mock-test-api';
 import { getApiErrorMessage } from '../../lib/api';
 
 export function StudentDashboardPage() {
+  const { t } = useTranslation('student');
+  const { t: tCommon } = useTranslation('common');
   const { user } = useAuth();
   const queryClient = useQueryClient();
   const enrollmentsQuery = useQuery({
@@ -46,37 +49,37 @@ export function StudentDashboardPage() {
   return (
     <div className="space-y-8">
       <PageHero
-        eyebrow="student dashboard"
-        title={`Xin chao ${user?.fullName ?? 'hoc vien'}`}
-        description="Dashboard hoc vien da ket noi du lieu that tu enrollments va mock tests. Muc tieu la de hoc vien biet ngay minh dang hoc gi, tien do den dau va bai thi nao nen lam tiep."
+        eyebrow={t('dashboard.eyebrow')}
+        title={t('dashboard.title', { name: user?.fullName ?? t('dashboard.fallbackName') })}
+        description={t('dashboard.description')}
       />
 
       <section className="grid gap-4 md:grid-cols-4">
-        <MetricCard label="Tong khoa hoc" value={String(enrollments.length)} hint="Da dang ky" />
-        <MetricCard label="Dang hoc" value={String(activeEnrollments.length)} hint="Can tiep tuc" />
-        <MetricCard label="Hoan thanh" value={String(completedEnrollments.length)} hint="Da ket thuc" />
-        <MetricCard label="Tien do TB" value={`${averageProgress}%`} hint="Tren toan bo khoa hoc" />
+        <MetricCard label={t('dashboard.totalCourses')} value={String(enrollments.length)} hint={t('dashboard.enrolledHint')} />
+        <MetricCard label={t('dashboard.activeCourses')} value={String(activeEnrollments.length)} hint={t('dashboard.activeHint')} />
+        <MetricCard label={t('dashboard.completedCourses')} value={String(completedEnrollments.length)} hint={t('dashboard.completedHint')} />
+        <MetricCard label={t('dashboard.averageProgress')} value={`${averageProgress}%`} hint={t('dashboard.progressHint')} />
       </section>
 
       {enrollmentsQuery.isPending || mockTestsQuery.isPending ? (
-        <QueryLoadingState title="Dang tai dashboard hoc vien..." />
+        <QueryLoadingState title={t('dashboard.loading')} />
       ) : null}
       {enrollmentsQuery.error ? (
-        <QueryErrorState title="Khong tai duoc du lieu khoa hoc" description={getApiErrorMessage(enrollmentsQuery.error)} />
+        <QueryErrorState title={t('dashboard.coursesError')} description={getApiErrorMessage(enrollmentsQuery.error)} />
       ) : null}
       {mockTestsQuery.error ? (
-        <QueryErrorState title="Khong tai duoc mock tests" description={getApiErrorMessage(mockTestsQuery.error)} />
+        <QueryErrorState title={t('dashboard.testsError')} description={getApiErrorMessage(mockTestsQuery.error)} />
       ) : null}
 
       <section className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
         <div className="space-y-5">
           <div className="flex items-end justify-between gap-4">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.3em] text-teal-700">continue learning</p>
-              <h2 className="mt-2 text-3xl font-extrabold tracking-tight text-slate-950">Khoa hoc dang hoc</h2>
+              <p className="text-xs font-semibold uppercase tracking-[0.3em] text-teal-700">{t('dashboard.continueLearning')}</p>
+              <h2 className="mt-2 text-3xl font-extrabold tracking-tight text-slate-950">{t('dashboard.currentCourses')}</h2>
             </div>
             <Link to="/student/my-courses" className="text-sm font-semibold text-teal-700">
-              Xem tat ca
+              {tCommon('actions.viewAll')}
             </Link>
           </div>
 
@@ -89,12 +92,12 @@ export function StudentDashboardPage() {
 
         <div className="space-y-5">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.3em] text-teal-700">mock tests</p>
-            <h2 className="mt-2 text-3xl font-extrabold tracking-tight text-slate-950">Bai thi de xuat</h2>
+            <p className="text-xs font-semibold uppercase tracking-[0.3em] text-teal-700">{t('mockTests.eyebrow')}</p>
+            <h2 className="mt-2 text-3xl font-extrabold tracking-tight text-slate-950">{t('dashboard.recommendedTests')}</h2>
           </div>
 
           <Link to="/student/results" className="text-sm font-semibold text-cyan-700">
-            Xem bang diem
+            {t('dashboard.viewScores')}
           </Link>
 
           <div className="grid gap-4">
@@ -106,10 +109,10 @@ export function StudentDashboardPage() {
               >
                 <div className="flex items-center justify-between gap-3">
                   <span className="rounded-full bg-teal-50 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-teal-700">
-                    {mockTest.type}
+                    {tCommon(`testTypes.${mockTest.type}` as const)}
                   </span>
                   <span className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
-                    {mockTest.durationMinutes} phut
+                    {tCommon('counts.minutes', { count: mockTest.durationMinutes })}
                   </span>
                 </div>
                 <h3 className="mt-4 text-xl font-extrabold tracking-tight text-slate-950">{mockTest.title}</h3>

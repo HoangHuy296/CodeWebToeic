@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 import { GoogleLogin, type CredentialResponse } from '@react-oauth/google';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../app/providers/auth-provider';
 import { getApiErrorCode, getApiErrorMessage } from '../../lib/api';
 import { getDefaultRolePath } from '../../routes/path-utils';
@@ -12,6 +13,7 @@ interface GoogleRoleAuthPanelProps {
 }
 
 export function GoogleRoleAuthPanel({ mode, selectedRole }: GoogleRoleAuthPanelProps) {
+  const { t } = useTranslation('auth');
   const navigate = useNavigate();
   const location = useLocation();
   const { loginWithGoogle } = useAuth();
@@ -23,15 +25,15 @@ export function GoogleRoleAuthPanel({ mode, selectedRole }: GoogleRoleAuthPanelP
 
   const helperMessage = useMemo(() => {
     if (!googleClientId) {
-      return 'Google sign-in chua duoc cau hinh. Bo sung VITE_GOOGLE_CLIENT_ID de hien nut dang nhap Google.';
+      return t('google.notConfigured');
     }
 
     return null;
-  }, [googleClientId]);
+  }, [googleClientId, t]);
 
   const handleGoogleSuccess = async (credentialResponse: CredentialResponse) => {
     if (!credentialResponse.credential) {
-      setError('Google khong tra ve credential hop le.');
+      setError(t('google.invalidCredential'));
       return;
     }
 
@@ -48,11 +50,11 @@ export function GoogleRoleAuthPanel({ mode, selectedRole }: GoogleRoleAuthPanelP
     } catch (submitError) {
       const errorCode = getApiErrorCode(submitError);
       if (errorCode === 'GOOGLE_LINK_REQUIRED') {
-        setError('Email nay da ton tai. Hay dang nhap bang mat khau truoc, sau do lien ket Google o phase sau.');
+        setError(t('google.linkRequired'));
       } else if (errorCode === 'GOOGLE_ROLE_MISMATCH') {
-        setError('Email nay da gan voi mot role khac. Hay chon dung role hoac dang nhap bang cach hien co.');
+        setError(t('google.roleMismatch'));
       } else if (errorCode === 'GOOGLE_ROLE_NOT_ALLOWED') {
-        setError('Tai khoan admin khong duoc dang nhap bang Google trong phase nay.');
+        setError(t('google.adminNotAllowed'));
       } else {
         setError(getApiErrorMessage(submitError));
       }
@@ -65,9 +67,9 @@ export function GoogleRoleAuthPanel({ mode, selectedRole }: GoogleRoleAuthPanelP
     <section className="surface-soft mt-8 rounded-xl p-5">
       <div className="flex items-center justify-between gap-4">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.28em] text-teal-700">google sign-in</p>
+          <p className="text-xs font-semibold uppercase tracking-[0.28em] text-teal-700">{t('google.eyebrow')}</p>
           <h3 className="mt-2 text-lg font-extrabold tracking-tight text-slate-950">
-            {mode === 'register' ? 'Dang ky bang Google' : 'Dang nhap bang Google'}
+            {mode === 'register' ? t('google.titleRegister') : t('google.titleLogin')}
           </h3>
         </div>
         <span className="rounded-full bg-teal-50 px-3 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-teal-700">
@@ -84,7 +86,7 @@ export function GoogleRoleAuthPanel({ mode, selectedRole }: GoogleRoleAuthPanelP
           <div className={isSubmitting ? 'pointer-events-none opacity-70' : ''}>
             <GoogleLogin
               onSuccess={handleGoogleSuccess}
-              onError={() => setError('Google sign-in that bai. Hay thu lai.')}
+              onError={() => setError(t('google.loginFailed'))}
               theme="outline"
               size="large"
               text={mode === 'register' ? 'signup_with' : 'signin_with'}

@@ -1,0 +1,40 @@
+{
+  "tabs": {
+    "general": "General",
+    "appearance": "Appearance",
+    "language": "Language"
+  },
+  "general": {
+    "eyebrow": "general",
+    "title": "General settings",
+    "description": "Your currently signed-in account. To edit your profile (name, avatar, phone...), go to the Profile page.",
+    "fullName": "Full name",
+    "email": "Email",
+    "role": "Role",
+    "status": "Status",
+    "active": "Active",
+    "inactive": "Suspended",
+    "roleStudent": "Student",
+    "roleTeacher": "Teacher",
+    "roleAdmin": "Admin",
+    "editProfile": "Edit profile",
+    "logout": "Log out",
+    "noName": "No name yet"
+  },
+  "appearance": {
+    "eyebrow": "appearance",
+    "title": "Appearance",
+    "description": "Choose a light or dark theme. Your choice is saved on this browser and applies to the whole site.",
+    "light": "Light",
+    "lightHint": "Light background, dark text.",
+    "dark": "Dark",
+    "darkHint": "Dark background, light text."
+  },
+  "language": {
+    "eyebrow": "language",
+    "title": "Language",
+    "description": "Choose your interface language. This is saved to your account and applies on every device.",
+    "descriptionGuest": "Choose your interface language. Since you're not signed in, this is only saved on this browser.",
+    "current": "In use"
+  }
+}

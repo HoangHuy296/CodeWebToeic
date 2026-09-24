@@ -6,4 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface WordScoreJpaRepository extends JpaRepository<WordScoreEntity, String> {
 
     List<WordScoreEntity> findByModeOrderByFinishedAtDesc(String mode);
+
+    List<WordScoreEntity> findByStudentIdAndModeOrderByFinishedAtDesc(String studentId, String mode);
 }

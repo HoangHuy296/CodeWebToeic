@@ -1,5 +1,7 @@
 import { useMemo } from "react";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import type { TFunction } from "i18next";
 import { useAuth } from "../../app/providers/auth-provider";
 import { useFloatingPanel } from "./use-floating-panel";
 
@@ -9,41 +11,47 @@ interface RoleNavItem {
   children?: RoleNavItem[];
 }
 
-const roleLinks: Record<"student" | "teacher" | "admin", RoleNavItem[]> = {
+function useRoleLinks(t: TFunction<'navigation'>): Record<"student" | "teacher" | "admin", RoleNavItem[]> {
+  return {
   student: [
-    { label: "Dashboard", to: "/student/dashboard" },
-    { label: "Ho so", to: "/student/profile" },
-    { label: "Tin nhan", to: "/student/messages" },
-    { label: "Khoa hoc cua toi", to: "/student/my-courses" },
-    { label: "Ket qua bai lam", to: "/student/results" },
-    { label: "Luyen thi", to: "/student/mock-tests" },
+    { label: t('common.dashboard'), to: "/student/dashboard" },
+    { label: t('common.profile'), to: "/student/profile" },
+    { label: t('common.messages'), to: "/student/messages" },
+    { label: t('student.myCourses'), to: "/student/my-courses" },
+    { label: t('student.results'), to: "/student/results" },
+    { label: t('student.mockTests'), to: "/student/mock-tests" },
+    { label: t('common.settings'), to: "/student/settings" },
   ],
   teacher: [
-    { label: "Dashboard", to: "/teacher/dashboard" },
-    { label: "Ho so", to: "/teacher/profile" },
-    { label: "Khoa hoc", to: "/teacher/courses" },
-    { label: "Bai tap", to: "/teacher/exercises/items" },
-    { label: "Mock tests", to: "/teacher/mock-tests" },
-    { label: "Ket qua bai lam", to: "/teacher/results" },
-    { label: "Hoc vien", to: "/teacher/students" },
-    { label: "Tin nhan", to: "/teacher/messages" },
+    { label: t('common.dashboard'), to: "/teacher/dashboard" },
+    { label: t('common.profile'), to: "/teacher/profile" },
+    { label: t('teacher.courses'), to: "/teacher/courses" },
+    { label: t('teacher.exercises'), to: "/teacher/exercises/items" },
+    { label: t('teacher.mockTests'), to: "/teacher/mock-tests" },
+    { label: t('teacher.results'), to: "/teacher/results" },
+    { label: t('teacher.students'), to: "/teacher/students" },
+    { label: t('common.messages'), to: "/teacher/messages" },
+    { label: t('common.settings'), to: "/teacher/settings" },
   ],
   admin: [
-    { label: "Dashboard", to: "/admin/dashboard" },
-    { label: "Nguoi dung", to: "/admin/users" },
-    { label: "Khoa hoc", to: "/admin/courses" },
-    { label: "Mock tests", to: "/admin/mock-tests" },
-    { label: "Bai tap", to: "/admin/exercises" },
-    { label: "Bang diem", to: "/admin/results" },
-    { label: "Posts", to: "/admin/posts" },
-    { label: "Messages", to: "/admin/messages" },
-    { label: "Settings", to: "/admin/settings" },
+    { label: t('common.dashboard'), to: "/admin/dashboard" },
+    { label: t('admin.users'), to: "/admin/users" },
+    { label: t('admin.courses'), to: "/admin/courses" },
+    { label: t('admin.mockTests'), to: "/admin/mock-tests" },
+    { label: t('admin.exercises'), to: "/admin/exercises" },
+    { label: t('admin.results'), to: "/admin/results" },
+    { label: t('admin.posts'), to: "/admin/posts" },
+    { label: t('common.messages'), to: "/admin/messages" },
+    { label: t('admin.accountSettings'), to: "/admin/account-settings" },
   ],
-};
+  };
+}
 
 export function AvatarDropdown() {
+  const { t } = useTranslation('navigation');
   const { user, logout } = useAuth();
   const { isOpen, togglePanel, closePanel, wrapperProps } = useFloatingPanel();
+  const roleLinks = useRoleLinks(t);
 
   const initials = useMemo(() => {
     if (!user) {
@@ -188,7 +196,7 @@ export function AvatarDropdown() {
             }}
             className="btn-brand mt-3 w-full rounded-[1.2rem] px-4 py-3 text-sm font-semibold text-white"
           >
-            Dang xuat
+            {t('common.logout')}
           </button>
         </div>
       ) : null}

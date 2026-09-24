@@ -1,8 +1,10 @@
 import { useMemo, useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { GoogleRoleAuthPanel } from '../../components/auth/google-role-auth-panel';
 import { AuthRoleSelector } from '../../components/auth/auth-role-selector';
 import { useAuth } from '../../app/providers/auth-provider';
+import { useLanguage } from '../../app/providers/language-provider';
 import { getApiErrorMessage } from '../../lib/api';
 import type { GoogleAuthRole } from '../../types/auth';
 
@@ -11,8 +13,10 @@ function parseRole(value: string | null): GoogleAuthRole | null {
 }
 
 export function RegisterPage() {
+  const { t } = useTranslation('auth');
   const navigate = useNavigate();
   const { register } = useAuth();
+  const { language } = useLanguage();
   const [searchParams, setSearchParams] = useSearchParams();
   const initialRole = useMemo(() => parseRole(searchParams.get('role')), [searchParams]);
   const [selectedRole, setSelectedRole] = useState<GoogleAuthRole | null>(initialRole);
@@ -44,16 +48,16 @@ export function RegisterPage() {
     );
   }
 
-  const roleLabel = selectedRole === 'teacher' ? 'giang vien' : 'hoc vien';
+  const roleLabel = t(`roleLabel.${selectedRole}`);
 
   return (
     <div>
-      <p className="text-xs font-semibold tracking-[0.35em] text-teal-700 uppercase">Dang ky</p>
+      <p className="text-xs font-semibold tracking-[0.35em] text-teal-700 uppercase">{t('register.eyebrow')}</p>
       <h2 className="mt-3 text-3xl font-extrabold tracking-tight text-slate-950">
-        Tao tai khoan {roleLabel} moi
+        {t('register.title', { role: roleLabel })}
       </h2>
       <p className="mt-3 text-sm leading-7 text-slate-600">
-        Form nay tao tai khoan {roleLabel} theo role da chon truoc do.
+        {t('register.description', { role: roleLabel })}
       </p>
 
       <form
@@ -67,6 +71,7 @@ export function RegisterPage() {
             await register({
               ...form,
               intendedRole: selectedRole,
+              preferredLanguage: language,
             });
             navigate(selectedRole === 'teacher' ? '/teacher/dashboard' : '/student/dashboard', { replace: true });
           } catch (submitError) {
@@ -77,7 +82,7 @@ export function RegisterPage() {
         }}
       >
         <label className="grid gap-2">
-          <span className="text-sm font-semibold text-slate-700">Ho va ten</span>
+          <span className="text-sm font-semibold text-slate-700">{t('register.fullName')}</span>
           <input
             className="h-12 rounded-2xl border border-stroke bg-slate-50 px-4 text-sm outline-none transition focus:border-teal-500 focus:bg-white"
             value={form.fullName}
@@ -86,7 +91,7 @@ export function RegisterPage() {
           />
         </label>
         <label className="grid gap-2">
-          <span className="text-sm font-semibold text-slate-700">Email</span>
+          <span className="text-sm font-semibold text-slate-700">{t('emailLabel')}</span>
           <input
             className="h-12 rounded-2xl border border-stroke bg-slate-50 px-4 text-sm outline-none transition focus:border-teal-500 focus:bg-white"
             type="email"
@@ -96,7 +101,7 @@ export function RegisterPage() {
           />
         </label>
         <label className="grid gap-2">
-          <span className="text-sm font-semibold text-slate-700">So dien thoai</span>
+          <span className="text-sm font-semibold text-slate-700">{t('register.phone')}</span>
           <input
             className="h-12 rounded-2xl border border-stroke bg-slate-50 px-4 text-sm outline-none transition focus:border-teal-500 focus:bg-white"
             value={form.phone}
@@ -104,7 +109,7 @@ export function RegisterPage() {
           />
         </label>
         <label className="grid gap-2">
-          <span className="text-sm font-semibold text-slate-700">Mat khau</span>
+          <span className="text-sm font-semibold text-slate-700">{t('passwordLabel')}</span>
           <input
             className="h-12 rounded-2xl border border-stroke bg-slate-50 px-4 text-sm outline-none transition focus:border-teal-500 focus:bg-white"
             type="password"
@@ -121,14 +126,14 @@ export function RegisterPage() {
           disabled={isSubmitting}
           className="mt-2 h-12 rounded-2xl bg-slate-950 text-sm font-semibold text-white transition hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-70"
         >
-          {isSubmitting ? 'Dang xu ly...' : 'Tao tai khoan'}
+          {isSubmitting ? t('submitting') : t('register.submit')}
         </button>
       </form>
 
       <p className="mt-6 text-sm text-slate-600">
-        Da co tai khoan?{' '}
+        {t('register.haveAccount')}{' '}
         <Link to={`/login?role=${selectedRole}`} className="font-semibold text-teal-700">
-          Dang nhap
+          {t('register.loginLink')}
         </Link>
       </p>
 

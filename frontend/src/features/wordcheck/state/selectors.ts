@@ -1,4 +1,5 @@
 import type { SessionState } from './types';
+import type { TFunction } from 'i18next';
 
 /** Ported from the standalone toeic-web app's `src/state/selectors.ts`, unchanged. */
 export interface ResultRow {
@@ -33,9 +34,12 @@ export function summarize(state: SessionState): Summary {
   };
 }
 
-export function nextButtonLabel(state: SessionState): string {
-  if (state.queue.length > 0) return 'Tiep tuc';
-  return state.wrong.length === 0 || state.round >= state.maxRounds ? 'Nop va nhan ket qua' : `Ket thuc vong ${state.round}`;
+/** `t` is the `wordcheck` namespace's translate function — this is a pure function, not a component. */
+export function nextButtonLabel(state: SessionState, t: TFunction<'wordcheck'>): string {
+  if (state.queue.length > 0) return t('session.next');
+  return state.wrong.length === 0 || state.round >= state.maxRounds
+    ? t('session.submitAndSeeResult')
+    : t('session.endRound', { round: state.round });
 }
 
 export function questionsLeftInRound(state: SessionState): number {

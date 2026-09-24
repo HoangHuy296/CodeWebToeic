@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import App from './App';
 import './index.css';
+import './i18n';
 
 const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID?.trim();
 const appTree = (

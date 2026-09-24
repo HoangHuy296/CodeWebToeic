@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import type { GoogleAuthRole } from '../../types/auth';
 
 interface AuthRoleSelectorProps {
@@ -6,26 +7,6 @@ interface AuthRoleSelectorProps {
   onContinue: () => void;
   mode: 'login' | 'register';
 }
-
-const roleCards: Array<{
-  role: GoogleAuthRole;
-  title: string;
-  subtitle: string;
-  accent: string;
-}> = [
-  {
-    role: 'student',
-    title: 'Hoc vien',
-    subtitle: 'Hoc course, lam bai tap, lam bai thi va theo doi tien do hoc.',
-    accent: 'bg-teal-700',
-  },
-  {
-    role: 'teacher',
-    title: 'Giang vien',
-    subtitle: 'Quan ly course, lesson, bai tap va bai thi cua hoc vien.',
-    accent: 'bg-teal-900',
-  },
-];
 
 function RoleIllustration({ role }: { role: GoogleAuthRole }) {
   if (role === 'teacher') {
@@ -54,16 +35,33 @@ function RoleIllustration({ role }: { role: GoogleAuthRole }) {
 }
 
 export function AuthRoleSelector({ selectedRole, onSelect, onContinue, mode }: AuthRoleSelectorProps) {
+  const { t } = useTranslation('auth');
+
+  const roleCards: Array<{ role: GoogleAuthRole; title: string; subtitle: string; accent: string }> = [
+    {
+      role: 'student',
+      title: t('roleSelector.studentTitle'),
+      subtitle: t('roleSelector.studentSubtitle'),
+      accent: 'bg-teal-700',
+    },
+    {
+      role: 'teacher',
+      title: t('roleSelector.teacherTitle'),
+      subtitle: t('roleSelector.teacherSubtitle'),
+      accent: 'bg-teal-900',
+    },
+  ];
+
   return (
     <div>
       <p className="text-xs font-semibold uppercase tracking-[0.35em] text-teal-700">
-        {mode === 'register' ? 'Dang ky' : 'Dang nhap'}
+        {mode === 'register' ? t('roleSelector.eyebrowRegister') : t('roleSelector.eyebrowLogin')}
       </p>
       <h2 className="mt-3 text-3xl font-extrabold tracking-tight text-slate-950">
-        Chon vai tro truoc khi tiep tuc
+        {t('roleSelector.title')}
       </h2>
       <p className="mt-3 text-sm leading-7 text-slate-600">
-        Chon dung vai tro de he thong dua ban vao dung workspace va dung luong xac thuc.
+        {t('roleSelector.description')}
       </p>
 
       <div className="mt-6 grid gap-4 md:grid-cols-2">
@@ -88,7 +86,7 @@ export function AuthRoleSelector({ selectedRole, onSelect, onContinue, mode }: A
                 ].join(' ')}
               >
                 <div>
-                  <p className="text-xs font-semibold uppercase tracking-[0.24em] text-white/75">Role</p>
+                  <p className="text-xs font-semibold uppercase tracking-[0.24em] text-white/75">{t('roleSelector.roleTag')}</p>
                   <p className="mt-2 text-2xl font-extrabold tracking-tight">{card.title}</p>
                 </div>
                 <RoleIllustration role={card.role} />
@@ -105,7 +103,7 @@ export function AuthRoleSelector({ selectedRole, onSelect, onContinue, mode }: A
         disabled={!selectedRole}
         className="btn-brand mt-6 h-12 w-full rounded-2xl text-sm font-semibold text-white disabled:cursor-not-allowed disabled:opacity-60"
       >
-        Tiep tuc
+        {t('roleSelector.continue')}
       </button>
     </div>
   );

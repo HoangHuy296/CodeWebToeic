@@ -58,6 +58,9 @@ public class UserAuthEntity {
     @Column(name = "bio", columnDefinition = "TEXT")
     private String bio;
 
+    @Column(name = "preferred_language", nullable = false, length = 8)
+    private String preferredLanguage = "vi";
+
     @Column(name = "is_active", nullable = false)
     private boolean isActive = true;
 

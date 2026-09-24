@@ -13,6 +13,7 @@ import com.ivyts.backend.web.auth.dto.RefreshTokenRequest;
 import com.ivyts.backend.web.auth.dto.RegisterRequest;
 import com.ivyts.backend.web.auth.dto.RequestEmailChangeRequest;
 import com.ivyts.backend.web.auth.dto.RequestPhoneChangeRequest;
+import com.ivyts.backend.web.auth.dto.UpdatePreferencesRequest;
 import com.ivyts.backend.web.auth.dto.UpdateProfileRequest;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -77,6 +78,11 @@ public class AuthController {
     @PatchMapping("/me/profile")
     public ApiSuccessResponse<?> updateProfile(HttpServletRequest request, @Valid @RequestBody UpdateProfileRequest body) {
         return ApiSuccessResponse.of("Profile updated successfully", authService.updateProfile(requestAuthService.requireUser(request), body));
+    }
+
+    @PatchMapping("/me/preferences")
+    public ApiSuccessResponse<?> updatePreferences(HttpServletRequest request, @Valid @RequestBody UpdatePreferencesRequest body) {
+        return ApiSuccessResponse.of("Preferences updated successfully", authService.updatePreferences(requestAuthService.requireUser(request), body));
     }
 
     @PostMapping("/me/password")

@@ -19,6 +19,7 @@ import com.ivyts.backend.web.auth.dto.RefreshTokenRequest;
 import com.ivyts.backend.web.auth.dto.RegisterRequest;
 import com.ivyts.backend.web.auth.dto.RequestEmailChangeRequest;
 import com.ivyts.backend.web.auth.dto.RequestPhoneChangeRequest;
+import com.ivyts.backend.web.auth.dto.UpdatePreferencesRequest;
 import com.ivyts.backend.web.auth.dto.UpdateProfileRequest;
 import com.ivyts.backend.web.auth.dto.VerificationResponse;
 import java.time.Instant;
@@ -56,6 +57,7 @@ public class AuthService {
         user.setPasswordHash(PASSWORD_ENCODER.encode(request.password()));
         user.setPhone(blankToNull(request.phone()));
         user.setRole(parseSelfRegisterRole(request.intendedRole()));
+        user.setPreferredLanguage(normalizeLanguage(request.preferredLanguage()));
         user.setActive(true);
         user = userStore.save(user);
         notificationEventsService.emitNewUserRegistered(user.getId(), user.getEmail(), user.getFullName());
@@ -133,6 +135,25 @@ public class AuthService {
 
         userStore.save(user);
         return toPublicUser(user);
+    }
+
+    /**
+     * Deliberately returns only `{preferredLanguage}`, not the full profile — merging a lean
+     * response into the `['auth', 'me']` cache avoids clobbering it with a stale full-profile
+     * snapshot from a request that raced with this one (see docs/language-en-vi-plan.md).
+     */
+    public java.util.Map<String, Object> updatePreferences(AuthUser authUser, UpdatePreferencesRequest request) {
+        String value = request.preferredLanguage() == null ? "" : request.preferredLanguage().trim().toLowerCase(Locale.ROOT);
+        if (!value.equals("vi") && !value.equals("en")) {
+            throw new ApiException(HttpStatus.BAD_REQUEST, "preferredLanguage must be \"vi\" or \"en\"");
+        }
+
+        User user = findUserByIdOrThrow(authUser.userId());
+        ensureActive(user);
+        user.setPreferredLanguage(value);
+        userStore.save(user);
+
+        return java.util.Map.of("preferredLanguage", value);
     }
 
     public void changePassword(AuthUser authUser, ChangePasswordRequest request) {
@@ -261,8 +282,15 @@ public class AuthService {
             user.getPhone(),
             user.getBio(),
             user.isActive(),
-            user.getOwnedCourseIds() == null ? List.of() : user.getOwnedCourseIds()
+            user.getOwnedCourseIds() == null ? List.of() : user.getOwnedCourseIds(),
+            normalizeLanguage(user.getPreferredLanguage())
         );
+    }
+
+    /** Bad/missing values fall back to "vi" rather than surfacing a broken preference to the UI. */
+    private String normalizeLanguage(String value) {
+        String normalized = value == null ? "" : value.trim().toLowerCase(Locale.ROOT);
+        return normalized.equals("en") ? "en" : "vi";
     }
 
     private User findUserByIdOrThrow(String userId) {

@@ -1,0 +1,128 @@
+{
+  "hero": {
+    "eyebrow": "MEET YOUR TEACHER",
+    "hello": "Hi, I'm",
+    "nameLine1": "Trịnh Đinh",
+    "nameLine2": "Thúy Vy.",
+    "tagline1": "Learning English together,",
+    "tagline2": "growing more confident every day.",
+    "description": "From your very first sounds to your TOEIC goals, Ms. Vy walks with you with patience, approachable lessons, and a path that fits you.",
+    "ctaPrimary": "Chat with Ms. Vy",
+    "ctaSecondary": "See how we learn",
+    "subjectsLabel": "Teaching areas",
+    "subject1": "TOEIC",
+    "subject2": "Conversational English",
+    "subject3": "Pronunciation",
+    "photoAlt": "Ms. Trịnh Đinh Thúy Vy demonstrating pronunciation mouth shapes next to a laptop — original photo provided.",
+    "photoNote1": "A little persistence.",
+    "photoNote2": "One confident step.",
+    "photoIndex": "THÚY VY / ENGLISH TEACHER"
+  },
+  "qualificationsLabel": "Certificates and experience, from her CV",
+  "qualifications": [
+    { "value": "970", "label": "TOEIC", "detail": "07.01.2025" },
+    { "value": "7.5", "label": "IELTS", "detail": "24.08.2025" },
+    { "value": "120h", "label": "TESOL Certificate", "detail": "03.2026" },
+    { "value": "2018", "label": "Started teaching", "detail": "Kids & adults" }
+  ],
+  "about": {
+    "eyebrow": "A LEARNING COMPANION",
+    "heading1": "Listening to you.",
+    "heading2": "Understanding how you learn.",
+    "paragraph1": "Teaching English since 2018, Ms. Vy has worked with children, students, and adults. Each experience has deepened her understanding of learners' challenges and how to create a classroom where everyone feels comfortable speaking up.",
+    "paragraph2": "For TOEIC and conversational English, she focuses on practice, tailors lessons to each learner's needs, and closely tracks progress. Outside of teaching, she loves music, explores ESL games, and keeps learning about teaching methods.",
+    "signatureName": "Thúy Vy",
+    "signatureRole": "English teacher · Lifelong learner",
+    "portraitCaption1": "A little about Ms. Vy",
+    "portraitCaption2": "Ho Chi Minh City",
+    "portraitAlt": "Portrait of Ms. Vy wearing round glasses, smiling amid greenery — original photo provided."
+  },
+  "teaching": {
+    "eyebrow": "HOW MS. VY SUPPORTS YOU",
+    "heading1": "Learning with direction.",
+    "heading2": "Practice with joy.",
+    "subheading": "A space where you're free to ask, try, correct mistakes, and keep moving forward.",
+    "imageDisclosure": "These two classroom photos show Ms. Vy's real teaching sessions."
+  },
+  "approaches": [
+    { "number": "01", "title": "Learn from what you need", "text": "Methods and materials are tailored to each learner's level, needs, and learning style." },
+    { "number": "02", "title": "Practice to grow more confident", "text": "Pronunciation drills, dictation, shadowing, and conversation practice through everyday, relatable situations." },
+    { "number": "03", "title": "See your own progress", "text": "Track your learning journey, spot challenges, and get feedback so you know exactly what to practice next." }
+  ],
+  "classroomImages": [
+    {
+      "alt": "Photo of Ms. Vy guiding three adult learners reviewing an English exercise together.",
+      "title": "Understanding together, progressing together",
+      "description": "Discussing, asking questions, and taking the time to understand every part of the lesson."
+    },
+    {
+      "alt": "Photo of Ms. Vy guiding an adult learner through pronunciation practice.",
+      "title": "Confidence from the very first sounds",
+      "description": "Listening, practicing pronunciation, and step by step bringing English into real conversation."
+    }
+  ],
+  "background": {
+    "eyebrow": "PROFESSIONAL BACKGROUND",
+    "heading1": "Always learning,",
+    "heading2": "to teach better.",
+    "studyingLabel": "In progress",
+    "communityNoteBold": "English is also about connection.",
+    "communityNoteText": "In 2019, she volunteered as an interpreter at Friends for Street Children and taught conversational English to students in a summer program."
+  },
+  "education": [
+    {
+      "meta": "2026",
+      "title": "Master of Education (TESOL)",
+      "school": "Open University × Edith Cowan University",
+      "text": "A programme covering language teaching, course and materials design, and learner testing and assessment."
+    },
+    {
+      "meta": "2016 — 2020",
+      "title": "English Language & Literature",
+      "school": "University of Social Sciences and Humanities",
+      "text": "A language-teaching track built on linguistics foundations, teaching methodology, and hands-on practice."
+    }
+  ],
+  "experienceLabel": "TEACHING JOURNEY",
+  "experience": [
+    {
+      "period": "12.2025 — present",
+      "name": "Simple English Center",
+      "role": "Conversational English Teacher",
+      "description": "Combines dictation, Repeat & Shadow, TPR, and hands-on activities to build pronunciation, listening/speaking skills, and speaking confidence."
+    },
+    {
+      "period": "08.2024 — 08.2025",
+      "name": "Mini Hippo",
+      "role": "Full-time TOEIC Teacher",
+      "description": "Tailors methods and materials to learner needs, coaches test-taking strategies, tracks progress, and builds real English ability alongside score goals."
+    },
+    {
+      "period": "2021 — present",
+      "name": "Freelance Teaching",
+      "role": "TOEIC Teacher",
+      "description": "Coaches the skills needed for the TOEIC test, tracking and assessing learner progress throughout the course."
+    }
+  ],
+  "earlierExperienceSummary": "More teaching experience",
+  "earlierExperience": [
+    { "period": "06.2023 — 07.2024", "name": "The Gold Beehive Kindergarten", "detail": "Built an English-immersion environment through games, songs, storytelling, and creative activities." },
+    { "period": "04.2020 — 03.2021", "name": "Helen Doron English Vietnam", "detail": "Taught English to young children; created language practice opportunities in and outside the classroom." },
+    { "period": "03.2019 — 03.2020", "name": "Open English Center", "detail": "Taught adults and students, focusing on pronunciation, conversation, and real-life situations." },
+    { "period": "03.2019", "name": "American International School (AIES)", "detail": "Taught English to children." },
+    { "period": "08.2018 — 02.2019", "name": "Global Citizen English Academy", "detail": "Taught children and adults, focusing on speaking skills and supporting learners through their English difficulties." }
+  ],
+  "contact": {
+    "eyebrow": "IT STARTS WITH A CONVERSATION",
+    "heading1": "What's your goal?",
+    "heading2": "Let's find your path together.",
+    "paragraph": "Share your current level, what you'd like to improve, and how much time you can give to English, so we can talk through the right approach for you.",
+    "cardRole": "Teacher",
+    "cardName": "Trịnh Đinh Thúy Vy",
+    "cardNote": "Let's talk about your TOEIC goals, pronunciation, and conversational English to find the right approach for you.",
+    "phoneLabel": "Phone",
+    "emailLabel": "Email",
+    "location": "Ho Chi Minh City"
+  },
+  "profileNote": "Education, experience, and certificate details are presented as provided in the teacher's CV."
+}

@@ -1,0 +1,128 @@
+{
+  "hero": {
+    "eyebrow": "GẶP GỠ GIẢNG VIÊN CỦA BẠN",
+    "hello": "Xin chào, mình là",
+    "nameLine1": "Trịnh Đinh",
+    "nameLine2": "Thúy Vy.",
+    "tagline1": "Cùng bạn học tiếng Anh,",
+    "tagline2": "tự tin hơn mỗi ngày.",
+    "description": "Từ những âm đầu tiên đến mục tiêu TOEIC, cô Vy đồng hành bằng sự kiên nhẫn, bài học gần gũi và lộ trình phù hợp với bạn.",
+    "ctaPrimary": "Trò chuyện với cô Vy",
+    "ctaSecondary": "Khám phá cách học",
+    "subjectsLabel": "Lĩnh vực giảng dạy",
+    "subject1": "TOEIC",
+    "subject2": "Tiếng Anh giao tiếp",
+    "subject3": "Phát âm",
+    "photoAlt": "Cô Trịnh Đinh Thúy Vy hướng dẫn khẩu hình phát âm bên laptop — ảnh gốc được cung cấp.",
+    "photoNote1": "Một chút kiên trì.",
+    "photoNote2": "Một bước tự tin.",
+    "photoIndex": "THÚY VY / ENGLISH TEACHER"
+  },
+  "qualificationsLabel": "Chứng chỉ và kinh nghiệm theo CV",
+  "qualifications": [
+    { "value": "970", "label": "TOEIC", "detail": "07.01.2025" },
+    { "value": "7.5", "label": "IELTS", "detail": "24.08.2025" },
+    { "value": "120h", "label": "Chứng chỉ TESOL", "detail": "03.2026" },
+    { "value": "2018", "label": "Bắt đầu giảng dạy", "detail": "Trẻ em & người lớn" }
+  ],
+  "about": {
+    "eyebrow": "NGƯỜI ĐỒNG HÀNH",
+    "heading1": "Lắng nghe bạn.",
+    "heading2": "Hiểu cách bạn học.",
+    "paragraph1": "Giảng dạy tiếng Anh từ năm 2018, cô Vy đã làm việc với trẻ em, sinh viên và người lớn. Mỗi trải nghiệm giúp cô hiểu hơn những khó khăn của người học và cách tạo một lớp học khuyến khích mọi người lên tiếng.",
+    "paragraph2": "Với TOEIC và tiếng Anh giao tiếp, cô chú trọng thực hành, điều chỉnh bài học theo nhu cầu và theo sát quá trình tiến bộ. Ngoài giờ dạy, cô yêu âm nhạc, tìm hiểu trò chơi ESL và tiếp tục học hỏi về phương pháp giảng dạy.",
+    "signatureName": "Thúy Vy",
+    "signatureRole": "English teacher · Lifelong learner",
+    "portraitCaption1": "Một chút về cô Vy",
+    "portraitCaption2": "TP. Hồ Chí Minh",
+    "portraitAlt": "Chân dung cô Vy với kính gọng tròn, mỉm cười giữa không gian xanh — ảnh gốc được cung cấp."
+  },
+  "teaching": {
+    "eyebrow": "CÁCH CÔ VY ĐỒNG HÀNH",
+    "heading1": "Học có định hướng.",
+    "heading2": "Thực hành có niềm vui.",
+    "subheading": "Một không gian để bạn thoải mái hỏi, thử, sửa và tiếp tục tiến về phía trước.",
+    "imageDisclosure": "Hai hình ảnh lớp học cô Vy minh họa hoạt động học tập lớp học thực tế."
+  },
+  "approaches": [
+    { "number": "01", "title": "Học từ điều bạn cần", "text": "Phương pháp và tài liệu được điều chỉnh theo trình độ, nhu cầu và cách học của từng học viên." },
+    { "number": "02", "title": "Thực hành để tự tin hơn", "text": "Luyện phát âm, nghe chép chính tả, shadowing và giao tiếp qua những tình huống gần gũi với cuộc sống." },
+    { "number": "03", "title": "Nhìn thấy mình tiến bộ", "text": "Theo dõi quá trình học, nhận diện khó khăn và nhận phản hồi để biết mình cần luyện tập thêm ở đâu." }
+  ],
+  "classroomImages": [
+    {
+      "alt": "Ảnh cô Vy hướng dẫn ba học viên trưởng thành cùng xem bài tập tiếng Anh.",
+      "title": "Cùng hiểu bài, cùng tiến bộ",
+      "description": "Trao đổi, đặt câu hỏi và dành thời gian để hiểu từng phần của bài học."
+    },
+    {
+      "alt": "Ảnh cô Vy hướng dẫn một học viên trưởng thành luyện phát âm.",
+      "title": "Tự tin từ những âm đầu tiên",
+      "description": "Lắng nghe, luyện phát âm và từng bước đưa tiếng Anh vào giao tiếp."
+    }
+  ],
+  "background": {
+    "eyebrow": "NỀN TẢNG CHUYÊN MÔN",
+    "heading1": "Luôn học hỏi",
+    "heading2": "để dạy tốt hơn.",
+    "studyingLabel": "Đang theo học",
+    "communityNoteBold": "Tiếng Anh cũng là sự kết nối.",
+    "communityNoteText": "Năm 2019, cô tham gia hỗ trợ phiên dịch tại Friends for Street Children và tình nguyện dạy giao tiếp cho học sinh trong chương trình hè."
+  },
+  "education": [
+    {
+      "meta": "2026",
+      "title": "Master of Education (TESOL)",
+      "school": "Open University × Edith Cowan University",
+      "text": "Chương trình về giảng dạy ngôn ngữ, thiết kế khóa học và tài liệu, kiểm tra và đánh giá người học."
+    },
+    {
+      "meta": "2016 — 2020",
+      "title": "Ngôn ngữ & Văn học Anh",
+      "school": "Đại học Khoa học Xã hội và Nhân văn",
+      "text": "Định hướng giảng dạy ngôn ngữ, với nền tảng ngôn ngữ học, phương pháp và thực hành giảng dạy."
+    }
+  ],
+  "experienceLabel": "HÀNH TRÌNH GIẢNG DẠY",
+  "experience": [
+    {
+      "period": "12.2025 — nay",
+      "name": "Simple English Center",
+      "role": "Giáo viên tiếng Anh giao tiếp",
+      "description": "Kết hợp nghe chép chính tả, Repeat & Shadow, TPR và hoạt động thực hành để phát triển phát âm, khả năng nghe nói và sự tự tin trong giao tiếp."
+    },
+    {
+      "period": "08.2024 — 08.2025",
+      "name": "Mini Hippo",
+      "role": "Giáo viên TOEIC toàn thời gian",
+      "description": "Điều chỉnh phương pháp và tài liệu theo nhu cầu học viên, hướng dẫn chiến thuật làm bài, theo dõi tiến bộ và phát triển năng lực tiếng Anh bên cạnh mục tiêu điểm số."
+    },
+    {
+      "period": "2021 — nay",
+      "name": "Giảng dạy tự do",
+      "role": "Giáo viên TOEIC",
+      "description": "Hướng dẫn các kỹ năng cần thiết cho bài thi TOEIC, theo dõi và đánh giá sự tiến bộ của học viên trong suốt khóa học."
+    }
+  ],
+  "earlierExperienceSummary": "Thêm kinh nghiệm giảng dạy",
+  "earlierExperience": [
+    { "period": "06.2023 — 07.2024", "name": "The Gold Beehive Kindergarten", "detail": "Xây dựng môi trường sử dụng tiếng Anh qua trò chơi, bài hát, kể chuyện và hoạt động sáng tạo." },
+    { "period": "04.2020 — 03.2021", "name": "Helen Doron English Vietnam", "detail": "Dạy tiếng Anh cho trẻ nhỏ; tạo cơ hội thực hành ngôn ngữ trong và ngoài lớp học." },
+    { "period": "03.2019 — 03.2020", "name": "Open English Center", "detail": "Dạy người lớn và sinh viên, tập trung vào phát âm, giao tiếp và tình huống thực tế." },
+    { "period": "03.2019", "name": "American International School (AIES)", "detail": "Giảng dạy tiếng Anh cho trẻ em." },
+    { "period": "08.2018 — 02.2019", "name": "Global Citizen English Academy", "detail": "Dạy trẻ em và người lớn, chú trọng kỹ năng nói và hỗ trợ những khó khăn khi học tiếng Anh." }
+  ],
+  "contact": {
+    "eyebrow": "BẮT ĐẦU TỪ MỘT CUỘC TRÒ CHUYỆN",
+    "heading1": "Mục tiêu của bạn là gì?",
+    "heading2": "Cùng cô Vy tìm hướng đi.",
+    "paragraph": "Chia sẻ trình độ hiện tại, điều bạn muốn cải thiện và thời gian có thể dành cho tiếng Anh để trao đổi về cách học phù hợp.",
+    "cardRole": "Giảng viên",
+    "cardName": "Trịnh Đinh Thúy Vy",
+    "cardNote": "Trao đổi về mục tiêu TOEIC, phát âm và tiếng Anh giao tiếp để tìm cách học phù hợp với bạn.",
+    "phoneLabel": "Điện thoại",
+    "emailLabel": "Email",
+    "location": "TP. Hồ Chí Minh"
+  },
+  "profileNote": "Thông tin học vấn, kinh nghiệm và chứng chỉ được giới thiệu theo CV của giảng viên."
+}

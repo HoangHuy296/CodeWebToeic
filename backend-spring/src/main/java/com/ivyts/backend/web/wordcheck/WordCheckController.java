@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -43,6 +44,11 @@ public class WordCheckController {
         return ApiSuccessResponse.of("Word set questions fetched successfully", wordCheckService.getQuestions(setId));
     }
 
+    @GetMapping("/{setId}/flashcards")
+    public ApiSuccessResponse<?> getFlashcards(@PathVariable String setId) {
+        return ApiSuccessResponse.of("Word set flashcards fetched successfully", wordCheckService.getFlashcards(setId));
+    }
+
     @PostMapping("/{setId}/answers")
     public ApiSuccessResponse<?> submitAnswer(
         @PathVariable String setId,
@@ -70,5 +76,13 @@ public class WordCheckController {
     @PostMapping("/{setId}/sessions/{sessionId}/finish")
     public ApiSuccessResponse<?> finishSession(@PathVariable String setId, @PathVariable String sessionId) {
         return ApiSuccessResponse.of("Session finished successfully", wordCheckService.finishSession(setId, sessionId));
+    }
+
+    @GetMapping("/my-scores")
+    public ApiSuccessResponse<?> myScores(@RequestParam(defaultValue = "extra") String mode, HttpServletRequest request) {
+        return ApiSuccessResponse.of(
+            "Word check scores fetched successfully",
+            wordCheckService.listMyScores(mode, requestAuthService.requireUser(request))
+        );
     }
 }

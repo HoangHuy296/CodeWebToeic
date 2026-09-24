@@ -1,14 +1,19 @@
+import { useTranslation } from 'react-i18next';
 import { DashboardShell } from '../components/common/dashboard-shell';
 
-const studentNav = [
-  { label: 'Dashboard', to: '/student/dashboard' },
-  { label: 'Ho so', to: '/student/profile' },
-  { label: 'Tin nhan', to: '/student/messages' },
-  { label: 'Khoa hoc cua toi', to: '/student/my-courses' },
-  { label: 'Ket qua bai lam', to: '/student/results' },
-  { label: 'Luyen thi', to: '/student/mock-tests' },
-];
-
 export function StudentLayout() {
-  return <DashboardShell title="Student Workspace" accent="hoc vien" navItems={studentNav} />;
+  const { t } = useTranslation('navigation');
+
+  const studentNav = [
+    { label: t('common.dashboard'), to: '/student/dashboard' },
+    { label: t('common.profile'), to: '/student/profile' },
+    { label: t('common.messages'), to: '/student/messages' },
+    { label: t('student.myCourses'), to: '/student/my-courses' },
+    { label: t('student.results'), to: '/student/results' },
+    { label: t('student.wordcheckResults'), to: '/student/wordcheck-results' },
+    { label: t('student.mockTests'), to: '/student/mock-tests' },
+    { label: t('common.settings'), to: '/student/settings' },
+  ];
+
+  return <DashboardShell title={t('student.workspaceTitle')} accent={t('student.accent')} navItems={studentNav} />;
 }

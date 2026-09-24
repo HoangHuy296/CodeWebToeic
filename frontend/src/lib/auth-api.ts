@@ -1,5 +1,5 @@
 import { api, unwrapResponse } from './api';
-import type { AuthPayload, GoogleAuthInput, LoginInput, PublicUser, RegisterInput } from '../types/auth';
+import type { AuthPayload, GoogleAuthInput, LanguageCode, LoginInput, PublicUser, RegisterInput } from '../types/auth';
 import type {
   ChangePasswordInput,
   UpdateProfileInput,
@@ -27,6 +27,9 @@ export const authApi = {
   },
   updateProfile(payload: UpdateProfileInput) {
     return unwrapResponse<PublicUser>(api.patch('/auth/me/profile', payload));
+  },
+  updatePreferences(payload: { preferredLanguage: LanguageCode }) {
+    return unwrapResponse<{ preferredLanguage: LanguageCode }>(api.patch('/auth/me/preferences', payload));
   },
   changePassword(payload: ChangePasswordInput) {
     return unwrapResponse<Record<string, never>>(api.post('/auth/me/password', payload));

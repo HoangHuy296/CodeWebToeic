@@ -23,6 +23,7 @@ import { AdminPostsPage } from '../pages/admin/admin-posts-page';
 import { AdminResultsPage } from '../pages/admin/admin-results-page';
 import { AdminResultsWordcheckPage } from '../pages/admin/admin-results-wordcheck-page';
 import { AdminSettingsPage } from '../pages/admin/admin-settings-page';
+import { AdminAccountSettingsPage } from '../pages/admin/admin-account-settings-page';
 import { AdminUsersPage } from '../pages/admin/admin-users-page';
 import { BlogDetailPage } from '../pages/public/blog-detail-page';
 import { BlogListPage } from '../pages/public/blog-list-page';
@@ -34,6 +35,7 @@ import { HomePage } from '../pages/public/home-page';
 import { MockTestLandingPage } from '../pages/public/mock-test-landing-page';
 import { PortfolioPage } from '../pages/public/portfolio-page';
 import { WordCheckPage } from '../pages/public/word-check-page';
+import { CheckPhrasePage } from '../pages/public/check-phrase-page';
 import { WordReviewPage } from '../pages/public/word-review-page';
 import { CourseLessonsManagePage } from '../pages/shared/course-lessons-manage-page';
 import { StudentDashboardPage } from '../pages/student/student-dashboard-page';
@@ -44,6 +46,8 @@ import { StudentMessagesPage } from '../pages/student/student-messages-page';
 import { StudentMyCoursesPage } from '../pages/student/student-my-courses-page';
 import { StudentProfilePage } from '../pages/student/student-profile-page';
 import { StudentResultsPage } from '../pages/student/student-results-page';
+import { StudentWordcheckResultsPage } from '../pages/student/student-wordcheck-results-page';
+import { StudentSettingsPage } from '../pages/student/student-settings-page';
 import { TeacherCoursesPage } from '../pages/teacher/teacher-courses-page';
 import { TeacherDashboardPage } from '../pages/teacher/teacher-dashboard-page';
 import { TeacherExerciseItemCreatePage } from '../pages/teacher/teacher-exercise-item-create-page';
@@ -54,6 +58,7 @@ import { TeacherMockTestCreatePage } from '../pages/teacher/teacher-mock-test-cr
 import { TeacherMockTestEditorPage } from '../pages/teacher/teacher-mock-test-editor-page';
 import { TeacherMockTestsPage } from '../pages/teacher/teacher-mock-tests-page';
 import { TeacherProfilePage } from '../pages/teacher/teacher-profile-page';
+import { TeacherSettingsPage } from '../pages/teacher/teacher-settings-page';
 import { TeacherResultsPage } from '../pages/teacher/teacher-results-page';
 import { TeacherStudentsPage } from '../pages/teacher/teacher-students-page';
 import { NotFoundPage } from '../pages/system/not-found-page';
@@ -91,6 +96,7 @@ export const router = createBrowserRouter([
           { path: 'blog/:slug', Component: BlogDetailPage },
           { path: 'portfolio', Component: PortfolioPage },
           { path: 'wordcheck', Component: WordCheckPage },
+          { path: 'checkphrase', Component: CheckPhrasePage },
           { path: 'review', Component: WordReviewPage },
           {
             Component: AuthRedirectRoute,
@@ -121,6 +127,8 @@ export const router = createBrowserRouter([
                       { path: 'messages', Component: StudentMessagesPage },
                       { path: 'my-courses', Component: StudentMyCoursesPage },
                       { path: 'results', Component: StudentResultsPage },
+                      { path: 'wordcheck-results', Component: StudentWordcheckResultsPage },
+                      { path: 'settings', Component: StudentSettingsPage },
                       { path: 'mock-tests', Component: StudentMockTestsPage },
                     ],
                   },
@@ -147,6 +155,7 @@ export const router = createBrowserRouter([
                       { path: 'results', Component: TeacherResultsPage },
                       { path: 'students', Component: TeacherStudentsPage },
                       { path: 'messages', Component: TeacherMessagesPage },
+                      { path: 'settings', Component: TeacherSettingsPage },
                     ],
                   },
                 ],
@@ -175,6 +184,7 @@ export const router = createBrowserRouter([
                       { path: 'posts', Component: AdminPostsPage },
                       { path: 'messages', Component: AdminMessagesPage },
                       { path: 'settings', Component: AdminSettingsPage },
+                      { path: 'account-settings', Component: AdminAccountSettingsPage },
                     ],
                   },
                 ],

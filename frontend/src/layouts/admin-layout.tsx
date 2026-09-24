@@ -1,33 +1,37 @@
+import { useTranslation } from 'react-i18next';
 import { DashboardShell } from '../components/common/dashboard-shell';
 
-const adminNav = [
-  { label: 'Dashboard', to: '/admin/dashboard' },
-  { label: 'Nguoi dung', to: '/admin/users' },
-  {
-    label: 'Khoa hoc',
-    to: '/admin/courses',
-    children: [{ label: 'Tao khoa hoc', to: '/admin/courses/create' }],
-  },
-  {
-    label: 'Mock tests',
-    to: '/admin/mock-tests',
-    children: [{ label: 'Tao bai thi', to: '/admin/mock-tests/create' }],
-  },
-  {
-    label: 'Bai tap',
-    to: '/admin/exercises',
-    children: [
-      { label: 'Chu de on tap', to: '/admin/exercises' },
-      { label: 'Workspace bai tap', to: '/admin/exercises/items' },
-    ],
-  },
-  { label: 'Bang diem', to: '/admin/results' },
-  { label: 'Diem Wordcheck', to: '/admin/resultswordcheck' },
-  { label: 'Posts', to: '/admin/posts' },
-  { label: 'Messages', to: '/admin/messages' },
-  { label: 'Settings', to: '/admin/settings' },
-];
-
 export function AdminLayout() {
-  return <DashboardShell title="Admin Control" accent="quan tri" navItems={adminNav} />;
+  const { t } = useTranslation('navigation');
+
+  const adminNav = [
+    { label: t('common.dashboard'), to: '/admin/dashboard' },
+    { label: t('admin.users'), to: '/admin/users' },
+    {
+      label: t('admin.courses'),
+      to: '/admin/courses',
+      children: [{ label: t('admin.createCourse'), to: '/admin/courses/create' }],
+    },
+    {
+      label: t('admin.mockTests'),
+      to: '/admin/mock-tests',
+      children: [{ label: t('admin.createMockTest'), to: '/admin/mock-tests/create' }],
+    },
+    {
+      label: t('admin.exercises'),
+      to: '/admin/exercises',
+      children: [
+        { label: t('admin.exerciseTopics'), to: '/admin/exercises' },
+        { label: t('admin.exerciseWorkspace'), to: '/admin/exercises/items' },
+      ],
+    },
+    { label: t('admin.results'), to: '/admin/results' },
+    { label: t('admin.wordcheckResults'), to: '/admin/resultswordcheck' },
+    { label: t('admin.posts'), to: '/admin/posts' },
+    { label: t('common.messages'), to: '/admin/messages' },
+    { label: t('admin.systemSettings'), to: '/admin/settings' },
+    { label: t('admin.accountSettings'), to: '/admin/account-settings' },
+  ];
+
+  return <DashboardShell title={t('admin.workspaceTitle')} accent={t('admin.accent')} navItems={adminNav} />;
 }

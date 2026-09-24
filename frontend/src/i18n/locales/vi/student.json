@@ -1,0 +1,88 @@
+{
+  "dashboard": {
+    "eyebrow": "Tổng quan học tập",
+    "title": "Xin chào {{name}}",
+    "fallbackName": "bạn",
+    "description": "Theo dõi khóa học, tiến độ và các bài thi đề xuất để chọn việc học tiếp theo.",
+    "totalCourses": "Tổng khóa học",
+    "enrolledHint": "Đã đăng ký",
+    "activeCourses": "Đang học",
+    "activeHint": "Tiếp tục học",
+    "completedCourses": "Đã hoàn thành",
+    "completedHint": "Đã học xong",
+    "averageProgress": "Tiến độ trung bình",
+    "progressHint": "Trên toàn bộ khóa học",
+    "loading": "Đang tải tổng quan học tập...",
+    "coursesError": "Không tải được khóa học",
+    "testsError": "Không tải được bài thi đề xuất",
+    "continueLearning": "Tiếp tục học",
+    "currentCourses": "Khóa học đang học",
+    "recommendedTests": "Bài thi đề xuất",
+    "viewScores": "Xem bảng điểm"
+  },
+  "myCourses": {
+    "eyebrow": "Khóa học của tôi",
+    "title": "Khóa học đã đăng ký",
+    "description": "Theo dõi tiến độ và tiếp tục học các khóa học đã đăng ký.",
+    "loading": "Đang tải khóa học của bạn...",
+    "loadError": "Không tải được khóa học của bạn",
+    "empty": "Bạn chưa đăng ký khóa học nào.",
+    "browseCourses": "Khám phá khóa học",
+    "continueLearning": "Tiếp tục học"
+  },
+  "mockTests": {
+    "eyebrow": "Luyện thi",
+    "title": "Chọn bài thi để luyện tập",
+    "description": "Luyện tập với các bài thi công khai và bài thi trong khóa học của bạn.",
+    "loading": "Đang tải danh sách bài thi...",
+    "loadError": "Không tải được danh sách bài thi",
+    "empty": "Chưa có bài thi phù hợp.",
+    "start": "Bắt đầu làm bài"
+  },
+  "learning": {
+    "loading": "Đang tải nội dung học...",
+    "loadError": "Không tải được nội dung học",
+    "progress": "Tiến độ học tập",
+    "currentProgress": "Tiến độ hiện tại",
+    "progressSaved": "Đã cập nhật tiến độ học tập.",
+    "markComplete": "Đánh dấu đã học xong",
+    "completed": "Đã hoàn thành bài học",
+    "updating": "Đang cập nhật...",
+    "materials": "Tài liệu bài học"
+  },
+  "session": {
+    "exerciseEyebrow": "Làm bài tập",
+    "testEyebrow": "Làm bài thi",
+    "teacherExercisePreview": "Xem trước bài tập",
+    "teacherTestPreview": "Xem trước bài thi",
+    "description": "Làm bài theo hướng dẫn và theo dõi thời gian còn lại trước khi nộp.",
+    "loading": "Đang tải bài thi...",
+    "timeRemaining": "Thời gian còn lại",
+    "submitted": "Đã nộp bài",
+    "answered": "Số câu đã trả lời",
+    "totalQuestions": "Tổng số câu",
+    "loadError": "Không tải được bài thi",
+    "submitError": "Không nộp được bài thi",
+    "previousQuestion": "Câu trước",
+    "nextQuestion": "Câu tiếp",
+    "results": "Kết quả bài thi",
+    "score": "{{score}} điểm",
+    "summary": "Đúng {{correct}}/{{total}} câu. Thời gian làm bài: {{time}}.",
+    "retake": "Làm lại bài thi"
+  },
+  "wordcheckResults": {
+    "eyebrow": "Kết quả luyện tập",
+    "title": "Kết quả kiểm tra cụm từ",
+    "description": "Xem điểm số và tiến bộ của bạn qua các lần luyện tập.",
+    "loading": "Đang tải kết quả luyện tập...",
+    "loadError": "Không tải được kết quả luyện tập",
+    "empty": "Bạn chưa có kết quả luyện tập.",
+    "practice": "Luyện tập ngay"
+  },
+  "messages": {
+    "eyebrow": "Tin nhắn học viên",
+    "title": "Trao đổi với giảng viên và quản trị viên",
+    "description": "Đọc tin nhắn, phản hồi hoặc bắt đầu cuộc trao đổi mới.",
+    "recipientHint": "Bạn có thể gửi tin nhắn cho quản trị viên hoặc giảng viên phụ trách khóa học đã đăng ký."
+  }
+}

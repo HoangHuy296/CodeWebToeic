@@ -6,6 +6,7 @@ import com.ivyts.backend.relational.wordcheck.WordItemJpaRepository;
 import com.ivyts.backend.relational.wordcheck.WordItemJpaRepository.SetCount;
 import com.ivyts.backend.relational.wordcheck.WordScoreEntity;
 import com.ivyts.backend.relational.wordcheck.WordScoreJpaRepository;
+import com.ivyts.backend.security.AuthUser;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -75,6 +76,60 @@ public class WordCheckService {
         result.put("set", set);
         result.put("questions", questions);
         return result;
+    }
+
+    /**
+     * For /checkphrase's flashcard warm-up, shown before the student moves on to the graded
+     * /wordcheck typing drill. Unlike {@link #getQuestions}, this deliberately DOES send the
+     * English answer — a flashcard's whole point is to reveal it, there is nothing to grade.
+     */
+    public Map<String, Object> getFlashcards(String setSlug) {
+        List<WordItemEntity> items = wordItemJpaRepository.findBySetSlugOrderBySortOrderAsc(setSlug);
+        if (items.isEmpty()) {
+            throw new ApiException(HttpStatus.NOT_FOUND, "Word set not found");
+        }
+
+        Map<String, Object> set = new LinkedHashMap<>();
+        set.put("id", setSlug);
+        set.put("setName", items.get(0).getSetName());
+        set.put("itemCount", items.size());
+
+        List<Map<String, Object>> cards = items.stream().map(item -> {
+            Map<String, Object> card = new LinkedHashMap<>();
+            card.put("id", item.getId());
+            card.put("vi", item.getVi());
+            card.put("en", item.getEn());
+            card.put("note", item.getNote() == null ? "" : item.getNote());
+            return card;
+        }).toList();
+
+        Map<String, Object> result = new LinkedHashMap<>();
+        result.put("set", set);
+        result.put("cards", cards);
+        return result;
+    }
+
+    /** Only the calling student's own scores — used by the "Ket qua kiem tra" student page. */
+    public List<Map<String, Object>> listMyScores(String mode, AuthUser authUser) {
+        return wordScoreJpaRepository.findByStudentIdAndModeOrderByFinishedAtDesc(authUser.userId(), mode).stream()
+            .map(this::toScoreView)
+            .toList();
+    }
+
+    private Map<String, Object> toScoreView(WordScoreEntity score) {
+        Map<String, Object> view = new LinkedHashMap<>();
+        view.put("id", score.getId());
+        view.put("setName", score.getSetName());
+        view.put("setSlug", score.getSetSlug());
+        view.put("mode", score.getMode());
+        view.put("correctFirstTry", score.getCorrectFirstTry());
+        view.put("totalAnswered", score.getTotalAnswered());
+        view.put("totalInSet", score.getTotalInSet());
+        view.put("rounds", score.getRounds());
+        view.put("totalAttempts", score.getTotalAttempts());
+        view.put("durationSeconds", score.getDurationSeconds());
+        view.put("finishedAt", score.getFinishedAt());
+        return view;
     }
 
     public Map<String, Object> gradeAnswer(

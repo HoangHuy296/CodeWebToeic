@@ -5,6 +5,7 @@ type ThemeMode = 'light' | 'dark';
 interface ThemeContextValue {
   theme: ThemeMode;
   toggleTheme: () => void;
+  setTheme: (mode: ThemeMode) => void;
 }
 
 const STORAGE_KEY = 'ivyts-theme';
@@ -26,7 +27,7 @@ function getInitialTheme(): ThemeMode {
 }
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
-  const [theme, setTheme] = useState<ThemeMode>(getInitialTheme);
+  const [theme, setThemeState] = useState<ThemeMode>(getInitialTheme);
 
   useEffect(() => {
     document.documentElement.dataset.theme = theme;
@@ -40,7 +41,14 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
         const root = document.documentElement;
         root.classList.add(TRANSITION_CLASS);
         window.setTimeout(() => root.classList.remove(TRANSITION_CLASS), TRANSITION_MS);
-        setTheme((current) => (current === 'light' ? 'dark' : 'light'));
+        setThemeState((current) => (current === 'light' ? 'dark' : 'light'));
+      },
+      setTheme: (mode: ThemeMode) => {
+        if (mode === theme) return;
+        const root = document.documentElement;
+        root.classList.add(TRANSITION_CLASS);
+        window.setTimeout(() => root.classList.remove(TRANSITION_CLASS), TRANSITION_MS);
+        setThemeState(mode);
       },
     }),
     [theme],

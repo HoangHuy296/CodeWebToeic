@@ -29,6 +29,7 @@ public class User {
     private String avatarUrl;
     private String phone;
     private String bio;
+    private String preferredLanguage = "vi";
     private boolean isActive = true;
     private String refreshToken;
     private List<String> ownedCourseIds = new ArrayList<>();

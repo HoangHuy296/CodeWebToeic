@@ -11,6 +11,7 @@ public record PublicUserResponse(
     String phone,
     String bio,
     boolean isActive,
-    List<String> ownedCourseIds
+    List<String> ownedCourseIds,
+    String preferredLanguage
 ) {
 }

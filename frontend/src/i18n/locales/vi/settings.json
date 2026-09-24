@@ -1,0 +1,40 @@
+{
+  "tabs": {
+    "general": "Chung",
+    "appearance": "Giao diện",
+    "language": "Ngôn ngữ"
+  },
+  "general": {
+    "eyebrow": "cài đặt chung",
+    "title": "Cài đặt chung",
+    "description": "Thông tin tài khoản đang đăng nhập. Để sửa hồ sơ (tên, ảnh đại diện, số điện thoại...), vào trang Hồ sơ.",
+    "fullName": "Họ tên",
+    "email": "Email",
+    "role": "Vai trò",
+    "status": "Trạng thái",
+    "active": "Đang hoạt động",
+    "inactive": "Bị khóa",
+    "roleStudent": "Học viên",
+    "roleTeacher": "Giảng viên",
+    "roleAdmin": "Admin",
+    "editProfile": "Sửa hồ sơ",
+    "logout": "Đăng xuất",
+    "noName": "Chưa có tên"
+  },
+  "appearance": {
+    "eyebrow": "giao diện",
+    "title": "Giao diện",
+    "description": "Chọn giao diện sáng hoặc tối. Lựa chọn được lưu trên trình duyệt này và áp dụng cho toàn bộ trang web.",
+    "light": "Sáng (Light)",
+    "lightHint": "Nền sáng, chữ tối màu.",
+    "dark": "Tối (Dark)",
+    "darkHint": "Nền tối, chữ sáng màu."
+  },
+  "language": {
+    "eyebrow": "ngôn ngữ",
+    "title": "Ngôn ngữ",
+    "description": "Chọn ngôn ngữ giao diện. Lựa chọn được lưu vào tài khoản của bạn và áp dụng trên mọi thiết bị.",
+    "descriptionGuest": "Chọn ngôn ngữ giao diện. Vì bạn chưa đăng nhập, lựa chọn chỉ được lưu trên trình duyệt này.",
+    "current": "Đang sử dụng"
+  }
+}

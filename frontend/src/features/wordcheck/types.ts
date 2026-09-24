@@ -33,6 +33,19 @@ export interface QuestionsResponse {
   questions: Question[];
 }
 
+/** Unlike Question, this carries the English answer — /checkphrase reveals it on purpose. */
+export interface Flashcard {
+  id: string;
+  vi: string;
+  en: string;
+  note: string;
+}
+
+export interface FlashcardsResponse {
+  set: SetSummary;
+  cards: Flashcard[];
+}
+
 export interface DiffWord {
   w: string;
   ok: boolean;
@@ -41,6 +54,21 @@ export interface DiffWord {
 export interface WordDiff {
   typed: DiffWord[];
   correct: DiffWord[];
+}
+
+/** One finished /wordcheck (or /review) session — shown on the student's own "Ket qua kiem tra" page. */
+export interface WordScoreSummary {
+  id: string;
+  setName: string;
+  setSlug: string;
+  mode: SessionMode;
+  correctFirstTry: number;
+  totalAnswered: number;
+  totalInSet: number;
+  rounds: number;
+  totalAttempts: number;
+  durationSeconds: number;
+  finishedAt: string | null;
 }
 
 export interface GradeResult {

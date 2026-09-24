@@ -1,5 +1,6 @@
 export type AppRole = 'guest' | 'student' | 'teacher' | 'admin';
 export type GoogleAuthRole = 'student' | 'teacher';
+export type LanguageCode = 'vi' | 'en';
 
 export interface PublicUser {
   id: string;
@@ -11,6 +12,7 @@ export interface PublicUser {
   bio?: string;
   isActive: boolean;
   ownedCourseIds: string[];
+  preferredLanguage: LanguageCode;
 }
 
 export interface AuthPayload {
@@ -33,6 +35,7 @@ export interface RegisterInput extends LoginInput {
   fullName: string;
   phone?: string;
   intendedRole: GoogleAuthRole;
+  preferredLanguage?: LanguageCode;
 }
 
 export interface UpdateProfileInput {

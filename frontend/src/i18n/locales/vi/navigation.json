@@ -1,0 +1,65 @@
+{
+  "header": {
+    "home": "Trang chủ",
+    "wordcheck": "Kiểm tra",
+    "checkphrase": "Cụm từ",
+    "review": "Ôn tập",
+    "contact": "Liên hệ",
+    "login": "Đăng nhập",
+    "register": "Đăng ký",
+    "openMenu": "Mở menu"
+  },
+  "footer": {
+    "tagline": "English learning CRM cho TOEIC, IELTS và lớp học online có tiến độ rõ ràng.",
+    "description": "Khóa học, mock test, learning progress và inbox nội bộ được gom trong một hệ thống cho học viên, giảng viên và admin.",
+    "navigation": "Điều hướng",
+    "courses": "Khóa học",
+    "practice": "Luyện thi",
+    "blog": "Bài viết",
+    "resources": "Tài nguyên",
+    "teacherFeedback": "Giảng viên và feedback",
+    "studyGuides": "Study guides",
+    "adminPortal": "Admin portal"
+  },
+  "common": {
+    "dashboard": "Dashboard",
+    "profile": "Hồ sơ",
+    "messages": "Tin nhắn",
+    "settings": "Cài Đặt",
+    "logout": "Đăng xuất"
+  },
+  "student": {
+    "workspaceTitle": "Student Workspace",
+    "accent": "học viên",
+    "myCourses": "Khóa học của tôi",
+    "results": "Kết quả bài làm",
+    "wordcheckResults": "Kết quả kiểm tra",
+    "mockTests": "Luyện thi"
+  },
+  "teacher": {
+    "workspaceTitle": "Teacher Workspace",
+    "accent": "giảng viên",
+    "courses": "Khóa học",
+    "exercises": "Bài tập",
+    "mockTests": "Mock tests",
+    "results": "Kết quả bài làm",
+    "students": "Học viên"
+  },
+  "admin": {
+    "workspaceTitle": "Admin Control",
+    "accent": "quản trị",
+    "users": "Người dùng",
+    "courses": "Khóa học",
+    "createCourse": "Tạo khóa học",
+    "mockTests": "Mock tests",
+    "createMockTest": "Tạo bài thi",
+    "exercises": "Bài tập",
+    "exerciseTopics": "Chủ đề ôn tập",
+    "exerciseWorkspace": "Workspace bài tập",
+    "results": "Bảng điểm",
+    "wordcheckResults": "Điểm Wordcheck",
+    "posts": "Posts",
+    "systemSettings": "Cài đặt hệ thống",
+    "accountSettings": "Cài đặt tài khoản"
+  }
+}

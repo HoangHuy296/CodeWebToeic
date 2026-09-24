@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import type { DiffWord, Question } from './types';
 import type { SessionState } from './state/types';
 import { nextButtonLabel, questionsLeftInRound, summarize } from './state/selectors';
@@ -49,6 +50,7 @@ function QuizCard({
   message: string | null;
   onSubmit: (typed: string) => void;
 }) {
+  const { t } = useTranslation('wordcheck');
   const [typed, setTyped] = useState('');
   const checking = state.phase === 'checking';
 
@@ -64,8 +66,8 @@ function QuizCard({
       className="rounded-[2rem] border border-stroke bg-white p-6 shadow-[0_18px_55px_rgba(15,23,42,0.06)] lg:p-8"
     >
       <div className="flex flex-wrap items-center justify-between gap-3 text-xs font-semibold uppercase tracking-[0.24em] text-slate-500">
-        <span>Vong {state.round}: con {questionsLeftInRound(state)} cum</span>
-        <span>Da thuoc {state.mastered}/{state.total}</span>
+        <span>{t('session.roundStatus', { round: state.round, count: questionsLeftInRound(state) })}</span>
+        <span>{t('session.masteredStatus', { mastered: state.mastered, total: state.total })}</span>
       </div>
 
       <div className="mt-5 flex flex-wrap gap-2">
@@ -82,7 +84,7 @@ function QuizCard({
       <p className="mt-4 text-2xl font-extrabold leading-snug text-slate-950">{question.vi}</p>
       {question.accents ? (
         <p className="mt-2 text-xs text-slate-500">
-          Dap an co the chua ky tu co dau: <span className="font-semibold">{question.accents}</span>
+          {t('session.accentsHint')} <span className="font-semibold">{question.accents}</span>
         </p>
       ) : null}
 
@@ -91,7 +93,7 @@ function QuizCard({
         value={typed}
         onChange={(e) => setTyped(e.target.value)}
         disabled={checking}
-        placeholder="Go cau tra loi bang tieng Anh..."
+        placeholder={t('session.answerPlaceholder')}
         className="mt-6 w-full rounded-2xl border border-stroke bg-white px-5 py-4 text-base font-semibold text-slate-950 outline-none transition focus:border-teal-400 disabled:opacity-60"
       />
 
@@ -102,7 +104,7 @@ function QuizCard({
         disabled={checking}
         className="btn-brand mt-5 w-full rounded-full px-5 py-3.5 text-sm font-semibold text-white transition disabled:cursor-not-allowed disabled:opacity-70"
       >
-        {checking ? 'Dang cham...' : 'Nop cau tra loi'}
+        {checking ? t('session.checking') : t('session.submit')}
       </button>
     </form>
   );
@@ -117,6 +119,7 @@ function FeedbackCard({
   question: Question;
   onNext: () => void;
 }) {
+  const { t } = useTranslation('wordcheck');
   const fb = state.feedback;
   if (!fb) return null;
   const { result } = fb;
@@ -131,11 +134,11 @@ function FeedbackCard({
       <p className={['text-lg font-extrabold', result.ok ? 'text-emerald-700' : 'text-rose-700'].join(' ')}>
         {result.ok
           ? fb.attempt === 1
-            ? 'Chinh xac!'
-            : 'Dung roi, cum tu nay da thuoc.'
+            ? t('session.correctFirstTry')
+            : t('session.correctRetry')
           : fb.giveUp
-            ? 'Chua dung. Cum tu nay tinh la chua thuoc, hay on lai sau.'
-            : 'Chua dung. Ban co the on lai cum tu nay o cuoi vong.'}
+            ? t('session.wrongFinal')
+            : t('session.wrongRetry')}
       </p>
 
       {result.ok ? (
@@ -143,7 +146,7 @@ function FeedbackCard({
           <p className="text-base font-semibold text-slate-950">{result.matchedText}</p>
           {result.matched > 0 ? (
             <p className="mt-1 text-xs text-slate-600">
-              Cach viet cua ban duoc chap nhan. Cum tu chuan: {result.canonical}
+              {t('session.acceptedSpelling', { canonical: result.canonical })}
             </p>
           ) : null}
         </div>
@@ -151,18 +154,18 @@ function FeedbackCard({
         <div className="mt-3 space-y-2">
           <div>
             <DiffLine words={result.diff.typed} badClass="text-rose-600 line-through decoration-2" />
-            <p className="text-xs text-slate-500">Ban go</p>
+            <p className="text-xs text-slate-500">{t('session.typedLabel')}</p>
           </div>
           <div>
             <DiffLine words={result.diff.correct} badClass="text-amber-600 underline decoration-2 underline-offset-4" />
-            <p className="text-xs text-slate-500">Dap an</p>
+            <p className="text-xs text-slate-500">{t('session.correctLabel')}</p>
           </div>
           {result.otherAnswers.length > 0 ? (
-            <p className="text-sm text-slate-600">Cach viet khac cung duoc: {result.otherAnswers.join(' / ')}</p>
+            <p className="text-sm text-slate-600">{t('session.otherAnswers', { list: result.otherAnswers.join(' / ') })}</p>
           ) : null}
           {result.imeSuspected ? (
             <p className="text-sm font-semibold text-amber-700">
-              Co ve bo go tieng Viet dang bat: chuyen sang go tieng Anh (E) roi go lai.
+              {t('session.imeWarning')}
             </p>
           ) : null}
         </div>
@@ -170,7 +173,7 @@ function FeedbackCard({
 
       {result.example ? (
         <div className="mt-4 rounded-2xl border border-stroke bg-white/80 p-4">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-500">Vi du</p>
+          <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-500">{t('session.example')}</p>
           <HighlightedLine text={result.example.en} phrase={result.canonical} className="mt-1 text-sm font-medium text-slate-900" />
           <HighlightedLine text={result.example.vi} phrase={question.vi} className="mt-1 text-sm text-slate-600" />
         </div>
@@ -183,45 +186,46 @@ function FeedbackCard({
         onClick={onNext}
         className="btn-brand mt-5 w-full rounded-full px-5 py-3.5 text-sm font-semibold text-white transition"
       >
-        {nextButtonLabel(state)}
+        {nextButtonLabel(state, t)}
       </button>
     </div>
   );
 }
 
 function RoundEndCard({ state, onReview, onSubmitNow }: { state: SessionState; onReview: () => void; onSubmitNow: () => void }) {
+  const { t } = useTranslation('wordcheck');
   const ok = state.roundTotal - state.wrong.length;
   const canReview = state.wrong.length > 0 && state.round < state.maxRounds;
 
   return (
     <div className="rounded-[2rem] border border-stroke bg-white p-6 text-center shadow-[0_18px_55px_rgba(15,23,42,0.06)] lg:p-8">
-      <h2 className="text-2xl font-extrabold text-slate-950">Xong vong {state.round}</h2>
+      <h2 className="text-2xl font-extrabold text-slate-950">{t('session.roundDone', { round: state.round })}</h2>
       <p className="mt-2 text-sm text-slate-600">
-        Dung {ok}/{state.roundTotal}, sai {state.wrong.length} cum.
+        {t('session.roundSummary', { ok, total: state.roundTotal, wrong: state.wrong.length })}
       </p>
 
       {canReview ? (
         <>
           <p className="mt-3 text-xs text-slate-500">
-            On lai giup ban nho chac hon. Diem "dung ngay lan dau" van tinh theo vong 1.
+            {t('session.reviewHelps')}
           </p>
           <div className="mt-5 grid gap-3 sm:grid-cols-2">
             <button type="button" onClick={onReview} className="btn-brand rounded-full px-5 py-3.5 text-sm font-semibold text-white">
-              On lai {state.wrong.length} cum sai (vong {state.round + 1})
+              {t('session.reviewWrong', { count: state.wrong.length, round: state.round + 1 })}
             </button>
             <button
               type="button"
               onClick={onSubmitNow}
               className="rounded-full border border-stroke bg-white px-5 py-3.5 text-sm font-semibold text-slate-800 transition hover:border-teal-300 hover:bg-teal-50"
             >
-              Nop va nhan ket qua
+              {t('session.submitAndSeeResult')}
             </button>
           </div>
-          <p className="mt-3 text-xs text-slate-500">Con toi da {state.maxRounds - state.round} vong on lai.</p>
+          <p className="mt-3 text-xs text-slate-500">{t('session.roundsLeft', { count: state.maxRounds - state.round })}</p>
         </>
       ) : (
         <button type="button" onClick={onSubmitNow} className="btn-brand mt-6 w-full rounded-full px-5 py-3.5 text-sm font-semibold text-white">
-          Nop va nhan ket qua
+          {t('session.submitAndSeeResult')}
         </button>
       )}
     </div>
@@ -249,6 +253,8 @@ function ResultCard({
   onNextChapter: (() => void) | null;
   nextSetLabel: string | null;
 }) {
+  const { t, i18n } = useTranslation('wordcheck');
+  const locale = i18n.language === 'en' ? 'en-US' : 'vi-VN';
   const summary = summarize(state);
   const wrongCount = state.wrong.length;
 
@@ -259,35 +265,35 @@ function ResultCard({
     const progress = loadProgress(state.name, setId);
     const next = nextReviewDay(questions, progress);
     if (next === null || next <= dayIndex()) return null;
-    return dayToDate(next).toLocaleDateString('vi-VN');
-  }, [state.mode, state.name, setId, questions]);
+    return dayToDate(next).toLocaleDateString(locale);
+  }, [state.mode, state.name, setId, questions, locale]);
 
-  const finishedAtLabel = state.finishedAt ? new Date(state.finishedAt).toLocaleString('vi-VN') : '';
+  const finishedAtLabel = state.finishedAt ? new Date(state.finishedAt).toLocaleString(locale) : '';
 
   return (
     <div className="rounded-[2rem] border border-stroke bg-white p-6 shadow-[0_18px_55px_rgba(15,23,42,0.06)] lg:p-8">
-      <h2 className="text-3xl font-extrabold text-emerald-700">Hoan thanh! Lam tot lam!</h2>
+      <h2 className="text-3xl font-extrabold text-emerald-700">{t('session.finishedTitle')}</h2>
       <p className="mt-2 text-sm text-slate-600">
-        {state.name} - {finishedAtLabel} - {state.mode === 'schedule' ? 'On theo lich' : 'Luyen them'}
+        {state.name} - {finishedAtLabel} - {state.mode === 'schedule' ? t('session.modeSchedule') : t('session.modeExtra')}
       </p>
 
       <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
-        <StatTile value={`${summary.firstOk}/${summary.total}`} label="dung ngay lan dau" />
-        <StatTile value={String(summary.rounds)} label="so vong" />
-        <StatTile value={String(summary.attempts)} label="tong lan go" />
-        <StatTile value={fmtTime(summary.elapsedMs)} label="thoi gian" />
+        <StatTile value={`${summary.firstOk}/${summary.total}`} label={t('session.statFirstOk')} />
+        <StatTile value={String(summary.rounds)} label={t('session.statRounds')} />
+        <StatTile value={String(summary.attempts)} label={t('session.statAttempts')} />
+        <StatTile value={fmtTime(summary.elapsedMs)} label={t('session.statTime')} />
       </div>
 
-      {nextInfo ? <p className="mt-4 text-sm text-slate-600">Lan on tiep theo: {nextInfo}</p> : null}
+      {nextInfo ? <p className="mt-4 text-sm text-slate-600">{t('session.nextReviewDate', { date: nextInfo })}</p> : null}
 
       <div className="mt-4">
-        {saveStatus === 'saving' ? <p className="text-sm text-slate-500">Dang luu diem...</p> : null}
-        {saveStatus === 'saved' ? <p className="text-sm font-semibold text-emerald-700">Da luu diem vao bang diem.</p> : null}
+        {saveStatus === 'saving' ? <p className="text-sm text-slate-500">{t('session.saving')}</p> : null}
+        {saveStatus === 'saved' ? <p className="text-sm font-semibold text-emerald-700">{t('session.saved')}</p> : null}
         {saveStatus === 'failed' ? (
           <div className="flex flex-wrap items-center gap-3">
-            <p className="text-sm font-semibold text-rose-600">Chua luu duoc diem. Ket qua ban lam van duoc giu.</p>
+            <p className="text-sm font-semibold text-rose-600">{t('session.saveFailed')}</p>
             <button type="button" onClick={onRetrySave} className="rounded-full border border-stroke bg-white px-4 py-2 text-xs font-semibold text-slate-700">
-              Thu lai
+              {t('session.retry')}
             </button>
           </div>
         ) : null}
@@ -297,11 +303,11 @@ function ResultCard({
         <table className="w-full min-w-[520px] text-left text-sm">
           <thead className="bg-slate-50 text-xs uppercase tracking-[0.14em] text-slate-500">
             <tr>
-              <th className="px-4 py-3">Cum tu</th>
-              <th className="px-4 py-3">Lan dau</th>
-              <th className="px-4 py-3">So lan go</th>
-              <th className="px-4 py-3">Cuoi cung</th>
-              <th className="px-4 py-3">Thoi gian</th>
+              <th className="px-4 py-3">{t('session.tableWord')}</th>
+              <th className="px-4 py-3">{t('session.tableFirst')}</th>
+              <th className="px-4 py-3">{t('session.tableAttempts')}</th>
+              <th className="px-4 py-3">{t('session.tableLast')}</th>
+              <th className="px-4 py-3">{t('session.tableTime')}</th>
             </tr>
           </thead>
           <tbody>
@@ -309,11 +315,11 @@ function ResultCard({
               <tr key={row.n} className="border-t border-stroke/70">
                 <td className="px-4 py-2.5 text-slate-500">{row.n}</td>
                 <td className={['px-4 py-2.5 font-semibold', row.firstOk ? 'text-emerald-700' : 'text-rose-600'].join(' ')}>
-                  {row.firstOk ? 'Dung' : 'Sai'}
+                  {row.firstOk ? t('session.correct') : t('session.wrong')}
                 </td>
                 <td className="px-4 py-2.5 text-slate-700">{row.attempts}</td>
                 <td className={['px-4 py-2.5 font-semibold', row.mastered ? 'text-emerald-700' : 'text-rose-600'].join(' ')}>
-                  {row.mastered ? 'Da thuoc' : 'Chua thuoc'}
+                  {row.mastered ? t('session.mastered') : t('session.notMastered')}
                 </td>
                 <td className="px-4 py-2.5 text-slate-700">{fmtTime(row.ms)}</td>
               </tr>
@@ -329,12 +335,12 @@ function ResultCard({
             onClick={onReviewWrong}
             className="btn-brand rounded-full px-5 py-3.5 text-sm font-semibold text-white"
           >
-            On lai {wrongCount} cum chua thuoc
+            {t('session.reviewWrongFinished', { count: wrongCount })}
           </button>
         ) : (
           <div className="flex items-center justify-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-5 py-3.5 text-sm font-semibold text-emerald-700">
             <CheckIcon />
-            Da thuoc het bo nay
+            {t('session.allMastered')}
           </div>
         )}
 
@@ -344,13 +350,13 @@ function ResultCard({
             onClick={onNextChapter}
             className="rounded-full border border-stroke bg-white px-5 py-3.5 text-sm font-semibold text-slate-800 transition hover:border-teal-300 hover:bg-teal-50"
           >
-            On tiep {nextSetLabel}
+            {t('session.nextChapter', { name: nextSetLabel })}
           </button>
         ) : null}
       </div>
 
       <button type="button" onClick={onExit} className="mt-3 rounded-full border border-stroke bg-white px-5 py-3 text-sm font-semibold text-slate-800">
-        Quay lai chon bo
+        {t('session.backToPicker')}
       </button>
     </div>
   );
