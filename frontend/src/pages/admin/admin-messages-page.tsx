@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useTranslation } from 'react-i18next';
 import { QueryErrorState, QueryLoadingState } from '../../components/common/query-state';
 import { getApiErrorMessage } from '../../lib/api';
 import { formatDateTime } from '../../lib/format';
@@ -20,6 +21,11 @@ function resolveReplyTarget(message: SupportMessage, currentUserId?: string | nu
 }
 
 export function AdminMessagesPage() {
+  const { t } = useTranslation('workspace');
+  const { t: tAdmin } = useTranslation('admin');
+  const { t: tCommon } = useTranslation('common');
+  const { i18n } = useTranslation();
+  const dateLocale = i18n.language === 'en' ? 'en-US' : 'vi-VN';
   const { user } = useAuth();
   const queryClient = useQueryClient();
   const [statusFilter, setStatusFilter] = useState<'all' | SupportMessage['status']>('all');
@@ -58,7 +64,7 @@ export function AdminMessagesPage() {
       setComposeSubject('');
       setComposeContent('');
       setReplyContent('');
-      setComposeSuccess('Tin nhan da duoc gui thanh cong.');
+      setComposeSuccess(t('messages.sent'));
       setStatusFilter('all');
       setRoleFilter('all');
       setSearchKeyword('');
@@ -97,31 +103,29 @@ export function AdminMessagesPage() {
     return matchesStatus && matchesRole && matchesKeyword;
   });
   const selectedMessage = messagesQuery.data?.find((message) => message.id === selectedMessageId) ?? messages[0];
-  const selectedRoleLabel =
-    selectedMessage?.recipientUser?.role ?? selectedMessage?.recipientRole ?? selectedMessage?.assignedTo?.role ?? 'contact';
+  const selectedRole =
+    selectedMessage?.recipientUser?.role ?? selectedMessage?.recipientRole ?? selectedMessage?.assignedTo?.role;
   const replyTarget = selectedMessage ? resolveReplyTarget(selectedMessage, user?.id) : undefined;
 
   return (
     <div className="space-y-8">
       <section className="rounded-[2rem] border border-stroke bg-white/90 p-8 shadow-[0_24px_70px_rgba(15,23,42,0.08)]">
-        <p className="text-xs font-semibold tracking-[0.35em] text-teal-700 uppercase">admin messages</p>
-        <h1 className="mt-4 text-4xl font-extrabold tracking-tight text-slate-950">Inbox van hanh cho lien he, tu van va support.</h1>
-        <p className="mt-4 max-w-3xl text-sm leading-8 text-slate-600">
-          Admin co the doc luong contact messages thuc te, loc theo unread/read/replied va danh dau trang thai ngay trong man hinh nay.
-        </p>
+        <p className="text-xs font-semibold tracking-[0.35em] text-teal-700 uppercase">{tAdmin('messages.eyebrow')}</p>
+        <h1 className="mt-4 text-4xl font-extrabold tracking-tight text-slate-950">{tAdmin('messages.title')}</h1>
+        <p className="mt-4 max-w-3xl text-sm leading-8 text-slate-600">{tAdmin('messages.description')}</p>
       </section>
 
       <section className="grid gap-6 xl:grid-cols-[0.95fr_1.05fr]">
         <article className="rounded-[1.8rem] border border-stroke bg-white p-6 shadow-[0_16px_50px_rgba(15,23,42,0.06)]">
           <div className="flex items-center justify-between gap-4">
-            <h2 className="text-2xl font-extrabold tracking-tight text-slate-950">Inbox</h2>
+            <h2 className="text-2xl font-extrabold tracking-tight text-slate-950">{t('messages.inbox')}</h2>
           </div>
 
           <div className="mt-5 grid gap-3">
             <input
               value={searchKeyword}
               onChange={(event) => setSearchKeyword(event.target.value)}
-              placeholder="Tim theo email, topic, summary..."
+              placeholder={t('messages.searchPlaceholder')}
               className="rounded-2xl border border-stroke bg-slate-50 px-4 py-3 text-sm outline-none focus:border-teal-400"
             />
             <div className="grid gap-3 sm:grid-cols-2">
@@ -130,28 +134,28 @@ export function AdminMessagesPage() {
                 onChange={(event) => setStatusFilter(event.target.value as typeof statusFilter)}
                 className="rounded-2xl border border-stroke bg-slate-50 px-4 py-3 text-sm outline-none focus:border-teal-400"
               >
-                <option value="all">Tat ca status</option>
-                <option value="unread">Unread</option>
-                <option value="read">Read</option>
-                <option value="replied">Replied</option>
+                <option value="all">{tCommon('fields.allStatuses')}</option>
+                <option value="unread">{tCommon('statuses.unread')}</option>
+                <option value="read">{tCommon('statuses.read')}</option>
+                <option value="replied">{tCommon('statuses.replied')}</option>
               </select>
               <select
                 value={roleFilter}
                 onChange={(event) => setRoleFilter(event.target.value as typeof roleFilter)}
                 className="rounded-2xl border border-stroke bg-slate-50 px-4 py-3 text-sm outline-none focus:border-teal-400"
               >
-                <option value="all">Tat ca roles</option>
-                <option value="student">Student</option>
-                <option value="teacher">Teacher</option>
-                <option value="admin">Admin</option>
+                <option value="all">{tCommon('fields.allRoles')}</option>
+                <option value="student">{tCommon('roles.student')}</option>
+                <option value="teacher">{tCommon('roles.teacher')}</option>
+                <option value="admin">{tCommon('roles.admin')}</option>
               </select>
             </div>
           </div>
 
-          {messagesQuery.isPending ? <div className="mt-6"><QueryLoadingState title="Dang tai inbox..." /></div> : null}
+          {messagesQuery.isPending ? <div className="mt-6"><QueryLoadingState title={t('messages.loading')} /></div> : null}
           {messagesQuery.error ? (
             <div className="mt-6">
-              <QueryErrorState title="Khong tai duoc messages" description={getApiErrorMessage(messagesQuery.error)} />
+              <QueryErrorState title={t('messages.loadError')} description={getApiErrorMessage(messagesQuery.error)} />
             </div>
           ) : null}
 
@@ -174,12 +178,16 @@ export function AdminMessagesPage() {
                       message.status === 'unread' ? 'bg-amber-100 text-amber-800' : message.status === 'replied' ? 'bg-teal-100 text-teal-800' : 'bg-slate-200 text-slate-700',
                     ].join(' ')}
                   >
-                    {message.status}
+                    {tCommon(`statuses.${message.status}`)}
                   </span>
                 </div>
                 <div className="mt-2 flex flex-wrap items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
                   <span className="rounded-full bg-slate-200 px-2.5 py-1 text-slate-700">
-                    {message.recipientUser?.role ?? message.recipientRole ?? message.messageType ?? 'contact'}
+                    {message.recipientUser?.role
+                      ? tCommon(`roles.${message.recipientUser.role}`)
+                      : message.recipientRole
+                        ? tCommon(`roles.${message.recipientRole}`)
+                        : t('messages.contactRole')}
                   </span>
                   <span>{message.email}</span>
                 </div>
@@ -213,29 +221,29 @@ export function AdminMessagesPage() {
                   </div>
                   <div className="flex flex-wrap gap-2">
                     <span className="rounded-full bg-slate-200 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-700">
-                      {selectedMessage.status}
+                      {tCommon(`statuses.${selectedMessage.status}`)}
                     </span>
                     <span className="rounded-full bg-violet-100 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-violet-700">
-                      {selectedRoleLabel}
+                      {selectedRole ? tCommon(`roles.${selectedRole}`) : t('messages.contactRole')}
                     </span>
                   </div>
                 </div>
 
                 <div className="mt-4 grid gap-2 text-sm text-slate-500">
-                  <p>Tao luc: {formatDateTime(selectedMessage.createdAt)}</p>
-                  <p>Read at: {formatDateTime(selectedMessage.readAt)}</p>
-                  <p>Replied at: {formatDateTime(selectedMessage.repliedAt)}</p>
+                  <p>{t('messages.createdAt')}: {formatDateTime(selectedMessage.createdAt, dateLocale)}</p>
+                  <p>{t('messages.readAt')}: {formatDateTime(selectedMessage.readAt, dateLocale)}</p>
+                  <p>{t('messages.repliedAt')}: {formatDateTime(selectedMessage.repliedAt, dateLocale)}</p>
                   <p>
-                    Assigned to:{' '}
-                    {selectedMessage.assignedTo?.fullName ?? selectedMessage.assignedTo?.email ?? 'Chua co'}
+                    {t('messages.assignedTo')}:{' '}
+                    {selectedMessage.assignedTo?.fullName ?? selectedMessage.assignedTo?.email ?? tCommon('states.notUpdated')}
                   </p>
                   <p>
-                    Recipient:{' '}
+                    {t('messages.recipient')}:{' '}
                     {selectedMessage.recipientUser?.fullName ?? selectedMessage.recipientUser?.email ?? selectedMessage.email}
                   </p>
                   <p>
-                    Sender:{' '}
-                    {selectedMessage.senderUser?.fullName ?? selectedMessage.senderUser?.email ?? 'Lead/Public contact'}
+                    {t('messages.sender')}:{' '}
+                    {selectedMessage.senderUser?.fullName ?? selectedMessage.senderUser?.email ?? t('messages.publicContact')}
                   </p>
                 </div>
               </div>
@@ -267,12 +275,12 @@ export function AdminMessagesPage() {
                 }}
               >
                 <label className="grid gap-2 text-sm font-semibold text-slate-700">
-                  Tra loi
+                  {t('messages.reply')}
                   <textarea
                     rows={4}
                     value={replyContent}
                     onChange={(event) => setReplyContent(event.target.value)}
-                    placeholder="Nhap noi dung phan hoi..."
+                    placeholder={t('messages.replyPlaceholder')}
                     className="rounded-[1.3rem] border border-stroke bg-white px-4 py-3 text-sm outline-none focus:border-teal-400"
                   />
                 </label>
@@ -281,7 +289,7 @@ export function AdminMessagesPage() {
                   disabled={sendMutation.isPending || !replyTarget?.id || replyContent.trim().length < 3}
                   className="rounded-2xl bg-slate-950 px-5 py-3 text-sm font-semibold text-white disabled:opacity-60"
                 >
-                  {sendMutation.isPending ? 'Dang gui phan hoi...' : 'Gui phan hoi'}
+                  {sendMutation.isPending ? t('messages.sendingReply') : t('messages.sendReply')}
                 </button>
               </form>
 
@@ -292,7 +300,7 @@ export function AdminMessagesPage() {
                   onClick={() => markMutation.mutate({ id: selectedMessage.id, status: 'read' })}
                   className="rounded-2xl border border-stroke bg-white px-5 py-3 text-sm font-semibold text-slate-900"
                 >
-                  Danh dau da doc
+                  {t('messages.markRead')}
                 </button>
                 <button
                   type="button"
@@ -300,20 +308,20 @@ export function AdminMessagesPage() {
                   onClick={() => markMutation.mutate({ id: selectedMessage.id, status: 'replied' })}
                   className="rounded-2xl bg-slate-950 px-5 py-3 text-sm font-semibold text-white"
                 >
-                  Danh dau da phan hoi
+                  {t('messages.markReplied')}
                 </button>
               </div>
             </div>
           ) : (
             <div className="mt-6 rounded-2xl border border-dashed border-stroke px-4 py-6 text-sm text-slate-500">
-              Chua co message nao trong inbox.
+              {t('messages.empty')}
             </div>
           )}
 
           <div className="mt-8 grid gap-6">
             <div>
-              <h2 className="text-2xl font-extrabold tracking-tight text-slate-950">Gui tin nhan noi bo</h2>
-              <p className="mt-2 text-sm text-slate-600">Admin co the gui message truc tiep cho teacher va student ngay trong inbox nay.</p>
+              <h2 className="text-2xl font-extrabold tracking-tight text-slate-950">{t('messages.composeInternal')}</h2>
+              <p className="mt-2 text-sm text-slate-600">{t('messages.composeInternalHint')}</p>
             </div>
 
             <form
@@ -335,23 +343,23 @@ export function AdminMessagesPage() {
             >
               <div className="grid gap-4 sm:grid-cols-2">
               <label className="grid gap-2 text-sm font-semibold text-slate-700">
-                Nguoi nhan
+                {t('messages.recipient')}
                 <select
                   value={recipientUserId}
                   onChange={(event) => setRecipientUserId(event.target.value)}
                   disabled={availableRecipients.length === 0}
                   className="rounded-2xl border border-stroke bg-white px-4 py-3 text-sm outline-none focus:border-teal-400"
                 >
-                  {availableRecipients.length === 0 ? <option value="">Chua co nguoi nhan hop le</option> : null}
+                  {availableRecipients.length === 0 ? <option value="">{t('messages.noRecipients')}</option> : null}
                   {availableRecipients.map((recipient) => (
                     <option key={recipient.id} value={recipient.id}>
-                      {recipient.fullName} - {recipient.role} - {recipient.email}
+                      {recipient.fullName} - {tCommon(`roles.${recipient.role}`)} - {recipient.email}
                       </option>
                     ))}
                   </select>
                 </label>
                 <label className="grid gap-2 text-sm font-semibold text-slate-700">
-                  Topic
+                  {t('messages.subject')}
                   <input
                     value={composeSubject}
                     onChange={(event) => setComposeSubject(event.target.value)}
@@ -361,7 +369,7 @@ export function AdminMessagesPage() {
               </div>
 
               <label className="grid gap-2 text-sm font-semibold text-slate-700">
-                Noi dung
+                {t('messages.content')}
                 <textarea
                   rows={4}
                   value={composeContent}
@@ -371,7 +379,7 @@ export function AdminMessagesPage() {
               </label>
 
               {sendMutation.error ? (
-                <QueryErrorState title="Khong gui duoc tin nhan" description={getApiErrorMessage(sendMutation.error)} />
+                <QueryErrorState title={t('messages.sendError')} description={getApiErrorMessage(sendMutation.error)} />
               ) : null}
               {composeSuccess ? (
                 <div className="rounded-2xl border border-teal-200 bg-teal-50 px-4 py-3 text-sm font-semibold text-teal-700">
@@ -379,10 +387,10 @@ export function AdminMessagesPage() {
                 </div>
               ) : null}
               {composeSubjectLength > 0 && composeSubjectLength < 3 ? (
-                <p className="text-sm text-amber-700">Topic can it nhat 3 ky tu.</p>
+                <p className="text-sm text-amber-700">{t('messages.subjectTooShort')}</p>
               ) : null}
               {composeContentLength > 0 && composeContentLength < 10 ? (
-                <p className="text-sm text-amber-700">Noi dung can it nhat 10 ky tu.</p>
+                <p className="text-sm text-amber-700">{t('messages.contentTooShort')}</p>
               ) : null}
 
               <button
@@ -394,7 +402,7 @@ export function AdminMessagesPage() {
                 }
                 className="rounded-2xl bg-slate-950 px-5 py-3 text-sm font-semibold text-white disabled:opacity-60"
               >
-                {sendMutation.isPending ? 'Dang gui...' : 'Gui tin nhan'}
+                {sendMutation.isPending ? tCommon('states.sending') : t('messages.send')}
               </button>
             </form>
           </div>

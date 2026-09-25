@@ -1,19 +1,26 @@
 import { useQuery } from '@tanstack/react-query';
+import { useTranslation } from 'react-i18next';
 import { PageHero } from '../../components/common/page-hero';
 import { QueryErrorState, QueryLoadingState } from '../../components/common/query-state';
 import { getApiErrorMessage } from '../../lib/api';
 import { formatDateTime } from '../../lib/format';
 import { wordCheckApi } from '../../lib/word-check-api';
 
-function formatDurationSeconds(value: number) {
-  if (!value) return '0s';
-  const minutes = Math.floor(value / 60);
-  const seconds = value % 60;
-  return minutes ? `${minutes}p ${seconds.toString().padStart(2, '0')}s` : `${seconds}s`;
-}
-
 /** "Ket qua kiem tra": the student's own /wordcheck practice history. */
 export function StudentWordcheckResultsPage() {
+  const { t, i18n } = useTranslation('student');
+  const { t: tCommon } = useTranslation('common');
+  const dateLocale = i18n.language === 'en' ? 'en-US' : 'vi-VN';
+
+  function formatDurationSeconds(value: number) {
+    if (!value) return tCommon('counts.seconds', { count: 0 });
+    const minutes = Math.floor(value / 60);
+    const seconds = value % 60;
+    return minutes
+      ? `${tCommon('counts.minutes', { count: minutes })} ${tCommon('counts.seconds', { count: seconds })}`
+      : tCommon('counts.seconds', { count: seconds });
+  }
+
   const scoresQuery = useQuery({
     queryKey: ['word-sets', 'my-scores', 'extra'],
     queryFn: () => wordCheckApi.myScores('extra'),
@@ -32,31 +39,31 @@ export function StudentWordcheckResultsPage() {
   return (
     <div className="space-y-8">
       <PageHero
-        eyebrow="wordcheck scorebook"
-        title="Ket qua Kiem tra (/wordcheck) cua ban"
-        description="Diem cac lan luyen tap go cum tu o /wordcheck duoc luu tai day khi ban da dang nhap. Neu chua dang nhap luc lam bai, lan lam do se khong xuat hien o day."
+        eyebrow={t('wordcheckResults.eyebrow')}
+        title={t('wordcheckResults.title')}
+        description={t('wordcheckResults.description')}
       />
 
       <section className="grid gap-4 md:grid-cols-3">
         <article className="rounded-[1.7rem] border border-stroke bg-white/90 p-5 shadow-[0_16px_40px_rgba(15,23,42,0.06)]">
-          <p className="text-xs font-semibold uppercase tracking-[0.25em] text-teal-700">Tong luot lam</p>
+          <p className="text-xs font-semibold uppercase tracking-[0.25em] text-teal-700">{t('wordcheckResults.totalSessions')}</p>
           <p className="mt-3 text-3xl font-extrabold tracking-tight text-slate-950">{totalSessions}</p>
         </article>
         <article className="rounded-[1.7rem] border border-stroke bg-white/90 p-5 shadow-[0_16px_40px_rgba(15,23,42,0.06)]">
-          <p className="text-xs font-semibold uppercase tracking-[0.25em] text-teal-700">Ty le dung lan dau</p>
+          <p className="text-xs font-semibold uppercase tracking-[0.25em] text-teal-700">{t('wordcheckResults.firstTryRate')}</p>
           <p className="mt-3 text-3xl font-extrabold tracking-tight text-slate-950">{avgFirstTryRate}%</p>
         </article>
         <article className="rounded-[1.7rem] border border-stroke bg-white/90 p-5 shadow-[0_16px_40px_rgba(15,23,42,0.06)]">
-          <p className="text-xs font-semibold uppercase tracking-[0.25em] text-teal-700">Lan gan nhat</p>
+          <p className="text-xs font-semibold uppercase tracking-[0.25em] text-teal-700">{t('wordcheckResults.lastSession')}</p>
           <p className="mt-3 text-lg font-extrabold tracking-tight text-slate-950">
-            {lastFinishedAt ? formatDateTime(lastFinishedAt) : 'Chua co'}
+            {lastFinishedAt ? formatDateTime(lastFinishedAt, dateLocale) : t('wordcheckResults.noSessionsYet')}
           </p>
         </article>
       </section>
 
-      {scoresQuery.isPending ? <QueryLoadingState title="Dang tai ket qua..." /> : null}
+      {scoresQuery.isPending ? <QueryLoadingState title={t('wordcheckResults.loading')} /> : null}
       {scoresQuery.error ? (
-        <QueryErrorState title="Khong tai duoc ket qua" description={getApiErrorMessage(scoresQuery.error)} />
+        <QueryErrorState title={t('wordcheckResults.loadError')} description={getApiErrorMessage(scoresQuery.error)} />
       ) : null}
 
       {!scoresQuery.isPending && !scoresQuery.error ? (
@@ -64,12 +71,12 @@ export function StudentWordcheckResultsPage() {
           <table className="w-full min-w-[600px] text-left text-sm">
             <thead className="bg-slate-50 text-xs uppercase tracking-[0.14em] text-slate-500">
               <tr>
-                <th className="px-4 py-3">Bo cau hoi</th>
-                <th className="px-4 py-3">Dung lan dau</th>
-                <th className="px-4 py-3">So vong</th>
-                <th className="px-4 py-3">Tong lan go</th>
-                <th className="px-4 py-3">Thoi gian</th>
-                <th className="px-4 py-3">Hoan thanh</th>
+                <th className="px-4 py-3">{t('wordcheckResults.questionSet')}</th>
+                <th className="px-4 py-3">{t('wordcheckResults.firstTry')}</th>
+                <th className="px-4 py-3">{t('wordcheckResults.rounds')}</th>
+                <th className="px-4 py-3">{t('wordcheckResults.totalAttempts')}</th>
+                <th className="px-4 py-3">{t('wordcheckResults.duration')}</th>
+                <th className="px-4 py-3">{t('wordcheckResults.finishedAt')}</th>
               </tr>
             </thead>
             <tbody>
@@ -91,16 +98,14 @@ export function StudentWordcheckResultsPage() {
                   <td className="px-4 py-3 text-slate-700">{score.rounds}</td>
                   <td className="px-4 py-3 text-slate-700">{score.totalAttempts}</td>
                   <td className="px-4 py-3 text-slate-700">{formatDurationSeconds(score.durationSeconds)}</td>
-                  <td className="px-4 py-3 text-slate-500">{formatDateTime(score.finishedAt ?? undefined)}</td>
+                  <td className="px-4 py-3 text-slate-500">{formatDateTime(score.finishedAt ?? undefined, dateLocale)}</td>
                 </tr>
               ))}
             </tbody>
           </table>
 
           {scores.length === 0 ? (
-            <div className="px-6 py-10 text-center text-sm text-slate-500">
-              Ban chua co luot luyen tap nao o /wordcheck luc da dang nhap.
-            </div>
+            <div className="px-6 py-10 text-center text-sm text-slate-500">{t('wordcheckResults.emptyLoggedOut')}</div>
           ) : null}
         </div>
       ) : null}

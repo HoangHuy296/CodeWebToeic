@@ -94,6 +94,33 @@
     "title": "Support and conversations",
     "description": "Handle inquiries, reply to students, and communicate with teachers."
   },
+  "results": {
+    "mockTestTab": "Mock test",
+    "reviewTab": "Review (/review)",
+    "reviewEyebrow": "Review scorebook",
+    "reviewTitle": "Spaced-repetition review scores (/review)",
+    "reviewDescription": "Track each user's results from the scheduled review at /review: the question set reviewed, first-attempt accuracy, review rounds, and completion time."
+  },
+  "wordScoreResults": {
+    "totalSessions": "Total sessions",
+    "firstTryRate": "First-try accuracy",
+    "uniqueStudents": "Students who practiced",
+    "searchLabel": "Search by student name or question set",
+    "searchPlaceholder": "e.g. John Doe, Starter 3...",
+    "loading": "Loading results...",
+    "loadError": "Could not load results",
+    "student": "Student",
+    "questionSet": "Question set",
+    "firstTry": "First-try correct",
+    "rounds": "Rounds",
+    "totalAttempts": "Total attempts",
+    "duration": "Duration",
+    "finishedAt": "Finished",
+    "empty": "No sessions match your filters.",
+    "extraEyebrow": "Free practice scorebook",
+    "extraTitle": "WordCheck practice scores (/wordcheck)",
+    "extraDescription": "Track each user's results from free practice at /wordcheck: the question set practiced, first-attempt accuracy, review rounds, and completion time."
+  },
   "systemSettings": {
     "eyebrow": "System settings",
     "title": "Operations overview",

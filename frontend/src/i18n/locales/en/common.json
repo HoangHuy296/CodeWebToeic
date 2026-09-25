@@ -166,5 +166,6 @@
     "saving": "Saving...",
     "saved": "Saved.",
     "error": "Could not save, please try again."
-  }
+  },
+  "courseCompletedLessons": "Completed {{completed}}/{{total}} lessons"
 }

@@ -1,10 +1,19 @@
 import { useQueryClient } from '@tanstack/react-query';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { learningApi, learningQueryKeys } from '../../lib/learning-api';
 import type { Enrollment } from '../../types/enrollment';
 import { ProgressBar } from './progress-bar';
 
+const LEVEL_KEYS = ['beginner', 'intermediate', 'advanced'] as const;
+type LevelKey = (typeof LEVEL_KEYS)[number];
+
+function isLevelKey(value: string): value is LevelKey {
+  return (LEVEL_KEYS as readonly string[]).includes(value);
+}
+
 export function CourseProgressCard({ enrollment }: { enrollment: Enrollment }) {
+  const { t } = useTranslation('common');
   const queryClient = useQueryClient();
   const learningPath = `/student/learn/${enrollment.course.id}`;
 
@@ -28,7 +37,7 @@ export function CourseProgressCard({ enrollment }: { enrollment: Enrollment }) {
       <div className="p-6">
         <div className="flex items-center justify-between gap-3">
           <span className="rounded-full bg-teal-50 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-teal-700">
-            {enrollment.status}
+            {t(`statuses.${enrollment.status}`)}
           </span>
           <span className="text-sm font-semibold text-slate-500">{enrollment.progressPercent}%</span>
         </div>
@@ -37,7 +46,10 @@ export function CourseProgressCard({ enrollment }: { enrollment: Enrollment }) {
           {enrollment.course.title ?? 'Course'}
         </h3>
         <p className="mt-2 text-sm text-slate-500">
-          {enrollment.course.lessonCount ?? 0} lessons · {enrollment.course.level ?? 'N/A'}
+          {t('counts.lessons', { count: enrollment.course.lessonCount ?? 0 })}
+          {enrollment.course.level && isLevelKey(enrollment.course.level)
+            ? ` · ${t(`levels.${enrollment.course.level}`)}`
+            : ''}
         </p>
 
         <div className="mt-5">
@@ -46,7 +58,10 @@ export function CourseProgressCard({ enrollment }: { enrollment: Enrollment }) {
 
         <div className="mt-6 flex items-center justify-between gap-3">
           <p className="text-sm text-slate-500">
-            Hoan thanh {enrollment.completedLessonIds.length}/{enrollment.course.lessonCount ?? 0} lesson
+            {t('courseCompletedLessons', {
+              completed: enrollment.completedLessonIds.length,
+              total: enrollment.course.lessonCount ?? 0,
+            })}
           </p>
           <Link
             to={learningPath}
@@ -54,7 +69,7 @@ export function CourseProgressCard({ enrollment }: { enrollment: Enrollment }) {
             onFocus={prefetchLearning}
             className="rounded-full bg-slate-950 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-slate-800"
           >
-            Tiep tuc hoc
+            {t('actions.continue')}
           </Link>
         </div>
       </div>

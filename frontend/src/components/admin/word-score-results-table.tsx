@@ -1,22 +1,29 @@
 import { useMemo, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
+import { useTranslation } from 'react-i18next';
 import { adminApi } from '../../lib/admin-api';
 import { formatDateTime } from '../../lib/format';
 import { getApiErrorMessage } from '../../lib/api';
 import { QueryErrorState, QueryLoadingState } from '../common/query-state';
-
-function formatDurationSeconds(value: number) {
-  if (!value) return '0s';
-  const minutes = Math.floor(value / 60);
-  const seconds = value % 60;
-  return minutes ? `${minutes}p ${seconds.toString().padStart(2, '0')}s` : `${seconds}s`;
-}
 
 /**
  * Shared by /admin/resultswordcheck (mode="extra") and the "On tap" tab of /admin/results
  * (mode="schedule") — both read the same `word_scores` table, split by practice mode.
  */
 export function WordScoreResultsTable({ mode }: { mode: 'extra' | 'schedule' }) {
+  const { t, i18n } = useTranslation('admin');
+  const { t: tCommon } = useTranslation('common');
+  const dateLocale = i18n.language === 'en' ? 'en-US' : 'vi-VN';
+
+  function formatDurationSeconds(value: number) {
+    if (!value) return tCommon('counts.seconds', { count: 0 });
+    const minutes = Math.floor(value / 60);
+    const seconds = value % 60;
+    return minutes
+      ? `${tCommon('counts.minutes', { count: minutes })} ${tCommon('counts.seconds', { count: seconds })}`
+      : tCommon('counts.seconds', { count: seconds });
+  }
+
   const [search, setSearch] = useState('');
 
   const scoresQuery = useQuery({
@@ -49,34 +56,34 @@ export function WordScoreResultsTable({ mode }: { mode: 'extra' | 'schedule' }) 
     <div className="space-y-6">
       <section className="grid gap-4 md:grid-cols-3">
         <article className="rounded-[1.7rem] border border-stroke bg-white/90 p-5 shadow-[0_16px_40px_rgba(15,23,42,0.06)]">
-          <p className="text-xs font-semibold uppercase tracking-[0.25em] text-teal-700">Tong luot lam</p>
+          <p className="text-xs font-semibold uppercase tracking-[0.25em] text-teal-700">{t('wordScoreResults.totalSessions')}</p>
           <p className="mt-3 text-3xl font-extrabold tracking-tight text-slate-950">{totalSessions}</p>
         </article>
         <article className="rounded-[1.7rem] border border-stroke bg-white/90 p-5 shadow-[0_16px_40px_rgba(15,23,42,0.06)]">
-          <p className="text-xs font-semibold uppercase tracking-[0.25em] text-teal-700">Ty le dung lan dau</p>
+          <p className="text-xs font-semibold uppercase tracking-[0.25em] text-teal-700">{t('wordScoreResults.firstTryRate')}</p>
           <p className="mt-3 text-3xl font-extrabold tracking-tight text-slate-950">{avgFirstTryRate}%</p>
         </article>
         <article className="rounded-[1.7rem] border border-stroke bg-white/90 p-5 shadow-[0_16px_40px_rgba(15,23,42,0.06)]">
-          <p className="text-xs font-semibold uppercase tracking-[0.25em] text-teal-700">So nguoi da lam</p>
+          <p className="text-xs font-semibold uppercase tracking-[0.25em] text-teal-700">{t('wordScoreResults.uniqueStudents')}</p>
           <p className="mt-3 text-3xl font-extrabold tracking-tight text-slate-950">{uniqueStudents}</p>
         </article>
       </section>
 
       <section className="rounded-[1.8rem] border border-stroke bg-white/90 p-6 shadow-[0_18px_48px_rgba(15,23,42,0.07)]">
         <label className="grid gap-2">
-          <span className="text-sm font-semibold text-slate-700">Tim theo ten hoc vien hoac bo cau hoi</span>
+          <span className="text-sm font-semibold text-slate-700">{t('wordScoreResults.searchLabel')}</span>
           <input
             value={search}
             onChange={(event) => setSearch(event.target.value)}
-            placeholder="VD: Nguyen Van A, Starter 3..."
+            placeholder={t('wordScoreResults.searchPlaceholder')}
             className="h-12 max-w-md rounded-2xl border border-stroke bg-slate-50 px-4 text-sm outline-none focus:border-teal-500"
           />
         </label>
       </section>
 
-      {scoresQuery.isPending ? <QueryLoadingState title="Dang tai bang diem..." /> : null}
+      {scoresQuery.isPending ? <QueryLoadingState title={t('wordScoreResults.loading')} /> : null}
       {scoresQuery.error ? (
-        <QueryErrorState title="Khong tai duoc bang diem" description={getApiErrorMessage(scoresQuery.error)} />
+        <QueryErrorState title={t('wordScoreResults.loadError')} description={getApiErrorMessage(scoresQuery.error)} />
       ) : null}
 
       {!scoresQuery.isPending && !scoresQuery.error ? (
@@ -84,13 +91,13 @@ export function WordScoreResultsTable({ mode }: { mode: 'extra' | 'schedule' }) 
           <table className="w-full min-w-[720px] text-left text-sm">
             <thead className="bg-slate-50 text-xs uppercase tracking-[0.14em] text-slate-500">
               <tr>
-                <th className="px-4 py-3">Hoc vien</th>
-                <th className="px-4 py-3">Bo cau hoi</th>
-                <th className="px-4 py-3">Dung lan dau</th>
-                <th className="px-4 py-3">So vong</th>
-                <th className="px-4 py-3">Tong lan go</th>
-                <th className="px-4 py-3">Thoi gian</th>
-                <th className="px-4 py-3">Hoan thanh</th>
+                <th className="px-4 py-3">{t('wordScoreResults.student')}</th>
+                <th className="px-4 py-3">{t('wordScoreResults.questionSet')}</th>
+                <th className="px-4 py-3">{t('wordScoreResults.firstTry')}</th>
+                <th className="px-4 py-3">{t('wordScoreResults.rounds')}</th>
+                <th className="px-4 py-3">{t('wordScoreResults.totalAttempts')}</th>
+                <th className="px-4 py-3">{t('wordScoreResults.duration')}</th>
+                <th className="px-4 py-3">{t('wordScoreResults.finishedAt')}</th>
               </tr>
             </thead>
             <tbody>
@@ -113,16 +120,14 @@ export function WordScoreResultsTable({ mode }: { mode: 'extra' | 'schedule' }) 
                   <td className="px-4 py-3 text-slate-700">{score.rounds}</td>
                   <td className="px-4 py-3 text-slate-700">{score.totalAttempts}</td>
                   <td className="px-4 py-3 text-slate-700">{formatDurationSeconds(score.durationSeconds)}</td>
-                  <td className="px-4 py-3 text-slate-500">{formatDateTime(score.finishedAt ?? undefined)}</td>
+                  <td className="px-4 py-3 text-slate-500">{formatDateTime(score.finishedAt ?? undefined, dateLocale)}</td>
                 </tr>
               ))}
             </tbody>
           </table>
 
           {filtered.length === 0 ? (
-            <div className="px-6 py-10 text-center text-sm text-slate-500">
-              Chua co luot lam nao phu hop voi bo loc hien tai.
-            </div>
+            <div className="px-6 py-10 text-center text-sm text-slate-500">{t('wordScoreResults.empty')}</div>
           ) : null}
         </div>
       ) : null}

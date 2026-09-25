@@ -9,6 +9,7 @@ import { WORD_CHECK_MAX_ROUNDS } from '../../features/wordcheck/config';
 import { WordSessionRunner } from '../../features/wordcheck/word-session-runner';
 import { loadLastName, saveLastName } from '../../features/wordcheck/srs/storage';
 import { nextSetOf } from '../../features/wordcheck/set-order';
+import { PracticeHeader, PracticeSetPicker } from '../../features/wordcheck/practice-layout';
 
 /**
  * "Kiem Tra": type-the-phrase drills over a whole set, no sign-in required. Ported from the
@@ -44,45 +45,50 @@ export function WordCheckPage() {
   if (started && setId && questionsQuery.data) {
     const total = questionsQuery.data.questions.length;
     return (
-      <div className="space-y-8">
-        <PageHeader />
-        <WordSessionRunner
-          key={`${setId}-${sessionKey}`}
-          setId={setId}
-          questions={questionsQuery.data.questions}
-          name={name.trim() || t('common.guestName')}
-          mode="extra"
-          pool={pool ?? Array.from({ length: total }, (_, i) => i)}
-          freshIdx={[]}
-          maxRounds={WORD_CHECK_MAX_ROUNDS}
-          onExit={() => {
-            setStarted(false);
-            setPool(null);
-          }}
-          onReviewWrong={(wrongIdx) => {
-            setPool(wrongIdx);
-            setSessionKey((k) => k + 1);
-          }}
-          onNextChapter={nextSet ? () => startSet(nextSet.id) : null}
-          nextSetLabel={nextSet ? nextSet.setName : null}
-        />
+      <div className="practice-page">
+        <PracticeHeader mode="typing" compact />
+        <div className="practice-session">
+          <WordSessionRunner
+            key={`${setId}-${sessionKey}`}
+            setId={setId}
+            questions={questionsQuery.data.questions}
+            name={name.trim() || t('common.guestName')}
+            mode="extra"
+            pool={pool ?? Array.from({ length: total }, (_, i) => i)}
+            freshIdx={[]}
+            maxRounds={WORD_CHECK_MAX_ROUNDS}
+            onExit={() => {
+              setStarted(false);
+              setPool(null);
+            }}
+            onReviewWrong={(wrongIdx) => {
+              setPool(wrongIdx);
+              setSessionKey((k) => k + 1);
+            }}
+            onNextChapter={nextSet ? () => startSet(nextSet.id) : null}
+            nextSetLabel={nextSet ? nextSet.setName : null}
+          />
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="space-y-8">
-      <PageHeader />
+    <div className="practice-page">
+      <PracticeHeader mode="typing" />
 
-      <section className="rounded-[2rem] border border-stroke bg-white p-6 shadow-[0_18px_55px_rgba(15,23,42,0.06)] lg:p-8">
-        <label className="block text-xs font-semibold uppercase tracking-[0.24em] text-slate-500">{t('common.nameLabel')}</label>
+      <section className="practice-name">
+        <label htmlFor="practice-name">{t('common.nameLabel')}</label>
         <input
+          id="practice-name"
           value={name}
           onChange={(e) => setName(e.target.value)}
           placeholder={t('common.namePlaceholder')}
           maxLength={60}
-          className="mt-2 w-full max-w-sm rounded-2xl border border-stroke bg-white px-4 py-3 text-sm font-semibold text-slate-950 outline-none focus:border-teal-400"
+          autoComplete="name"
+          aria-describedby="practice-name-hint"
         />
+        <p id="practice-name-hint" className="practice-name__hint">{t('layout.nameHint')}</p>
       </section>
 
       {setsQuery.isPending ? <QueryLoadingState title={t('common.loadingSets')} /> : null}
@@ -90,50 +96,17 @@ export function WordCheckPage() {
         <QueryErrorState title={t('common.loadSetsError')} description={getApiErrorMessage(setsQuery.error)} />
       ) : null}
 
-      <section className="grid gap-6 sm:grid-cols-2">
-        {(setsQuery.data ?? []).map((set) => (
-          <div
-            key={set.id}
-            className={[
-              'rounded-[2rem] border bg-white p-6 shadow-[0_18px_55px_rgba(15,23,42,0.06)]',
-              set.id === presetSetId ? 'border-teal-400 ring-2 ring-teal-200' : 'border-stroke',
-            ].join(' ')}
-          >
-            <p className="text-xs font-semibold uppercase tracking-[0.24em] text-teal-700">{t('common.setLabel')}</p>
-            {set.id === presetSetId ? (
-              <p className="mt-1 text-xs font-semibold text-teal-600">{t('checkPage.presetHint')}</p>
-            ) : null}
-            <h2 className="mt-2 text-2xl font-extrabold text-slate-950">{set.setName}</h2>
-            <p className="mt-1 text-sm text-slate-600">{t('common.itemCount', { count: set.itemCount })}</p>
-            <button
-              type="button"
-              disabled={!name.trim()}
-              onClick={() => startSet(set.id)}
-              className="btn-brand mt-5 w-full rounded-full px-5 py-3 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:opacity-60"
-            >
-              {t('checkPage.practiceWholeSet', { count: set.itemCount })}
-            </button>
-          </div>
-        ))}
-      </section>
+      <PracticeSetPicker
+        sets={setsQuery.data ?? []}
+        onSelect={startSet}
+        selectedId={presetSetId}
+        disabled={!name.trim() || (started && questionsQuery.isFetching)}
+      />
 
-      {questionsQuery.isFetching && !started ? <QueryLoadingState title={t('common.loadingQuestions')} /> : null}
+      {questionsQuery.isFetching && started ? <QueryLoadingState title={t('common.loadingQuestions')} /> : null}
       {questionsQuery.error ? (
         <QueryErrorState title={t('common.loadQuestionsError')} description={getApiErrorMessage(questionsQuery.error)} />
       ) : null}
     </div>
-  );
-}
-
-function PageHeader() {
-  const { t } = useTranslation('wordcheck');
-  return (
-    <section className="rounded-[2rem] border border-stroke bg-white px-6 py-8 shadow-[0_18px_55px_rgba(15,23,42,0.06)]">
-      <p className="text-xs font-semibold uppercase tracking-[0.32em] text-teal-700">{t('checkPage.eyebrow')}</p>
-      <h1 className="mt-4 text-4xl font-extrabold tracking-tight text-slate-950">{t('checkPage.title')}</h1>
-      <p className="mt-4 max-w-3xl text-sm leading-8 text-slate-600">
-        {t('checkPage.description')}
-      </p>
-    </section>
   );
 }

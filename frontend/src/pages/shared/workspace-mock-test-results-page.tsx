@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
+import { useTranslation } from 'react-i18next';
 import { PageHero } from '../../components/common/page-hero';
 import { QueryErrorState, QueryLoadingState } from '../../components/common/query-state';
 import { getApiErrorMessage } from '../../lib/api';
@@ -10,20 +11,24 @@ interface WorkspaceMockTestResultsPageProps {
   audience: 'student' | 'teacher' | 'admin';
 }
 
-function formatDurationSeconds(value: number) {
-  if (!value) {
-    return 'Chua ghi nhan';
-  }
-
-  const minutes = Math.floor(value / 60);
-  const seconds = value % 60;
-  if (!minutes) {
-    return `${seconds} giay`;
-  }
-  return `${minutes} phut ${seconds.toString().padStart(2, '0')} giay`;
-}
-
 export function WorkspaceMockTestResultsPage({ audience }: WorkspaceMockTestResultsPageProps) {
+  const { t, i18n } = useTranslation('workspace');
+  const { t: tCommon } = useTranslation('common');
+  const dateLocale = i18n.language === 'en' ? 'en-US' : 'vi-VN';
+
+  function formatDurationSeconds(value: number) {
+    if (!value) {
+      return tCommon('states.notRecorded');
+    }
+
+    const minutes = Math.floor(value / 60);
+    const seconds = value % 60;
+    if (!minutes) {
+      return tCommon('counts.seconds', { count: seconds });
+    }
+    return `${tCommon('counts.minutes', { count: minutes })} ${tCommon('counts.seconds', { count: seconds })}`;
+  }
+
   const [search, setSearch] = useState('');
   const [sourceFilter, setSourceFilter] = useState<'all' | 'assigned' | 'free'>('all');
   const [selectedSubmissionId, setSelectedSubmissionId] = useState<string | null>(null);
@@ -80,23 +85,20 @@ export function WorkspaceMockTestResultsPage({ audience }: WorkspaceMockTestResu
   const heroContent =
     audience === 'admin'
       ? {
-          eyebrow: 'score workspace',
-          title: 'Bang diem bai on tap va luyen thi',
-          description:
-            'Admin co the xem diem tung bai lam, nguon de, hoc vien, giang vien tao de va nhung khoa hoc duoc gan vao de do.',
+          eyebrow: t('results.adminEyebrow'),
+          title: t('results.adminTitle'),
+          description: t('results.adminDescription'),
         }
       : audience === 'teacher'
         ? {
-            eyebrow: 'teacher scorebook',
-            title: 'Ket qua bai lam theo de va khoa hoc cua giang vien',
-            description:
-              'Giang vien co the theo doi diem tung bai on tap va bai luyen thi do minh tao, biet hoc vien nao da nop bai va de dang gan voi khoa hoc nao.',
+            eyebrow: t('results.teacherEyebrow'),
+            title: t('results.teacherTitle'),
+            description: t('results.teacherDescription'),
           }
         : {
-            eyebrow: 'student scorebook',
-            title: 'Ket qua bai lam cua ban theo tung de va giang vien',
-            description:
-              'Hoc vien co the xem lai diem cua bai on tap va bai luyen thi, biet de do do giang vien nao tao va dang gan voi khoa hoc nao minh dang hoc.',
+            eyebrow: t('results.studentEyebrow'),
+            title: t('results.studentTitle'),
+            description: t('results.studentDescription'),
           };
 
   return (
@@ -109,15 +111,15 @@ export function WorkspaceMockTestResultsPage({ audience }: WorkspaceMockTestResu
 
       <section className="grid gap-4 md:grid-cols-3">
         <article className="rounded-[1.7rem] border border-stroke bg-white/90 p-5 shadow-[0_16px_40px_rgba(15,23,42,0.06)]">
-          <p className="text-xs font-semibold uppercase tracking-[0.25em] text-cyan-700">Tong bai da cham</p>
+          <p className="text-xs font-semibold uppercase tracking-[0.25em] text-cyan-700">{t('results.totalGraded')}</p>
           <p className="mt-3 text-3xl font-extrabold tracking-tight text-slate-950">{totalSubmissions}</p>
         </article>
         <article className="rounded-[1.7rem] border border-stroke bg-white/90 p-5 shadow-[0_16px_40px_rgba(15,23,42,0.06)]">
-          <p className="text-xs font-semibold uppercase tracking-[0.25em] text-cyan-700">Diem trung binh</p>
+          <p className="text-xs font-semibold uppercase tracking-[0.25em] text-cyan-700">{t('results.averageScore')}</p>
           <p className="mt-3 text-3xl font-extrabold tracking-tight text-slate-950">{averageScore}/100</p>
         </article>
         <article className="rounded-[1.7rem] border border-stroke bg-white/90 p-5 shadow-[0_16px_40px_rgba(15,23,42,0.06)]">
-          <p className="text-xs font-semibold uppercase tracking-[0.25em] text-cyan-700">Bai dat 80+</p>
+          <p className="text-xs font-semibold uppercase tracking-[0.25em] text-cyan-700">{t('results.highScores')}</p>
           <p className="mt-3 text-3xl font-extrabold tracking-tight text-slate-950">{strongAttempts}</p>
         </article>
       </section>
@@ -125,39 +127,33 @@ export function WorkspaceMockTestResultsPage({ audience }: WorkspaceMockTestResu
       <section className="rounded-[1.8rem] border border-stroke bg-white/90 p-6 shadow-[0_18px_48px_rgba(15,23,42,0.07)]">
         <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_220px]">
           <label className="grid gap-2">
-            <span className="text-sm font-semibold text-slate-700">Tim theo de, giang vien, hoc vien hoac khoa hoc</span>
+            <span className="text-sm font-semibold text-slate-700">{t('results.searchPlaceholder')}</span>
             <input
               value={search}
               onChange={(event) => setSearch(event.target.value)}
-              placeholder={
-                audience === 'admin'
-                  ? 'VD: teacher, student, TOEIC...'
-                  : audience === 'teacher'
-                    ? 'VD: hoc vien, de reading, khoa hoc...'
-                    : 'VD: de reading, co Lan, khoa hoc...'
-              }
+              placeholder={t('results.searchPlaceholder')}
               className="h-12 rounded-2xl border border-stroke bg-slate-50 px-4 text-sm outline-none focus:border-cyan-500"
             />
           </label>
 
           <label className="grid gap-2">
-            <span className="text-sm font-semibold text-slate-700">Nguon de</span>
+            <span className="text-sm font-semibold text-slate-700">{t('results.source')}</span>
             <select
               value={sourceFilter}
               onChange={(event) => setSourceFilter(event.target.value as 'all' | 'assigned' | 'free')}
               className="h-12 rounded-2xl border border-stroke bg-slate-50 px-4 text-sm outline-none focus:border-cyan-500"
             >
-              <option value="all">Tat ca</option>
-              <option value="assigned">De gan khoa hoc</option>
-              <option value="free">De tu do</option>
+              <option value="all">{tCommon('fields.all')}</option>
+              <option value="assigned">{t('results.courseLinked')}</option>
+              <option value="free">{t('results.standalone')}</option>
             </select>
           </label>
         </div>
       </section>
 
-      {submissionsQuery.isPending ? <QueryLoadingState title="Dang tai bang diem..." /> : null}
+      {submissionsQuery.isPending ? <QueryLoadingState title={t('results.loading')} /> : null}
       {submissionsQuery.error ? (
-        <QueryErrorState title="Khong tai duoc bang diem" description={getApiErrorMessage(submissionsQuery.error)} />
+        <QueryErrorState title={t('results.loadError')} description={getApiErrorMessage(submissionsQuery.error)} />
       ) : null}
 
       <section className="grid items-start gap-6 xl:grid-cols-[0.95fr_1.05fr]">
@@ -178,7 +174,7 @@ export function WorkspaceMockTestResultsPage({ audience }: WorkspaceMockTestResu
               >
                 <div className="flex flex-wrap items-center justify-between gap-3">
                   <span className="rounded-full bg-slate-950 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.22em] text-white">
-                    {submission.mockTest.type}
+                    {tCommon(`testTypes.${submission.mockTest.type}`)}
                   </span>
                   <span
                     className={[
@@ -197,15 +193,15 @@ export function WorkspaceMockTestResultsPage({ audience }: WorkspaceMockTestResu
                 <h3 className="mt-4 text-xl font-extrabold tracking-tight text-slate-950">{submission.mockTest.title}</h3>
                 <p className="mt-2 text-sm text-slate-600">
                   {audience === 'admin' ? `${submission.student.fullName} · ` : ''}
-                  {submission.creator.fullName} · {formatDateTime(submission.submittedAt)}
+                  {submission.creator.fullName} · {formatDateTime(submission.submittedAt, dateLocale)}
                 </p>
 
                 <div className="mt-4 flex flex-wrap gap-2 text-xs font-semibold">
                   <span className="rounded-full bg-slate-100 px-3 py-1 text-slate-700">
-                    {submission.correctAnswers}/{submission.totalQuestions} cau dung
+                    {t('results.correctSummary', { correct: submission.correctAnswers, total: submission.totalQuestions })}
                   </span>
                   <span className="rounded-full bg-slate-100 px-3 py-1 text-slate-700">
-                    {submission.sourceKind === 'assigned' ? 'De gan khoa hoc' : 'De tu do'}
+                    {submission.sourceKind === 'assigned' ? t('results.courseLinked') : t('results.standalone')}
                   </span>
                 </div>
 
@@ -224,7 +220,7 @@ export function WorkspaceMockTestResultsPage({ audience }: WorkspaceMockTestResu
 
           {!submissionsQuery.isPending && filteredSubmissions.length === 0 ? (
             <div className="rounded-[1.8rem] border border-dashed border-stroke bg-white/80 px-6 py-10 text-sm text-slate-500">
-              Chua co bai lam nao phu hop voi bo loc hien tai.
+              {t('results.noMatches')}
             </div>
           ) : null}
         </div>
@@ -232,18 +228,18 @@ export function WorkspaceMockTestResultsPage({ audience }: WorkspaceMockTestResu
         <div className="rounded-[2rem] border border-stroke bg-white/92 p-6 shadow-[0_18px_48px_rgba(15,23,42,0.07)]">
           {!selectedSubmissionId ? (
             <div className="rounded-[1.5rem] border border-dashed border-stroke px-5 py-12 text-center text-sm text-slate-500">
-              Chon mot bai lam o cot ben trai de xem chi tiet diem.
+              {t('results.selectSubmission')}
             </div>
           ) : submissionDetailQuery.isPending ? (
-            <QueryLoadingState title="Dang tai chi tiet bai lam..." />
+            <QueryLoadingState title={t('results.loadingDetail')} />
           ) : submissionDetailQuery.error ? (
-            <QueryErrorState title="Khong tai duoc chi tiet bai lam" description={getApiErrorMessage(submissionDetailQuery.error)} />
+            <QueryErrorState title={t('results.detailError')} description={getApiErrorMessage(submissionDetailQuery.error)} />
           ) : submissionDetailQuery.data ? (
             <div className="space-y-6">
               <div className="flex flex-wrap items-start justify-between gap-4">
                 <div>
                   <p className="text-xs font-semibold uppercase tracking-[0.25em] text-cyan-700">
-                    {selectedSummary?.creator.role === 'teacher' ? 'de cua giang vien' : 'de he thong'}
+                    {selectedSummary?.creator.role === 'teacher' ? t('results.teacherTest') : t('results.systemTest')}
                   </p>
                   <h2 className="mt-2 text-3xl font-extrabold tracking-tight text-slate-950">
                     {submissionDetailQuery.data.mockTest.title}
@@ -251,12 +247,12 @@ export function WorkspaceMockTestResultsPage({ audience }: WorkspaceMockTestResu
                   <p className="mt-3 text-sm leading-7 text-slate-600">
                     {submissionDetailQuery.data.creator.fullName}
                     {' · '}
-                    {formatDateTime(submissionDetailQuery.data.submittedAt)}
+                    {formatDateTime(submissionDetailQuery.data.submittedAt, dateLocale)}
                   </p>
                 </div>
 
                 <div className="rounded-[1.4rem] bg-[linear-gradient(135deg,rgba(8,145,178,0.12),rgba(37,99,235,0.08))] px-5 py-4 text-right">
-                  <p className="text-xs font-semibold uppercase tracking-[0.22em] text-cyan-700">Diem so</p>
+                  <p className="text-xs font-semibold uppercase tracking-[0.22em] text-cyan-700">{t('results.score')}</p>
                   <p className="mt-2 text-3xl font-extrabold tracking-tight text-slate-950">
                     {submissionDetailQuery.data.score}/100
                   </p>
@@ -265,28 +261,28 @@ export function WorkspaceMockTestResultsPage({ audience }: WorkspaceMockTestResu
 
               <div className="grid gap-4 sm:grid-cols-3">
                 <div className="rounded-[1.4rem] border border-stroke bg-slate-50 px-4 py-4">
-                  <p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-500">Dung / Tong</p>
+                  <p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-500">{t('results.correctTotal')}</p>
                   <p className="mt-2 text-xl font-extrabold text-slate-950">
                     {submissionDetailQuery.data.correctAnswers}/{submissionDetailQuery.data.totalQuestions}
                   </p>
                 </div>
                 <div className="rounded-[1.4rem] border border-stroke bg-slate-50 px-4 py-4">
-                  <p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-500">Thoi gian lam bai</p>
+                  <p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-500">{t('results.timeSpent')}</p>
                   <p className="mt-2 text-xl font-extrabold text-slate-950">
                     {formatDurationSeconds(submissionDetailQuery.data.durationSeconds)}
                   </p>
                 </div>
                 <div className="rounded-[1.4rem] border border-stroke bg-slate-50 px-4 py-4">
-                  <p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-500">Nguon</p>
+                  <p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-500">{t('results.source')}</p>
                   <p className="mt-2 text-xl font-extrabold text-slate-950">
-                    {selectedSummary?.sourceKind === 'assigned' ? 'Gan khoa hoc' : 'De tu do'}
+                    {selectedSummary?.sourceKind === 'assigned' ? t('results.courseLinked') : t('results.standalone')}
                   </p>
                 </div>
               </div>
 
               {submissionDetailQuery.data.assignedCourses.length ? (
                 <div>
-                  <p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-500">Khoa hoc lien quan</p>
+                  <p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-500">{t('results.relatedCourses')}</p>
                   <div className="mt-3 flex flex-wrap gap-2">
                     {submissionDetailQuery.data.assignedCourses.map((course) => (
                       <span key={course.id} className="rounded-full bg-cyan-100 px-3 py-2 text-xs font-semibold text-cyan-900">
@@ -298,34 +294,35 @@ export function WorkspaceMockTestResultsPage({ audience }: WorkspaceMockTestResu
               ) : null}
 
               <div className="grid gap-3">
-                <p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-500">Review tung cau</p>
+                <p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-500">{t('results.reviewQuestions')}</p>
                 {submissionDetailQuery.data.review.map((item, index) => (
                   <article key={item.questionId} className="rounded-[1.4rem] border border-stroke bg-white px-4 py-4">
                     <div className="flex flex-wrap items-center justify-between gap-3">
-                      <p className="text-sm font-bold text-slate-950">Cau {index + 1}</p>
+                      <p className="text-sm font-bold text-slate-950">{t('assessments.question', { number: index + 1 })}</p>
                       <span
                         className={[
                           'rounded-full px-3 py-1 text-xs font-semibold',
                           item.isCorrect ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-800',
                         ].join(' ')}
                       >
-                        {item.isCorrect ? 'Dung' : 'Can xem lai'}
+                        {item.isCorrect ? t('results.correct') : t('results.needsReview')}
                       </span>
                     </div>
                     <p className="mt-3 text-sm leading-7 text-slate-700">{item.prompt}</p>
                     <div className="mt-3 grid gap-2 text-sm text-slate-600">
                       <p>
-                        <span className="font-semibold text-slate-900">Lua chon cua ban:</span> {item.selectedOption || 'Bo trong'}
+                        <span className="font-semibold text-slate-900">{t('results.yourAnswer')}:</span>{' '}
+                        {item.selectedOption || t('results.unanswered')}
                       </p>
                       {'correctAnswer' in item ? (
                         <p>
-                          <span className="font-semibold text-slate-900">Dap an dung:</span>{' '}
-                          {((item as { correctAnswer?: string }).correctAnswer) ?? 'An cho hoc vien'}
+                          <span className="font-semibold text-slate-900">{t('results.correctAnswer')}:</span>{' '}
+                          {((item as { correctAnswer?: string }).correctAnswer) ?? t('results.hiddenFromStudents')}
                         </p>
                       ) : null}
                       {item.explanation ? (
                         <p>
-                          <span className="font-semibold text-slate-900">Giai thich:</span> {item.explanation}
+                          <span className="font-semibold text-slate-900">{t('results.explanation')}:</span> {item.explanation}
                         </p>
                       ) : null}
                     </div>

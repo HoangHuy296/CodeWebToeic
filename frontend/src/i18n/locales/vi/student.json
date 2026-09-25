@@ -27,6 +27,8 @@
     "loading": "Đang tải khóa học của bạn...",
     "loadError": "Không tải được khóa học của bạn",
     "empty": "Bạn chưa đăng ký khóa học nào.",
+    "emptyTitle": "Tài khoản này chưa đăng ký khóa học nào",
+    "emptyDescription": "Sau khi đăng ký thành công một khóa học, trang này sẽ chỉ hiển thị các khóa học bạn đã đăng ký.",
     "browseCourses": "Khám phá khóa học",
     "continueLearning": "Tiếp tục học"
   },
@@ -77,7 +79,18 @@
     "loading": "Đang tải kết quả luyện tập...",
     "loadError": "Không tải được kết quả luyện tập",
     "empty": "Bạn chưa có kết quả luyện tập.",
-    "practice": "Luyện tập ngay"
+    "practice": "Luyện tập ngay",
+    "totalSessions": "Tổng lượt làm",
+    "firstTryRate": "Tỷ lệ đúng lần đầu",
+    "lastSession": "Lần gần nhất",
+    "noSessionsYet": "Chưa có",
+    "questionSet": "Bộ câu hỏi",
+    "firstTry": "Đúng lần đầu",
+    "rounds": "Số vòng",
+    "totalAttempts": "Tổng lần gõ",
+    "duration": "Thời gian",
+    "finishedAt": "Hoàn thành",
+    "emptyLoggedOut": "Bạn chưa có lượt luyện tập nào ở /wordcheck lúc đã đăng nhập."
   },
   "messages": {
     "eyebrow": "Tin nhắn học viên",

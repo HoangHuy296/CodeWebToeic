@@ -157,5 +157,6 @@
     "saving": "Đang lưu...",
     "saved": "Đã lưu.",
     "error": "Không lưu được, vui lòng thử lại."
-  }
+  },
+  "courseCompletedLessons": "Hoàn thành {{completed}}/{{total}} bài học"
 }

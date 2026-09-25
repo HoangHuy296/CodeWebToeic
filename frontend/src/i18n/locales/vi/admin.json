@@ -94,6 +94,33 @@
     "title": "Hộp thư hỗ trợ và trao đổi",
     "description": "Tiếp nhận liên hệ, phản hồi học viên và trao đổi với giảng viên."
   },
+  "results": {
+    "mockTestTab": "Bài thi thử",
+    "reviewTab": "Ôn tập (/review)",
+    "reviewEyebrow": "Sổ điểm ôn tập",
+    "reviewTitle": "Điểm ôn tập cách quãng (/review)",
+    "reviewDescription": "Theo dõi kết quả của từng người dùng khi chọn ôn tập theo lịch ở /review: bộ câu hỏi đã ôn, tỷ lệ đúng lần đầu, số vòng ôn lại và thời gian hoàn thành."
+  },
+  "wordScoreResults": {
+    "totalSessions": "Tổng lượt làm",
+    "firstTryRate": "Tỷ lệ đúng lần đầu",
+    "uniqueStudents": "Số người đã làm",
+    "searchLabel": "Tìm theo tên học viên hoặc bộ câu hỏi",
+    "searchPlaceholder": "VD: Nguyễn Văn A, Starter 3...",
+    "loading": "Đang tải bảng điểm...",
+    "loadError": "Không tải được bảng điểm",
+    "student": "Học viên",
+    "questionSet": "Bộ câu hỏi",
+    "firstTry": "Đúng lần đầu",
+    "rounds": "Số vòng",
+    "totalAttempts": "Tổng lần gõ",
+    "duration": "Thời gian",
+    "finishedAt": "Hoàn thành",
+    "empty": "Chưa có lượt làm nào phù hợp với bộ lọc hiện tại.",
+    "extraEyebrow": "Sổ điểm luyện tập tự do",
+    "extraTitle": "Điểm luyện tập Kiểm tra (/wordcheck)",
+    "extraDescription": "Theo dõi kết quả của từng người dùng khi chọn luyện tập tự do ở /wordcheck: bộ câu hỏi đã làm, tỷ lệ đúng lần đầu, số vòng ôn lại và thời gian hoàn thành."
+  },
   "systemSettings": {
     "eyebrow": "Cài đặt hệ thống",
     "title": "Tổng quan vận hành",

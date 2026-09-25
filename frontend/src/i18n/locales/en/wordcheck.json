@@ -1,8 +1,14 @@
 {
+  "layout": {
+    "flashcards": "Review flashcards",
+    "typing": "Typing practice",
+    "openSet": "Open {{name}} set",
+    "nameHint": "Enter your name, then choose a set."
+  },
   "checkPage": {
     "eyebrow": "practice",
-    "title": "Type the right English phrase",
-    "description": "Pick a set, enter your name, then type the English answer for each Vietnamese meaning. The answer is never shown before you submit; the server grades it and shows right/wrong, word by word.",
+    "title": "English typing practice",
+    "description": "Type the English phrase for each Vietnamese meaning and get instant feedback.",
     "practiceWholeSet": "Practice the whole set ({{count}} phrases)",
     "practiceWholeSet_one": "Practice the whole set ({{count}} phrase)",
     "practiceWholeSet_other": "Practice the whole set ({{count}} phrases)",
@@ -100,8 +106,8 @@
   },
   "checkPhrase": {
     "eyebrow": "flashcards",
-    "title": "Warm up with flashcards before typing",
-    "description": "Pick a set, flip through the cards to review meanings and hear the pronunciation, then practice typing. You can skip the flashcards and start typing at any time.",
+    "title": "Phrase flashcards",
+    "description": "Flip a card, listen to the pronunciation, then practice typing.",
     "practiceFlashcards": "Flashcards ({{count}} phrases)",
     "practiceFlashcards_one": "Flashcards ({{count}} phrase)",
     "practiceFlashcards_other": "Flashcards ({{count}} phrases)",

@@ -1,8 +1,14 @@
 {
+  "layout": {
+    "flashcards": "Ôn flashcard",
+    "typing": "Luyện gõ",
+    "openSet": "Mở bộ {{name}}",
+    "nameHint": "Nhập tên rồi chọn bộ bạn muốn luyện."
+  },
   "checkPage": {
     "eyebrow": "kiểm tra",
-    "title": "Gõ đúng cụm từ tiếng Anh",
-    "description": "Chọn một bộ, nhập tên, rồi gõ đáp án tiếng Anh cho từng nghĩa tiếng Việt. Đáp án không bao giờ hiện trước khi bạn nộp; máy chủ chấm điểm và cho biết đúng/sai, so sánh từng từ.",
+    "title": "Luyện gõ tiếng Anh",
+    "description": "Gõ cụm từ theo nghĩa tiếng Việt và nhận kết quả sau mỗi câu.",
     "practiceWholeSet": "Luyện tập cả bộ ({{count}} cụm)",
     "practiceWholeSet_other": "Luyện tập cả bộ ({{count}} cụm)",
     "presetHint": "Bạn vừa ôn flashcard bộ này"
@@ -94,8 +100,8 @@
   },
   "checkPhrase": {
     "eyebrow": "cụm từ",
-    "title": "Ôn flashcard trước khi luyện gõ",
-    "description": "Chọn một bộ, lướt qua từng thẻ để ôn lại nghĩa và nghe phát âm, rồi chuyển sang luyện gõ. Bạn có thể bỏ qua flashcard và luyện gõ ngay bất cứ lúc nào.",
+    "title": "Ôn cụm từ với flashcard",
+    "description": "Lật thẻ, nghe phát âm rồi chuyển sang luyện gõ.",
     "practiceFlashcards": "Ôn flashcard ({{count}} cụm)",
     "practiceFlashcards_other": "Ôn flashcard ({{count}} cụm)",
     "loadingFlashcards": "Đang tải flashcard...",

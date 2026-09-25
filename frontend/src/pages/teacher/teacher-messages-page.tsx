@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../app/providers/auth-provider';
 import { PageHero } from '../../components/common/page-hero';
 import { QueryErrorState, QueryLoadingState } from '../../components/common/query-state';
@@ -21,6 +22,11 @@ function resolveReplyTarget(message: SupportMessage, currentUserId?: string | nu
 }
 
 export function TeacherMessagesPage() {
+  const { t } = useTranslation('workspace');
+  const { t: tTeacher } = useTranslation('teacher');
+  const { t: tCommon } = useTranslation('common');
+  const { i18n } = useTranslation();
+  const dateLocale = i18n.language === 'en' ? 'en-US' : 'vi-VN';
   const { user } = useAuth();
   const queryClient = useQueryClient();
   const [statusFilter, setStatusFilter] = useState<'all' | SupportMessage['status']>('all');
@@ -63,7 +69,7 @@ export function TeacherMessagesPage() {
       setComposeSubject('');
       setComposeContent('');
       setReplyContent('');
-      setComposeSuccess('Tin nhan da duoc gui thanh cong.');
+      setComposeSuccess(t('messages.sent'));
       setStatusFilter('all');
       setRoleFilter('all');
       setSearchKeyword('');
@@ -108,22 +114,22 @@ export function TeacherMessagesPage() {
   return (
     <div className="space-y-8">
       <PageHero
-        eyebrow="teacher messages"
-        title="Inbox cho giang vien lam viec voi admin va hoc vien."
-        description="Teacher co the theo doi conversation, reply truc tiep va gui tin nhan moi cho student da enroll trong khoa hoc cua minh hoac cho admin."
+        eyebrow={tTeacher('messages.eyebrow')}
+        title={tTeacher('messages.title')}
+        description={tTeacher('messages.description')}
       />
 
       <section className="grid gap-6 xl:grid-cols-[0.92fr_1.08fr]">
         <article className="rounded-[1.8rem] border border-stroke bg-white p-6 shadow-[0_16px_50px_rgba(15,23,42,0.06)]">
           <div className="flex items-center justify-between gap-4">
-            <h2 className="text-2xl font-extrabold tracking-tight text-slate-950">Inbox</h2>
+            <h2 className="text-2xl font-extrabold tracking-tight text-slate-950">{t('messages.inbox')}</h2>
           </div>
 
           <div className="mt-5 grid gap-3">
             <input
               value={searchKeyword}
               onChange={(event) => setSearchKeyword(event.target.value)}
-              placeholder="Tim theo role, email, topic, summary..."
+              placeholder={t('messages.searchPlaceholder')}
               className="rounded-2xl border border-stroke bg-slate-50 px-4 py-3 text-sm outline-none focus:border-teal-400"
             />
             <div className="grid gap-3 sm:grid-cols-2">
@@ -132,28 +138,28 @@ export function TeacherMessagesPage() {
                 onChange={(event) => setStatusFilter(event.target.value as typeof statusFilter)}
                 className="rounded-2xl border border-stroke bg-slate-50 px-4 py-3 text-sm outline-none focus:border-teal-400"
               >
-                <option value="all">Tat ca status</option>
-                <option value="unread">Unread</option>
-                <option value="read">Read</option>
-                <option value="replied">Replied</option>
+                <option value="all">{tCommon('fields.allStatuses')}</option>
+                <option value="unread">{tCommon('statuses.unread')}</option>
+                <option value="read">{tCommon('statuses.read')}</option>
+                <option value="replied">{tCommon('statuses.replied')}</option>
               </select>
               <select
                 value={roleFilter}
                 onChange={(event) => setRoleFilter(event.target.value as typeof roleFilter)}
                 className="rounded-2xl border border-stroke bg-slate-50 px-4 py-3 text-sm outline-none focus:border-teal-400"
               >
-                <option value="all">Tat ca roles</option>
-                <option value="student">Student</option>
-                <option value="admin">Admin</option>
-                <option value="teacher">Teacher</option>
+                <option value="all">{tCommon('fields.allRoles')}</option>
+                <option value="student">{tCommon('roles.student')}</option>
+                <option value="admin">{tCommon('roles.admin')}</option>
+                <option value="teacher">{tCommon('roles.teacher')}</option>
               </select>
             </div>
           </div>
 
-          {messagesQuery.isPending ? <div className="mt-6"><QueryLoadingState title="Dang tai inbox..." /></div> : null}
+          {messagesQuery.isPending ? <div className="mt-6"><QueryLoadingState title={t('messages.loading')} /></div> : null}
           {messagesQuery.error ? (
             <div className="mt-6">
-              <QueryErrorState title="Khong tai duoc messages" description={getApiErrorMessage(messagesQuery.error)} />
+              <QueryErrorState title={t('messages.loadError')} description={getApiErrorMessage(messagesQuery.error)} />
             </div>
           ) : null}
 
@@ -179,12 +185,16 @@ export function TeacherMessagesPage() {
                         message.status === 'unread' ? 'bg-amber-100 text-amber-800' : message.status === 'replied' ? 'bg-teal-100 text-teal-800' : 'bg-slate-200 text-slate-700',
                       ].join(' ')}
                     >
-                      {message.status}
+                      {tCommon(`statuses.${message.status}`)}
                     </span>
                   </div>
                   <div className="mt-2 flex flex-wrap items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
                     <span className="rounded-full bg-slate-200 px-2.5 py-1 text-slate-700">
-                      {counterparty?.role ?? message.recipientRole ?? 'contact'}
+                      {counterparty?.role
+                        ? tCommon(`roles.${counterparty.role}`)
+                        : message.recipientRole
+                          ? tCommon(`roles.${message.recipientRole}`)
+                          : t('messages.contactRole')}
                     </span>
                     <span>{counterparty?.email ?? message.email}</span>
                   </div>
@@ -196,7 +206,7 @@ export function TeacherMessagesPage() {
 
             {!messagesQuery.isPending && filteredMessages.length === 0 ? (
               <div className="rounded-2xl border border-dashed border-stroke px-4 py-6 text-sm text-slate-500">
-                Chua co message nao phu hop voi bo loc hien tai.
+                {t('messages.noMatches')}
               </div>
             ) : null}
           </div>
@@ -204,13 +214,13 @@ export function TeacherMessagesPage() {
 
         <article className="rounded-[1.8rem] border border-stroke bg-white p-6 shadow-[0_16px_50px_rgba(15,23,42,0.06)]">
           <div>
-            <h2 className="text-2xl font-extrabold tracking-tight text-slate-950">Chi tiet message va reply</h2>
-            <p className="mt-2 text-sm text-slate-600">Teacher co the xem conversation va phan hoi ngay tu detail pane truoc khi tao message moi.</p>
+            <h2 className="text-2xl font-extrabold tracking-tight text-slate-950">{t('messages.detailTitle')}</h2>
+            <p className="mt-2 text-sm text-slate-600">{t('messages.detailDescription')}</p>
           </div>
 
           {markMutation.error ? (
             <div className="mt-6">
-              <QueryErrorState title="Khong cap nhat duoc message" description={getApiErrorMessage(markMutation.error)} />
+              <QueryErrorState title={t('messages.updateError')} description={getApiErrorMessage(markMutation.error)} />
             </div>
           ) : null}
 
@@ -221,29 +231,34 @@ export function TeacherMessagesPage() {
                   <div>
                     <p className="text-xl font-extrabold tracking-tight text-slate-950">{selectedMessage.subject}</p>
                     <p className="mt-2 text-sm text-slate-600">
-                      {(replyTarget?.fullName ?? selectedMessage.name) || 'Nguoi gui'} - {(replyTarget?.email ?? selectedMessage.email) || 'No email'}
+                      {(replyTarget?.fullName ?? selectedMessage.name) || t('messages.unknownSender')} -{' '}
+                      {(replyTarget?.email ?? selectedMessage.email) || tCommon('states.noEmail')}
                     </p>
                   </div>
                   <div className="flex flex-wrap gap-2">
                     <span className="rounded-full bg-slate-200 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-700">
-                      {selectedMessage.status}
+                      {tCommon(`statuses.${selectedMessage.status}`)}
                     </span>
                     <span className="rounded-full bg-violet-100 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-violet-700">
-                      {replyTarget?.role ?? selectedMessage.recipientRole ?? 'contact'}
+                      {replyTarget?.role
+                        ? tCommon(`roles.${replyTarget.role}`)
+                        : selectedMessage.recipientRole
+                          ? tCommon(`roles.${selectedMessage.recipientRole}`)
+                          : t('messages.contactRole')}
                     </span>
                   </div>
                 </div>
 
                 <div className="mt-4 grid gap-2 text-sm text-slate-500">
-                  <p>Tao luc: {formatDateTime(selectedMessage.createdAt)}</p>
-                  <p>Read at: {formatDateTime(selectedMessage.readAt)}</p>
-                  <p>Replied at: {formatDateTime(selectedMessage.repliedAt)}</p>
+                  <p>{t('messages.createdAt')}: {formatDateTime(selectedMessage.createdAt, dateLocale)}</p>
+                  <p>{t('messages.readAt')}: {formatDateTime(selectedMessage.readAt, dateLocale)}</p>
+                  <p>{t('messages.repliedAt')}: {formatDateTime(selectedMessage.repliedAt, dateLocale)}</p>
                   <p>
-                    Sender:{' '}
+                    {t('messages.sender')}:{' '}
                     {selectedMessage.senderUser?.fullName ?? selectedMessage.senderUser?.email ?? selectedMessage.name}
                   </p>
                   <p>
-                    Recipient:{' '}
+                    {t('messages.recipient')}:{' '}
                     {selectedMessage.recipientUser?.fullName ?? selectedMessage.recipientUser?.email ?? selectedMessage.email}
                   </p>
                 </div>
@@ -278,12 +293,12 @@ export function TeacherMessagesPage() {
                 }}
               >
                 <label className="grid gap-2 text-sm font-semibold text-slate-700">
-                  Tra loi
+                  {t('messages.reply')}
                   <textarea
                     rows={4}
                     value={replyContent}
                     onChange={(event) => setReplyContent(event.target.value)}
-                    placeholder="Nhap noi dung phan hoi..."
+                    placeholder={t('messages.replyPlaceholder')}
                     className="rounded-[1.3rem] border border-stroke bg-white px-4 py-3 text-sm outline-none focus:border-teal-400"
                   />
                 </label>
@@ -292,7 +307,7 @@ export function TeacherMessagesPage() {
                   disabled={sendMutation.isPending || !replyTarget?.id || replyContent.trim().length < 3}
                   className="rounded-2xl bg-slate-950 px-5 py-3 text-sm font-semibold text-white disabled:opacity-60"
                 >
-                  {sendMutation.isPending ? 'Dang gui phan hoi...' : 'Gui phan hoi'}
+                  {sendMutation.isPending ? t('messages.sendingReply') : t('messages.sendReply')}
                 </button>
               </form>
 
@@ -303,7 +318,7 @@ export function TeacherMessagesPage() {
                   onClick={() => markMutation.mutate({ id: selectedMessage.id, status: 'read' })}
                   className="rounded-2xl border border-stroke bg-white px-5 py-3 text-sm font-semibold text-slate-900"
                 >
-                  Danh dau da doc
+                  {t('messages.markRead')}
                 </button>
                 <button
                   type="button"
@@ -311,25 +326,25 @@ export function TeacherMessagesPage() {
                   onClick={() => markMutation.mutate({ id: selectedMessage.id, status: 'replied' })}
                   className="rounded-2xl bg-slate-950 px-5 py-3 text-sm font-semibold text-white"
                 >
-                  Danh dau da phan hoi
+                  {t('messages.markReplied')}
                 </button>
               </div>
             </div>
           ) : (
             <div className="mt-6 rounded-2xl border border-dashed border-stroke px-4 py-6 text-sm text-slate-500">
-              Chua co message nao trong inbox.
+              {t('messages.empty')}
             </div>
           )}
 
           <div className="mt-8 grid gap-6">
             <div>
-              <h2 className="text-2xl font-extrabold tracking-tight text-slate-950">Gui tin nhan moi</h2>
-              <p className="mt-2 text-sm text-slate-600">Teacher chi nhan va gui cho admin hoac student dang hoc trong khoa hoc cua minh.</p>
+              <h2 className="text-2xl font-extrabold tracking-tight text-slate-950">{t('messages.compose')}</h2>
+              <p className="mt-2 text-sm text-slate-600">{tTeacher('messages.recipientHint')}</p>
             </div>
 
-            {recipientsQuery.isPending ? <QueryLoadingState title="Dang tai danh sach nguoi nhan..." /> : null}
+            {recipientsQuery.isPending ? <QueryLoadingState title={t('messages.loadingRecipients')} /> : null}
             {recipientsQuery.error ? (
-              <QueryErrorState title="Khong tai duoc nguoi nhan" description={getApiErrorMessage(recipientsQuery.error)} />
+              <QueryErrorState title={t('messages.recipientsError')} description={getApiErrorMessage(recipientsQuery.error)} />
             ) : null}
 
             <form
@@ -351,7 +366,7 @@ export function TeacherMessagesPage() {
             >
               <div className="grid gap-4 sm:grid-cols-2">
                 <label className="grid gap-2 text-sm font-semibold text-slate-700">
-                  Nguoi nhan
+                  {t('messages.recipient')}
                   <select
                     value={recipientUserId}
                     onChange={(event) => setRecipientUserId(event.target.value)}
@@ -359,17 +374,17 @@ export function TeacherMessagesPage() {
                     className="rounded-2xl border border-stroke bg-white px-4 py-3 text-sm outline-none focus:border-teal-400"
                   >
                     {availableRecipients.length === 0 ? (
-                      <option value="">Chua co nguoi nhan hop le</option>
+                      <option value="">{t('messages.noRecipients')}</option>
                     ) : null}
                     {availableRecipients.map((recipient) => (
                       <option key={recipient.id} value={recipient.id}>
-                        {recipient.fullName} - {recipient.role} - {recipient.email}
+                        {recipient.fullName} - {tCommon(`roles.${recipient.role}`)} - {recipient.email}
                       </option>
                     ))}
                   </select>
                 </label>
                 <label className="grid gap-2 text-sm font-semibold text-slate-700">
-                  Topic
+                  {t('messages.subject')}
                   <input
                     value={composeSubject}
                     onChange={(event) => setComposeSubject(event.target.value)}
@@ -379,7 +394,7 @@ export function TeacherMessagesPage() {
               </div>
 
               <label className="grid gap-2 text-sm font-semibold text-slate-700">
-                Noi dung
+                {t('messages.content')}
                 <textarea
                   rows={4}
                   value={composeContent}
@@ -389,7 +404,7 @@ export function TeacherMessagesPage() {
               </label>
 
               {sendMutation.error ? (
-                <QueryErrorState title="Khong gui duoc tin nhan" description={getApiErrorMessage(sendMutation.error)} />
+                <QueryErrorState title={t('messages.sendError')} description={getApiErrorMessage(sendMutation.error)} />
               ) : null}
               {composeSuccess ? (
                 <div className="rounded-2xl border border-teal-200 bg-teal-50 px-4 py-3 text-sm font-semibold text-teal-700">
@@ -397,10 +412,10 @@ export function TeacherMessagesPage() {
                 </div>
               ) : null}
               {composeSubjectLength > 0 && composeSubjectLength < 3 ? (
-                <p className="text-sm text-amber-700">Topic can it nhat 3 ky tu.</p>
+                <p className="text-sm text-amber-700">{t('messages.subjectTooShort')}</p>
               ) : null}
               {composeContentLength > 0 && composeContentLength < 10 ? (
-                <p className="text-sm text-amber-700">Noi dung can it nhat 10 ky tu.</p>
+                <p className="text-sm text-amber-700">{t('messages.contentTooShort')}</p>
               ) : null}
 
               <button
@@ -412,7 +427,7 @@ export function TeacherMessagesPage() {
                 }
                 className="rounded-2xl bg-slate-950 px-5 py-3 text-sm font-semibold text-white disabled:opacity-60"
               >
-                {sendMutation.isPending ? 'Dang gui...' : 'Gui tin nhan'}
+                {sendMutation.isPending ? tCommon('states.sending') : t('messages.send')}
               </button>
             </form>
           </div>

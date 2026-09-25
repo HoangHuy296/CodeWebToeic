@@ -1,10 +1,12 @@
 import { useEffect, useState, type ChangeEvent, type ReactNode } from 'react';
 import { useQuery } from '@tanstack/react-query';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../app/providers/auth-provider';
 import { useNotifications } from '../../app/providers/notification-provider';
 import { QueryErrorState, QueryLoadingState } from '../../components/common/query-state';
 import { authApi } from '../../lib/auth-api';
 import { getApiErrorMessage } from '../../lib/api';
+import { formatDateTime } from '../../lib/format';
 import { courseApi } from '../../lib/course-api';
 
 function ProfileModal({
@@ -18,6 +20,7 @@ function ProfileModal({
   children: ReactNode;
   onClose: () => void;
 }) {
+  const { t: tCommon } = useTranslation('common');
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/45 px-4 py-6 backdrop-blur-sm">
       <div className="w-full max-w-lg rounded-[2rem] border border-stroke bg-white p-6 shadow-[0_24px_80px_rgba(15,23,42,0.18)]">
@@ -27,7 +30,7 @@ function ProfileModal({
             <p className="mt-2 text-sm leading-7 text-slate-600">{description}</p>
           </div>
           <button type="button" onClick={onClose} className="rounded-full bg-slate-100 px-3 py-2 text-sm font-semibold text-slate-700">
-            Dong
+            {tCommon('actions.close')}
           </button>
         </div>
         <div className="mt-6">{children}</div>
@@ -37,6 +40,9 @@ function ProfileModal({
 }
 
 export function TeacherProfilePage() {
+  const { t, i18n } = useTranslation('workspace');
+  const { t: tCommon } = useTranslation('common');
+  const dateLocale = i18n.language === 'en' ? 'en-US' : 'vi-VN';
   const { user, syncAuthPayload, syncCurrentUser } = useAuth();
   const { pushClientNotification } = useNotifications();
   const managedCoursesQuery = useQuery({
@@ -106,12 +112,12 @@ export function TeacherProfilePage() {
       return;
     }
     if (!file.type.startsWith('image/')) {
-      setProfileError('Chi ho tro upload file anh cho avatar.');
+      setProfileError(tCommon('validation.imageOnly'));
       event.target.value = '';
       return;
     }
     if (file.size > 2 * 1024 * 1024) {
-      setProfileError('Avatar local khong duoc vuot qua 2MB.');
+      setProfileError(tCommon('validation.imageTooLarge', { max: 2 }));
       event.target.value = '';
       return;
     }
@@ -123,7 +129,7 @@ export function TeacherProfilePage() {
       const dataUrl = await new Promise<string>((resolve, reject) => {
         const reader = new FileReader();
         reader.onload = () => resolve(String(reader.result ?? ''));
-        reader.onerror = () => reject(new Error('Khong doc duoc file anh.'));
+        reader.onerror = () => reject(new Error(tCommon('validation.imageReadFailed')));
         reader.readAsDataURL(file);
       });
       setProfileDraft((current) => ({ ...current, avatarUrl: dataUrl }));
@@ -150,41 +156,41 @@ export function TeacherProfilePage() {
               )}
             </div>
             <div className="min-w-0">
-              <p className="text-xs font-semibold uppercase tracking-[0.34em] text-teal-700">teacher profile</p>
+              <p className="text-xs font-semibold uppercase tracking-[0.34em] text-teal-700">{t('profile.teacherEyebrow')}</p>
               <h1 className="mt-3 break-words text-3xl font-extrabold tracking-tight text-slate-950 lg:text-[2rem]">{user.fullName}</h1>
-              <p className="mt-2 text-sm leading-7 text-slate-600">
-                Ho so giang vien duoc cap nhat truc tiep qua backend Spring. Email va phone van di qua workflow xac nhan rieng de tranh doi nham thong tin lien he.
-              </p>
+              <p className="mt-2 text-sm leading-7 text-slate-600">{t('profile.description')}</p>
             </div>
           </div>
 
           <div className="grid gap-4 sm:grid-cols-3">
             <article className="min-w-0 rounded-[1.5rem] border border-stroke bg-slate-50 p-5">
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Email hien tai</p>
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">{t('profile.currentEmail')}</p>
               <p className="mt-3 min-h-[2.75rem] break-all text-sm font-extrabold tracking-tight text-slate-950">{user.email}</p>
               <button
                 type="button"
                 onClick={() => setEmailModalOpen(true)}
                 className="btn-brand mt-4 inline-flex w-full items-center justify-center rounded-full px-4 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-white"
               >
-                CRUD email
+                {t('profile.changeEmail')}
               </button>
             </article>
 
             <article className="min-w-0 rounded-[1.5rem] border border-stroke bg-slate-50 p-5">
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">So dien thoai</p>
-              <p className="mt-3 min-h-[2.75rem] break-all text-sm font-extrabold tracking-tight text-slate-950">{user.phone || 'Chua cap nhat'}</p>
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">{tCommon('fields.phone')}</p>
+              <p className="mt-3 min-h-[2.75rem] break-all text-sm font-extrabold tracking-tight text-slate-950">
+                {user.phone || tCommon('states.notUpdated')}
+              </p>
               <button
                 type="button"
                 onClick={() => setPhoneModalOpen(true)}
                 className="btn-brand mt-4 inline-flex w-full items-center justify-center rounded-full px-4 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-white"
               >
-                CRUD phone
+                {t('profile.changePhone')}
               </button>
             </article>
 
             <article className="min-w-0 rounded-[1.5rem] border border-stroke bg-slate-50 p-5">
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Khoa hoc dang so huu</p>
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">{t('profile.ownedCourses')}</p>
               <p className="mt-3 break-all text-sm font-extrabold tracking-tight text-slate-950">{String(ownedCourseIds.length)}</p>
             </article>
           </div>
@@ -195,8 +201,8 @@ export function TeacherProfilePage() {
         <article className="min-w-0 rounded-[1.8rem] border border-stroke bg-white p-6 shadow-[0_16px_50px_rgba(15,23,42,0.06)]">
           <div className="flex items-end justify-between gap-4">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.3em] text-teal-700">profile editor</p>
-              <h2 className="mt-2 text-3xl font-extrabold tracking-tight text-slate-950">Cap nhat thong tin giang vien</h2>
+              <p className="text-xs font-semibold uppercase tracking-[0.3em] text-teal-700">{t('profile.editorEyebrow')}</p>
+              <h2 className="mt-2 text-3xl font-extrabold tracking-tight text-slate-950">{t('profile.editorTitle')}</h2>
             </div>
           </div>
 
@@ -211,7 +217,7 @@ export function TeacherProfilePage() {
               try {
                 const updatedUser = await authApi.updateProfile(profileDraft);
                 syncCurrentUser(updatedUser);
-                setProfileSuccess('Cap nhat thong tin ca nhan thanh cong.');
+                setProfileSuccess(t('profile.saved'));
               } catch (error) {
                 setProfileError(getApiErrorMessage(error));
               } finally {
@@ -221,7 +227,7 @@ export function TeacherProfilePage() {
           >
             <div className="grid gap-4">
               <div className="min-w-0 rounded-[1.5rem] border border-stroke bg-slate-50 p-5">
-                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Avatar preview</p>
+                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">{t('profile.avatarPreview')}</p>
                 <div className="mt-4 flex justify-center">
                   <div className="flex h-28 w-28 items-center justify-center overflow-hidden rounded-[1.4rem] bg-[linear-gradient(135deg,var(--color-brand),var(--color-brand-deep))] text-2xl font-extrabold text-white shadow-[0_16px_34px_rgba(76,29,149,0.2)]">
                     {profileDraft.avatarUrl ? (
@@ -231,13 +237,11 @@ export function TeacherProfilePage() {
                     )}
                   </div>
                 </div>
-                <p className="mt-4 text-center text-xs leading-5 text-slate-500">
-                  Preview avatar hien tai truoc khi luu vao database.
-                </p>
+                <p className="mt-4 text-center text-xs leading-5 text-slate-500">{t('profile.avatarPreviewHint')}</p>
               </div>
 
               <label className="grid gap-2 text-sm font-semibold text-slate-700">
-                Ho ten
+                {tCommon('fields.fullName')}
                 <input
                   value={profileDraft.fullName}
                   onChange={(event) => setProfileDraft((current) => ({ ...current, fullName: event.target.value }))}
@@ -246,7 +250,7 @@ export function TeacherProfilePage() {
               </label>
 
               <label className="grid gap-2 text-sm font-semibold text-slate-700">
-                Avatar URL
+                {t('profile.avatarUrl')}
                 <input
                   value={profileDraft.avatarUrl}
                   onChange={(event) => setProfileDraft((current) => ({ ...current, avatarUrl: event.target.value }))}
@@ -255,20 +259,18 @@ export function TeacherProfilePage() {
               </label>
 
               <label className="grid gap-2 text-sm font-semibold text-slate-700">
-                Upload avatar tu may
+                {t('profile.uploadAvatar')}
                 <input
                   type="file"
                   accept="image/*"
                   onChange={handleAvatarFileChange}
                   className="w-full rounded-2xl border border-stroke bg-slate-50 px-4 py-3 text-sm outline-none transition file:mr-3 file:rounded-full file:border-0 file:bg-violet-50 file:px-3 file:py-2 file:font-semibold file:text-violet-700 hover:file:bg-violet-100"
                 />
-                <span className="text-xs font-medium leading-5 text-slate-500">
-                  Ho tro upload file anh local duoi 2MB. He thong se luu chuoi anh vao `avatarUrl` qua API profile hien tai.
-                </span>
+                <span className="text-xs font-medium leading-5 text-slate-500">{t('profile.avatarHint')}</span>
               </label>
 
               <label className="grid gap-2 text-sm font-semibold text-slate-700">
-                Bio
+                {t('profile.bio')}
                 <textarea
                   rows={5}
                   value={profileDraft.bio}
@@ -278,22 +280,24 @@ export function TeacherProfilePage() {
               </label>
             </div>
 
-            {profileError ? <QueryErrorState title="Khong cap nhat duoc profile" description={profileError} /> : null}
+            {profileError ? <QueryErrorState title={t('profile.saveError')} description={profileError} /> : null}
             {profileSuccess ? <p className="rounded-2xl bg-teal-50 px-4 py-3 text-sm font-semibold text-teal-700">{profileSuccess}</p> : null}
-            {isUploadingAvatar ? <p className="rounded-2xl bg-violet-50 px-4 py-3 text-sm font-semibold text-violet-700">Dang doc avatar local...</p> : null}
+            {isUploadingAvatar ? (
+              <p className="rounded-2xl bg-violet-50 px-4 py-3 text-sm font-semibold text-violet-700">{t('profile.readingAvatar')}</p>
+            ) : null}
 
             <div className="sticky bottom-3 z-10 -mx-2 rounded-[1.4rem] border border-stroke bg-white/92 px-5 py-4 shadow-[0_16px_36px_rgba(15,23,42,0.12)] backdrop-blur">
               <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                 <div>
-                  <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Sticky action bar</p>
-                  <p className="mt-1 text-sm text-slate-600">Luu profile sau khi kiem tra avatar, ho ten va bio.</p>
+                  <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">{t('profile.save')}</p>
+                  <p className="mt-1 text-sm text-slate-600">{t('profile.saveHint')}</p>
                 </div>
                 <button
                   type="submit"
                   disabled={isSavingProfile}
                   className="btn-brand rounded-2xl px-5 py-3 text-sm font-semibold text-white transition disabled:opacity-60"
                 >
-                  {isSavingProfile ? 'Dang cap nhat...' : 'Luu thong tin giang vien'}
+                  {isSavingProfile ? t('profile.saving') : t('profile.save')}
                 </button>
               </div>
             </div>
@@ -302,8 +306,8 @@ export function TeacherProfilePage() {
 
         <div className="grid min-w-0 gap-6">
           <article className="min-w-0 rounded-[1.8rem] border border-stroke bg-white p-6 shadow-[0_16px_50px_rgba(15,23,42,0.06)]">
-            <p className="text-xs font-semibold uppercase tracking-[0.3em] text-teal-700">password</p>
-            <h2 className="mt-2 text-[1.75rem] font-extrabold tracking-tight text-slate-950">Cap nhat mat khau</h2>
+            <p className="text-xs font-semibold uppercase tracking-[0.3em] text-teal-700">{t('profile.passwordEyebrow')}</p>
+            <h2 className="mt-2 text-[1.75rem] font-extrabold tracking-tight text-slate-950">{t('profile.passwordTitle')}</h2>
 
             <form
               className="mt-6 grid gap-4"
@@ -313,7 +317,7 @@ export function TeacherProfilePage() {
                 setPasswordSuccess(null);
 
                 if (passwordDraft.newPassword !== passwordDraft.confirmPassword) {
-                  setPasswordError('Mat khau xac nhan khong khop.');
+                  setPasswordError(tCommon('validation.passwordMismatch'));
                   return;
                 }
 
@@ -323,7 +327,7 @@ export function TeacherProfilePage() {
                     currentPassword: passwordDraft.currentPassword,
                     newPassword: passwordDraft.newPassword,
                   });
-                  setPasswordSuccess('Doi mat khau thanh cong.');
+                  setPasswordSuccess(t('profile.passwordSaved'));
                   setPasswordDraft({
                     currentPassword: '',
                     newPassword: '',
@@ -337,39 +341,39 @@ export function TeacherProfilePage() {
               }}
             >
               <label className="grid gap-2 text-sm font-semibold text-slate-700">
-                Mat khau hien tai
+                {t('profile.currentPassword')}
                 <input
                   type="password"
                   value={passwordDraft.currentPassword}
                   onChange={(event) => setPasswordDraft((current) => ({ ...current, currentPassword: event.target.value }))}
-                  placeholder="Mat khau hien tai"
+                  placeholder={t('profile.currentPassword')}
                   className="rounded-2xl border border-stroke bg-slate-50 px-4 py-3 outline-none transition focus:border-teal-400"
                 />
               </label>
               <div className="grid gap-4">
                 <label className="grid gap-2 text-sm font-semibold text-slate-700">
-                  Mat khau moi
+                  {t('profile.newPassword')}
                   <input
                     type="password"
                     value={passwordDraft.newPassword}
                     onChange={(event) => setPasswordDraft((current) => ({ ...current, newPassword: event.target.value }))}
-                    placeholder="Mat khau moi"
+                    placeholder={t('profile.newPassword')}
                     className="rounded-2xl border border-stroke bg-slate-50 px-4 py-3 outline-none transition focus:border-teal-400"
                   />
                 </label>
                 <label className="grid gap-2 text-sm font-semibold text-slate-700">
-                  Nhap lai mat khau moi
+                  {t('profile.confirmPassword')}
                   <input
                     type="password"
                     value={passwordDraft.confirmPassword}
                     onChange={(event) => setPasswordDraft((current) => ({ ...current, confirmPassword: event.target.value }))}
-                    placeholder="Nhap lai mat khau moi"
+                    placeholder={t('profile.confirmPassword')}
                     className="rounded-2xl border border-stroke bg-slate-50 px-4 py-3 outline-none transition focus:border-teal-400"
                   />
                 </label>
               </div>
 
-              {passwordError ? <QueryErrorState title="Khong doi duoc mat khau" description={passwordError} /> : null}
+              {passwordError ? <QueryErrorState title={t('profile.passwordError')} description={passwordError} /> : null}
               {passwordSuccess ? <p className="rounded-2xl bg-teal-50 px-4 py-3 text-sm font-semibold text-teal-700">{passwordSuccess}</p> : null}
 
               <button
@@ -377,30 +381,25 @@ export function TeacherProfilePage() {
                 disabled={isSavingPassword}
                 className="btn-brand rounded-2xl px-5 py-3 text-sm font-semibold text-white transition disabled:opacity-60"
               >
-                {isSavingPassword ? 'Dang doi mat khau...' : 'Cap nhat mat khau'}
+                {isSavingPassword ? t('profile.changingPassword') : t('profile.passwordTitle')}
               </button>
             </form>
           </article>
 
           <article className="min-w-0 rounded-[1.8rem] border border-stroke bg-white p-6 shadow-[0_16px_50px_rgba(15,23,42,0.06)]">
-            <p className="text-xs font-semibold uppercase tracking-[0.3em] text-teal-700">owned course ids</p>
-            <h2 className="mt-2 text-[1.75rem] font-extrabold tracking-tight text-slate-950">Khoa hoc dang so huu</h2>
-            <p className="mt-3 text-sm leading-7 text-slate-600">
-              Trang nay doc truc tiep tu course manage API de khop voi teacher workspace. Moi item hien course id va ten khoa hoc ma giang vien dang quan ly.
-            </p>
+            <p className="text-xs font-semibold uppercase tracking-[0.3em] text-teal-700">{t('profile.ownedCourseIds')}</p>
+            <h2 className="mt-2 text-[1.75rem] font-extrabold tracking-tight text-slate-950">{t('profile.ownedCourses')}</h2>
+            <p className="mt-3 text-sm leading-7 text-slate-600">{t('profile.ownedCoursesHint')}</p>
 
             {managedCoursesQuery.isPending ? (
               <div className="mt-5">
-                <QueryLoadingState title="Dang tai khoa hoc dang quan ly..." />
+                <QueryLoadingState title={t('profile.loadingCourses')} />
               </div>
             ) : null}
 
             {managedCoursesQuery.error ? (
               <div className="mt-5">
-                <QueryErrorState
-                  title="Khong tai duoc danh sach khoa hoc dang quan ly"
-                  description={getApiErrorMessage(managedCoursesQuery.error)}
-                />
+                <QueryErrorState title={t('profile.coursesError')} description={getApiErrorMessage(managedCoursesQuery.error)} />
               </div>
             ) : null}
 
@@ -416,14 +415,14 @@ export function TeacherProfilePage() {
                         {course.title}
                       </p>
                       <span className="rounded-full bg-teal-50 px-3 py-1 text-xs font-semibold uppercase tracking-[0.16em] text-teal-700">
-                        {course.isPublished ? 'published' : 'draft'}
+                        {course.isPublished ? tCommon('statuses.published') : tCommon('statuses.draft')}
                       </span>
                     </div>
                   </div>
                 ))
               ) : (
                 <div className="rounded-2xl border border-dashed border-stroke px-4 py-5 text-sm text-slate-500">
-                  Tai khoan nay hien chua so huu khoa hoc nao.
+                  {t('profile.noOwnedCourses')}
                 </div>
               )}
             </div>
@@ -433,8 +432,8 @@ export function TeacherProfilePage() {
 
       {emailModalOpen ? (
         <ProfileModal
-          title="Xac nhan thay doi email"
-          description="Workflow MVP: gui ma xac nhan toi email moi. Trong moi truong dev, he thong hien preview code de test nhanh truoc khi hook vao provider email that."
+          title={t('profile.emailTitle')}
+          description={t('profile.emailHint')}
           onClose={() => {
             setEmailModalOpen(false);
             setEmailError(null);
@@ -446,7 +445,7 @@ export function TeacherProfilePage() {
               type="email"
               value={emailDraft.newEmail}
               onChange={(event) => setEmailDraft((current) => ({ ...current, newEmail: event.target.value }))}
-              placeholder="Nhap email moi"
+              placeholder={t('profile.newEmailPlaceholder')}
               className="rounded-2xl border border-stroke bg-slate-50 px-4 py-3 outline-none transition focus:border-teal-400"
             />
 
@@ -466,12 +465,12 @@ export function TeacherProfilePage() {
                       previewCode: result.verificationPreviewCode,
                       expiresAt: result.expiresAt,
                     }));
-                    setEmailSuccess(`Da tao yeu cau doi email cho ${result.deliveryTarget}.`);
+                    setEmailSuccess(t('profile.emailCodeRequested', { target: result.deliveryTarget }));
                   } catch (error) {
                     const message = getApiErrorMessage(error);
                     setEmailError(message);
                     pushClientNotification({
-                      title: 'Gui email xac nhan that bai',
+                      title: t('profile.emailCodeError'),
                       message,
                       severity: 'error',
                       entityType: 'profile',
@@ -482,26 +481,26 @@ export function TeacherProfilePage() {
                 }}
                 className="rounded-2xl bg-slate-950 px-5 py-3 text-sm font-semibold text-white transition hover:bg-slate-800 disabled:opacity-60"
               >
-                {isRequestingEmail ? 'Dang gui...' : 'Gui email xac nhan'}
+                {isRequestingEmail ? tCommon('states.sending') : t('profile.sendEmailCode')}
               </button>
             </div>
 
             {emailDraft.previewCode ? (
               <div className="rounded-2xl border border-amber-200 bg-amber-50 px-4 py-4 text-sm text-amber-800">
-                Dev preview code: <span className="font-extrabold">{emailDraft.previewCode}</span>
+                {t('profile.devCode', { code: emailDraft.previewCode })}
                 <br />
-                Het han luc: {new Date(emailDraft.expiresAt).toLocaleString('vi-VN')}
+                {t('profile.expiresAt', { date: formatDateTime(emailDraft.expiresAt, dateLocale) })}
               </div>
             ) : null}
 
             <input
               value={emailDraft.verificationCode}
               onChange={(event) => setEmailDraft((current) => ({ ...current, verificationCode: event.target.value }))}
-              placeholder="Nhap ma xac nhan 6 so"
+              placeholder={t('profile.codePlaceholder')}
               className="rounded-2xl border border-stroke bg-slate-50 px-4 py-3 outline-none transition focus:border-teal-400"
             />
 
-            {emailError ? <QueryErrorState title="Khong doi duoc email" description={emailError} /> : null}
+            {emailError ? <QueryErrorState title={t('profile.emailError')} description={emailError} /> : null}
             {emailSuccess ? <p className="rounded-2xl bg-teal-50 px-4 py-3 text-sm font-semibold text-teal-700">{emailSuccess}</p> : null}
 
             <button
@@ -515,7 +514,7 @@ export function TeacherProfilePage() {
                 try {
                   const payload = await authApi.confirmEmailChange(emailDraft.newEmail, emailDraft.verificationCode);
                   syncAuthPayload(payload);
-                  setEmailSuccess('Cap nhat email thanh cong.');
+                  setEmailSuccess(t('profile.emailSaved'));
                   setEmailDraft({
                     newEmail: payload.user.email,
                     verificationCode: '',
@@ -531,7 +530,7 @@ export function TeacherProfilePage() {
               }}
               className="rounded-2xl border border-stroke bg-white px-5 py-3 text-sm font-semibold text-slate-900 transition hover:bg-slate-50 disabled:opacity-60"
             >
-              {isConfirmingEmail ? 'Dang xac nhan...' : 'Xac nhan doi email'}
+              {isConfirmingEmail ? t('profile.confirming') : t('profile.confirmEmail')}
             </button>
           </div>
         </ProfileModal>
@@ -539,8 +538,8 @@ export function TeacherProfilePage() {
 
       {phoneModalOpen ? (
         <ProfileModal
-          title="Xac nhan thay doi so dien thoai"
-          description="Workflow MVP: gui ma OTP toi so moi. Trong moi truong dev, page hien preview OTP de test nhanh truoc khi ket noi SMS provider."
+          title={t('profile.phoneTitle')}
+          description={t('profile.phoneHint')}
           onClose={() => {
             setPhoneModalOpen(false);
             setPhoneError(null);
@@ -551,7 +550,7 @@ export function TeacherProfilePage() {
             <input
               value={phoneDraft.newPhone}
               onChange={(event) => setPhoneDraft((current) => ({ ...current, newPhone: event.target.value }))}
-              placeholder="Nhap so dien thoai moi"
+              placeholder={t('profile.newPhonePlaceholder')}
               className="rounded-2xl border border-stroke bg-slate-50 px-4 py-3 outline-none transition focus:border-teal-400"
             />
 
@@ -570,12 +569,12 @@ export function TeacherProfilePage() {
                     previewCode: result.verificationPreviewCode,
                     expiresAt: result.expiresAt,
                   }));
-                  setPhoneSuccess(`Da tao yeu cau OTP cho ${result.deliveryTarget}.`);
+                  setPhoneSuccess(t('profile.otpRequested', { target: result.deliveryTarget }));
                 } catch (error) {
                   const message = getApiErrorMessage(error);
                   setPhoneError(message);
                   pushClientNotification({
-                    title: 'Gui OTP that bai',
+                    title: t('profile.otpError'),
                     message,
                     severity: 'error',
                     entityType: 'profile',
@@ -586,25 +585,25 @@ export function TeacherProfilePage() {
               }}
               className="rounded-2xl bg-slate-950 px-5 py-3 text-sm font-semibold text-white transition hover:bg-slate-800 disabled:opacity-60"
             >
-              {isRequestingPhone ? 'Dang gui OTP...' : 'Gui OTP'}
+              {isRequestingPhone ? t('profile.sendingOtp') : t('profile.sendOtp')}
             </button>
 
             {phoneDraft.previewCode ? (
               <div className="rounded-2xl border border-amber-200 bg-amber-50 px-4 py-4 text-sm text-amber-800">
-                Dev preview OTP: <span className="font-extrabold">{phoneDraft.previewCode}</span>
+                {t('profile.devOtp', { code: phoneDraft.previewCode })}
                 <br />
-                Het han luc: {new Date(phoneDraft.expiresAt).toLocaleString('vi-VN')}
+                {t('profile.expiresAt', { date: formatDateTime(phoneDraft.expiresAt, dateLocale) })}
               </div>
             ) : null}
 
             <input
               value={phoneDraft.otpCode}
               onChange={(event) => setPhoneDraft((current) => ({ ...current, otpCode: event.target.value }))}
-              placeholder="Nhap OTP 6 so"
+              placeholder={t('profile.otpPlaceholder')}
               className="rounded-2xl border border-stroke bg-slate-50 px-4 py-3 outline-none transition focus:border-teal-400"
             />
 
-            {phoneError ? <QueryErrorState title="Khong doi duoc phone" description={phoneError} /> : null}
+            {phoneError ? <QueryErrorState title={t('profile.phoneError')} description={phoneError} /> : null}
             {phoneSuccess ? <p className="rounded-2xl bg-teal-50 px-4 py-3 text-sm font-semibold text-teal-700">{phoneSuccess}</p> : null}
 
             <button
@@ -618,7 +617,7 @@ export function TeacherProfilePage() {
                 try {
                   const updatedUser = await authApi.confirmPhoneChange(phoneDraft.newPhone, phoneDraft.otpCode);
                   syncCurrentUser(updatedUser);
-                  setPhoneSuccess('Cap nhat so dien thoai thanh cong.');
+                  setPhoneSuccess(t('profile.phoneSaved'));
                   setPhoneDraft({
                     newPhone: updatedUser.phone ?? '',
                     otpCode: '',
@@ -634,7 +633,7 @@ export function TeacherProfilePage() {
               }}
               className="rounded-2xl border border-stroke bg-white px-5 py-3 text-sm font-semibold text-slate-900 transition hover:bg-slate-50 disabled:opacity-60"
             >
-              {isConfirmingPhone ? 'Dang xac nhan...' : 'Xac nhan doi so dien thoai'}
+              {isConfirmingPhone ? t('profile.confirming') : t('profile.confirmPhone')}
             </button>
           </div>
         </ProfileModal>

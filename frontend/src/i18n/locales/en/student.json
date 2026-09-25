@@ -27,6 +27,8 @@
     "loading": "Loading your courses...",
     "loadError": "Could not load your courses",
     "empty": "You have not enrolled in any courses yet.",
+    "emptyTitle": "This account has not enrolled in any courses",
+    "emptyDescription": "Once you successfully enroll in a course, this page will show only the courses you've enrolled in.",
     "browseCourses": "Browse courses",
     "continueLearning": "Continue learning"
   },
@@ -77,7 +79,18 @@
     "loading": "Loading practice results...",
     "loadError": "Could not load practice results",
     "empty": "You have no practice results yet.",
-    "practice": "Practice now"
+    "practice": "Practice now",
+    "totalSessions": "Total sessions",
+    "firstTryRate": "First-try accuracy",
+    "lastSession": "Last session",
+    "noSessionsYet": "None yet",
+    "questionSet": "Question set",
+    "firstTry": "First-try correct",
+    "rounds": "Rounds",
+    "totalAttempts": "Total attempts",
+    "duration": "Duration",
+    "finishedAt": "Finished",
+    "emptyLoggedOut": "You have no /wordcheck practice sessions recorded while signed in."
   },
   "messages": {
     "eyebrow": "Student messages",
