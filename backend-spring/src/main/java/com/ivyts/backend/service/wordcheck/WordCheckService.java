@@ -45,6 +45,8 @@ public class WordCheckService {
             Map<String, Object> view = new LinkedHashMap<>();
             view.put("id", row.getSetSlug());
             view.put("setName", row.getSetName());
+            view.put("courseSlug", row.getCourseSlug());
+            view.put("courseName", row.getCourseName());
             view.put("itemCount", row.getItemCount());
             result.add(view);
         }
@@ -60,6 +62,8 @@ public class WordCheckService {
         Map<String, Object> set = new LinkedHashMap<>();
         set.put("id", setSlug);
         set.put("setName", items.get(0).getSetName());
+        set.put("courseSlug", items.get(0).getCourseSlug());
+        set.put("courseName", items.get(0).getCourseName());
         set.put("itemCount", items.size());
 
         List<Map<String, Object>> questions = items.stream().map(item -> {
@@ -92,6 +96,8 @@ public class WordCheckService {
         Map<String, Object> set = new LinkedHashMap<>();
         set.put("id", setSlug);
         set.put("setName", items.get(0).getSetName());
+        set.put("courseSlug", items.get(0).getCourseSlug());
+        set.put("courseName", items.get(0).getCourseName());
         set.put("itemCount", items.size());
 
         List<Map<String, Object>> cards = items.stream().map(item -> {
@@ -232,7 +238,7 @@ public class WordCheckService {
             TrackedSession created = new TrackedSession();
             created.setSlug = setSlug;
             created.setName = wordItemJpaRepository.findBySetSlugOrderBySortOrderAsc(setSlug).stream()
-                .findFirst().map(WordItemEntity::getSetName).orElse(setSlug);
+                .findFirst().map(WordCheckService::scoreSetName).orElse(setSlug);
             created.studentName = (name == null || name.isBlank()) ? "Khach" : name.trim();
             created.mode = (mode == null || mode.isBlank()) ? "extra" : mode;
             created.studentId = studentId;
@@ -253,6 +259,12 @@ public class WordCheckService {
                 (existing, fresh) -> new TrackedAnswer(existing.attempts + 1, existing.firstOk)
             );
         }
+    }
+
+    /** "TOEIC Starter · Chapter 1": the label stored on a score row so it stays unambiguous across courses. */
+    private static String scoreSetName(WordItemEntity item) {
+        String course = item.getCourseName();
+        return course == null || course.isBlank() ? item.getSetName() : course + " · " + item.getSetName();
     }
 
     private List<String> allAnswers(WordItemEntity item) {

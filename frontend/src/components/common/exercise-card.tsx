@@ -62,7 +62,7 @@ export function ExerciseCard({ exercise, topicLabel }: ExerciseCardProps) {
         </div>
         <div className="rounded-2xl bg-slate-50 px-3 py-3">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Nguoi tao</p>
-          <p className="mt-1 font-bold text-slate-900">{exercise.createdBy.fullName ?? 'IVYTS 1998'}</p>
+          <p className="mt-1 font-bold text-slate-900">{exercise.createdBy.fullName ?? 'IVYTS'}</p>
         </div>
       </div>
 

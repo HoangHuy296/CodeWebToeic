@@ -19,26 +19,6 @@ interface ClassroomImage {
   description: string;
 }
 
-interface EducationItem {
-  meta: string;
-  title: string;
-  school: string;
-  text: string;
-}
-
-interface ExperienceItem {
-  period: string;
-  name: string;
-  role: string;
-  description: string;
-}
-
-interface EarlierExperienceItem {
-  period: string;
-  name: string;
-  detail: string;
-}
-
 // Real photos, provided by the site owner — filenames don't change with language.
 const classroomImageSrcs = ["/portfolio/thuy-vy-group-ai.png", "/portfolio/thuy-vy-individual-ai.png"];
 
@@ -98,9 +78,6 @@ export function PortfolioPage() {
   const approaches = t("approaches", { returnObjects: true }) as Approach[];
   const classroomImagesText = t("classroomImages", { returnObjects: true }) as ClassroomImage[];
   const classroomImages = classroomImagesText.map((item, index) => ({ ...item, src: classroomImageSrcs[index] }));
-  const education = t("education", { returnObjects: true }) as EducationItem[];
-  const experience = t("experience", { returnObjects: true }) as ExperienceItem[];
-  const earlierExperience = t("earlierExperience", { returnObjects: true }) as EarlierExperienceItem[];
 
   const contactActions = [
     { label: t("contact.phoneLabel"), value: "0784 902 824", href: "tel:0784902824", icon: contactIcons[0] },
@@ -171,7 +148,7 @@ export function PortfolioPage() {
       >
         {qualifications.map((item) => (
           <div className="vy-qualification" key={item.label}>
-            <span className="vy-qualification-value">{item.value}</span>
+            <span className={item.value.length > 4 ? "vy-qualification-value vy-qualification-value--text" : "vy-qualification-value"}>{item.value}</span>
             <div>
               <h2>{item.label}</h2>
               <p>{item.detail}</p>
@@ -267,63 +244,6 @@ export function PortfolioPage() {
         <p className="vy-image-disclosure">
           {t("teaching.imageDisclosure")}
         </p>
-      </section>
-
-      <section
-        className="vy-section vy-background"
-        aria-labelledby="vy-background-title"
-      >
-        <div className="vy-education">
-          <p className="vy-eyebrow">{t("background.eyebrow")}</p>
-          <h2 id="vy-background-title">
-            {t("background.heading1")}
-            <br />
-            <span>{t("background.heading2")}</span>
-          </h2>
-          {education.map((item, index) => (
-            <article className="vy-education-item" key={item.title}>
-              <p className="vy-meta">
-                {item.meta} {index === 0 ? <span className="vy-studying">{t("background.studyingLabel")}</span> : null}
-              </p>
-              <h3>{item.title}</h3>
-              <p className="vy-school">{item.school}</p>
-              <p>{item.text}</p>
-            </article>
-          ))}
-          <div className="vy-community">
-            <span aria-hidden="true">↗</span>
-            <p>
-              <strong>{t("background.communityNoteBold")}</strong> {t("background.communityNoteText")}
-            </p>
-          </div>
-        </div>
-        <div className="vy-experience">
-          <p className="vy-eyebrow">{t("experienceLabel")}</p>
-          <div className="vy-timeline">
-            {experience.map((item) => (
-              <article className="vy-timeline-item" key={item.name}>
-                <p className="vy-meta">{item.period}</p>
-                <h3>{item.name}</h3>
-                <p className="vy-role">{item.role}</p>
-                <p>{item.description}</p>
-              </article>
-            ))}
-          </div>
-          <details className="vy-earlier-experience">
-            <summary>
-              {t("earlierExperienceSummary")} <span aria-hidden="true">+</span>
-            </summary>
-            <div>
-              {earlierExperience.map((item) => (
-                <article key={item.name}>
-                  <p className="vy-meta">{item.period}</p>
-                  <h3>{item.name}</h3>
-                  <p>{item.detail}</p>
-                </article>
-              ))}
-            </div>
-          </details>
-        </div>
       </section>
 
       <section

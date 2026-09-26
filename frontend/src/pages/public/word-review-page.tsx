@@ -9,7 +9,7 @@ import { WordSessionRunner } from '../../features/wordcheck/word-session-runner'
 import { loadLastName, loadProgress, saveLastName } from '../../features/wordcheck/srs/storage';
 import { dayIndex, dayToDate } from '../../features/wordcheck/srs/day';
 import { planSession } from '../../features/wordcheck/srs/plan';
-import { nextSetOf } from '../../features/wordcheck/set-order';
+import { groupSetsByCourse, itemUnitKey, nextSetOf } from '../../features/wordcheck/set-order';
 
 /**
  * "On Tap": spaced review (Leitner) over items already due today, plus a small batch of new
@@ -100,15 +100,23 @@ export function WordReviewPage() {
         <QueryErrorState title={t('common.loadSetsError')} description={getApiErrorMessage(setsQuery.error)} />
       ) : null}
 
-      <section className="grid gap-6 sm:grid-cols-2">
-        {(setsQuery.data ?? []).map((set) => {
+      {groupSetsByCourse(setsQuery.data ?? []).map((group) => (
+      <section key={group.courseSlug || 'default'} className="space-y-4">
+        {group.courseName ? (
+          <h2 className="text-lg font-bold tracking-tight text-slate-950">
+            {group.courseName}{' '}
+            <span className="text-xs font-medium text-slate-500">{t('common.chapterCount', { count: group.sets.length })}</span>
+          </h2>
+        ) : null}
+        <div className="grid gap-6 sm:grid-cols-2">
+        {group.sets.map((set) => {
           const isSelected = setId === set.id;
           const currentPlan = isSelected ? plan : null;
           return (
             <div key={set.id} className="rounded-[2rem] border border-stroke bg-white p-6 shadow-[0_18px_55px_rgba(15,23,42,0.06)]">
               <p className="text-xs font-semibold uppercase tracking-[0.24em] text-teal-700">{t('common.setLabel')}</p>
-              <h2 className="mt-2 text-2xl font-extrabold text-slate-950">{set.setName}</h2>
-              <p className="mt-1 text-sm text-slate-600">{t('common.itemCount', { count: set.itemCount })}</p>
+              <h3 className="mt-2 text-2xl font-extrabold text-slate-950">{set.setName}</h3>
+              <p className="mt-1 text-sm text-slate-600">{t(`common.${itemUnitKey(set)}`, { count: set.itemCount })}</p>
 
               {!trimmedName ? (
                 <p className="mt-4 text-sm text-slate-500">{t('reviewPage.enterNameHint')}</p>
@@ -158,7 +166,9 @@ export function WordReviewPage() {
             </div>
           );
         })}
+        </div>
       </section>
+      ))}
 
       {questionsQuery.error ? (
         <QueryErrorState title={t('common.loadQuestionsError')} description={getApiErrorMessage(questionsQuery.error)} />

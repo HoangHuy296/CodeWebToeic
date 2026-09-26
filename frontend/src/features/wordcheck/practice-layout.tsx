@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import type { SetSummary } from './types';
+import { groupSetsByCourse, itemUnitKey } from './set-order';
 import './practice-layout.css';
 
 export function PracticeHeader({ mode, compact = false }: { mode: 'flashcards' | 'typing'; compact?: boolean }) {
@@ -35,28 +36,42 @@ export function PracticeSetPicker({
 }) {
   const { t } = useTranslation('wordcheck');
 
+  const groups = groupSetsByCourse(sets);
+
   return (
-    <section aria-label={t('common.setLabel')} className="practice-set-grid">
-      {sets.map((set, index) => (
-        <button
-          key={set.id}
-          type="button"
-          disabled={disabled}
-          onClick={() => onSelect(set.id)}
-          className="practice-set"
-          data-selected={set.id === selectedId || undefined}
-          aria-label={t('layout.openSet', { name: set.setName })}
-        >
-          <span className="practice-set__number" aria-hidden="true">{String(index + 1).padStart(2, '0')}</span>
-          <span className="min-w-0 flex-1">
-            <span className="practice-set__name">{set.setName}</span>
-            <span className="practice-set__count">{t('common.itemCount', { count: set.itemCount })}</span>
-            {set.id === selectedId ? <span className="practice-set__hint">{t('checkPage.presetHint')}</span> : null}
-          </span>
-          <span className="practice-set__arrow" aria-hidden="true"><ArrowIcon /></span>
-        </button>
+    <div aria-label={t('common.setLabel')} className="practice-courses">
+      {groups.map((group) => (
+        <section key={group.courseSlug || 'default'} className="practice-course">
+          {group.courseName ? (
+            <div className="practice-course__head">
+              <h2>{group.courseName}</h2>
+              <span>{t('common.chapterCount', { count: group.sets.length })}</span>
+            </div>
+          ) : null}
+          <div className="practice-set-grid">
+            {group.sets.map((set, index) => (
+              <button
+                key={set.id}
+                type="button"
+                disabled={disabled}
+                onClick={() => onSelect(set.id)}
+                className="practice-set"
+                data-selected={set.id === selectedId || undefined}
+                aria-label={t('layout.openSet', { name: group.courseName ? `${group.courseName} · ${set.setName}` : set.setName })}
+              >
+                <span className="practice-set__number" aria-hidden="true">{String(index + 1).padStart(2, '0')}</span>
+                <span className="min-w-0 flex-1">
+                  <span className="practice-set__name">{set.setName}</span>
+                  <span className="practice-set__count">{t(`common.${itemUnitKey(set)}`, { count: set.itemCount })}</span>
+                  {set.id === selectedId ? <span className="practice-set__hint">{t('checkPage.presetHint')}</span> : null}
+                </span>
+                <span className="practice-set__arrow" aria-hidden="true"><ArrowIcon /></span>
+              </button>
+            ))}
+          </div>
+        </section>
       ))}
-    </section>
+    </div>
   );
 }
 

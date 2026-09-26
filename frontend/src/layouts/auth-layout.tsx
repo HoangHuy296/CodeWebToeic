@@ -4,7 +4,7 @@ export function AuthLayout() {
   return (
     <div className="grid gap-6 lg:grid-cols-[1fr_480px] lg:items-stretch">
       <section className="brand-panel rounded-[1.5rem] p-6 sm:p-10">
-        <p className="panel-eyebrow text-xs font-semibold tracking-[0.3em] uppercase">English CRM · IVYTS 1998</p>
+        <p className="panel-eyebrow text-xs font-semibold tracking-[0.3em] uppercase">English CRM · IVYTS</p>
         <h1 className="mt-5 text-3xl leading-snug font-semibold tracking-tight sm:text-4xl">
           Mỗi ngày một bước tiến trên hành trình học tiếng Anh.
         </h1>

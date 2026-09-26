@@ -37,6 +37,10 @@
     "setLabel": "Bộ câu hỏi",
     "itemCount": "{{count}} cụm từ",
     "itemCount_other": "{{count}} cụm từ",
+    "chapterCount": "{{count}} chapter",
+    "chapterCount_other": "{{count}} chapter",
+    "sentenceCount": "{{count}} câu",
+    "sentenceCount_other": "{{count}} câu",
     "guestName": "Khách"
   },
   "session": {

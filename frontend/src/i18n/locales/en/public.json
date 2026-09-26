@@ -1,8 +1,8 @@
 {
   "home": {
-    "heroEyebrow": "IVYTS 1998",
+    "heroEyebrow": "IVYTS",
     "heroTitle": "An English learning CRM for TOEIC, IELTS, and online classes with measurable progress.",
-    "heroDescription": "IVYTS 1998 combines packaged courses, mock tests, learning progress, and an internal inbox so students see a clear path, teachers track progress, and admins run things smoothly.",
+    "heroDescription": "IVYTS combines packaged courses, mock tests, learning progress, and an internal inbox so students see a clear path, teachers track progress, and admins run things smoothly.",
     "panelEyebrow": "english academy crm",
     "panelTitle": "Students see the destination. Teachers see the progress.",
     "panelDescription": "From the landing page to the learning screen, the system focuses on what matters: picking a course at the right level, taking tests at the right time, and getting feedback from the right person.",
@@ -25,7 +25,7 @@
     "featuredCoursesEyebrow": "featured courses",
     "featuredCoursesTitle": "Featured courses",
     "viewAll": "View all",
-    "whyEyebrow": "why ivyts 1998",
+    "whyEyebrow": "why ivyts",
     "whyTitle": "One system for learning and running the business",
     "why1": "Courses, lessons, mock tests, and progress come together into one clear English-learning journey.",
     "why2": "Teachers get their own workspace to track students, package lessons, and build tests for their class.",

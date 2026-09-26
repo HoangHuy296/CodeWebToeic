@@ -20,10 +20,31 @@
   },
   "qualificationsLabel": "Chứng chỉ và kinh nghiệm theo CV",
   "qualifications": [
-    { "value": "970", "label": "TOEIC", "detail": "07.01.2025" },
-    { "value": "7.5", "label": "IELTS", "detail": "24.08.2025" },
-    { "value": "120h", "label": "Chứng chỉ TESOL", "detail": "03.2026" },
-    { "value": "2018", "label": "Bắt đầu giảng dạy", "detail": "Trẻ em & người lớn" }
+    {
+      "value": "970",
+      "label": "TOEIC",
+      "detail": "07.01.2025"
+    },
+    {
+      "value": "7.5",
+      "label": "IELTS",
+      "detail": "24.08.2025"
+    },
+    {
+      "value": "Cử nhân",
+      "label": "Ngôn ngữ Anh",
+      "detail": "Trường Đại học Khoa học Xã hội và Nhân văn (ĐHQG-TP.HCM)"
+    },
+    {
+      "value": "120h",
+      "label": "Chứng chỉ TESOL",
+      "detail": "03.2026"
+    },
+    {
+      "value": "5+",
+      "label": "Năm kinh nghiệm",
+      "detail": "Dạy tiếng Anh cho các lứa tuổi"
+    }
   ],
   "about": {
     "eyebrow": "NGƯỜI ĐỒNG HÀNH",
@@ -45,9 +66,21 @@
     "imageDisclosure": "Hai hình ảnh lớp học cô Vy minh họa hoạt động học tập lớp học thực tế."
   },
   "approaches": [
-    { "number": "01", "title": "Học từ điều bạn cần", "text": "Phương pháp và tài liệu được điều chỉnh theo trình độ, nhu cầu và cách học của từng học viên." },
-    { "number": "02", "title": "Thực hành để tự tin hơn", "text": "Luyện phát âm, nghe chép chính tả, shadowing và giao tiếp qua những tình huống gần gũi với cuộc sống." },
-    { "number": "03", "title": "Nhìn thấy mình tiến bộ", "text": "Theo dõi quá trình học, nhận diện khó khăn và nhận phản hồi để biết mình cần luyện tập thêm ở đâu." }
+    {
+      "number": "01",
+      "title": "Học từ điều bạn cần",
+      "text": "Phương pháp và tài liệu được điều chỉnh theo trình độ, nhu cầu và cách học của từng học viên."
+    },
+    {
+      "number": "02",
+      "title": "Thực hành để tự tin hơn",
+      "text": "Luyện phát âm, nghe chép chính tả, shadowing và giao tiếp qua những tình huống gần gũi với cuộc sống."
+    },
+    {
+      "number": "03",
+      "title": "Nhìn thấy mình tiến bộ",
+      "text": "Theo dõi quá trình học, nhận diện khó khăn và nhận phản hồi để biết mình cần luyện tập thêm ở đâu."
+    }
   ],
   "classroomImages": [
     {
@@ -60,57 +93,6 @@
       "title": "Tự tin từ những âm đầu tiên",
       "description": "Lắng nghe, luyện phát âm và từng bước đưa tiếng Anh vào giao tiếp."
     }
-  ],
-  "background": {
-    "eyebrow": "NỀN TẢNG CHUYÊN MÔN",
-    "heading1": "Luôn học hỏi",
-    "heading2": "để dạy tốt hơn.",
-    "studyingLabel": "Đang theo học",
-    "communityNoteBold": "Tiếng Anh cũng là sự kết nối.",
-    "communityNoteText": "Năm 2019, cô tham gia hỗ trợ phiên dịch tại Friends for Street Children và tình nguyện dạy giao tiếp cho học sinh trong chương trình hè."
-  },
-  "education": [
-    {
-      "meta": "2026",
-      "title": "Master of Education (TESOL)",
-      "school": "Open University × Edith Cowan University",
-      "text": "Chương trình về giảng dạy ngôn ngữ, thiết kế khóa học và tài liệu, kiểm tra và đánh giá người học."
-    },
-    {
-      "meta": "2016 — 2020",
-      "title": "Ngôn ngữ & Văn học Anh",
-      "school": "Đại học Khoa học Xã hội và Nhân văn",
-      "text": "Định hướng giảng dạy ngôn ngữ, với nền tảng ngôn ngữ học, phương pháp và thực hành giảng dạy."
-    }
-  ],
-  "experienceLabel": "HÀNH TRÌNH GIẢNG DẠY",
-  "experience": [
-    {
-      "period": "12.2025 — nay",
-      "name": "Simple English Center",
-      "role": "Giáo viên tiếng Anh giao tiếp",
-      "description": "Kết hợp nghe chép chính tả, Repeat & Shadow, TPR và hoạt động thực hành để phát triển phát âm, khả năng nghe nói và sự tự tin trong giao tiếp."
-    },
-    {
-      "period": "08.2024 — 08.2025",
-      "name": "Mini Hippo",
-      "role": "Giáo viên TOEIC toàn thời gian",
-      "description": "Điều chỉnh phương pháp và tài liệu theo nhu cầu học viên, hướng dẫn chiến thuật làm bài, theo dõi tiến bộ và phát triển năng lực tiếng Anh bên cạnh mục tiêu điểm số."
-    },
-    {
-      "period": "2021 — nay",
-      "name": "Giảng dạy tự do",
-      "role": "Giáo viên TOEIC",
-      "description": "Hướng dẫn các kỹ năng cần thiết cho bài thi TOEIC, theo dõi và đánh giá sự tiến bộ của học viên trong suốt khóa học."
-    }
-  ],
-  "earlierExperienceSummary": "Thêm kinh nghiệm giảng dạy",
-  "earlierExperience": [
-    { "period": "06.2023 — 07.2024", "name": "The Gold Beehive Kindergarten", "detail": "Xây dựng môi trường sử dụng tiếng Anh qua trò chơi, bài hát, kể chuyện và hoạt động sáng tạo." },
-    { "period": "04.2020 — 03.2021", "name": "Helen Doron English Vietnam", "detail": "Dạy tiếng Anh cho trẻ nhỏ; tạo cơ hội thực hành ngôn ngữ trong và ngoài lớp học." },
-    { "period": "03.2019 — 03.2020", "name": "Open English Center", "detail": "Dạy người lớn và sinh viên, tập trung vào phát âm, giao tiếp và tình huống thực tế." },
-    { "period": "03.2019", "name": "American International School (AIES)", "detail": "Giảng dạy tiếng Anh cho trẻ em." },
-    { "period": "08.2018 — 02.2019", "name": "Global Citizen English Academy", "detail": "Dạy trẻ em và người lớn, chú trọng kỹ năng nói và hỗ trợ những khó khăn khi học tiếng Anh." }
   ],
   "contact": {
     "eyebrow": "BẮT ĐẦU TỪ MỘT CUỘC TRÒ CHUYỆN",

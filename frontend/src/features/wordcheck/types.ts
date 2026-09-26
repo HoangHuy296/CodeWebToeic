@@ -16,6 +16,9 @@ export interface SetSummary {
   id: string;
   setName: string;
   itemCount: number;
+  /** Course the chapter belongs to ("toeic-starter", "toeic-winner"...); empty for legacy sets. */
+  courseSlug?: string;
+  courseName?: string;
 }
 
 export interface Question {

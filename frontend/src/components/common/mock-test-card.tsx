@@ -110,7 +110,7 @@ export function MockTestCard({ mockTest }: { mockTest: MockTest }) {
 
       <div className="mt-6 flex items-center justify-between gap-3">
         <p className="text-sm text-slate-500">
-          By {mockTest.createdBy.fullName ?? "IVYTS 1998"}
+          By {mockTest.createdBy.fullName ?? "IVYTS"}
         </p>
         <Link
           to={ctaPath}

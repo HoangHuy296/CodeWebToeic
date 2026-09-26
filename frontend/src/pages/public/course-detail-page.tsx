@@ -497,7 +497,7 @@ export function CourseDetailPage() {
                   </div>
                   <div className="rounded-2xl bg-slate-50 px-4 py-4">
                     <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Giang vien</p>
-                    <p className="mt-2 font-bold text-slate-900">{course.owner.fullName ?? 'IVYTS 1998'}</p>
+                    <p className="mt-2 font-bold text-slate-900">{course.owner.fullName ?? 'IVYTS'}</p>
                   </div>
                 </div>
 

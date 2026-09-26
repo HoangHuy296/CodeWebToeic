@@ -8,7 +8,7 @@ export function SiteFooter() {
     <footer className="brand-panel border-t">
       <div className="mx-auto grid max-w-7xl gap-10 px-5 py-16 lg:grid-cols-[1.2fr_0.8fr_0.8fr] lg:px-8">
         <div>
-          <p className="panel-eyebrow text-xs font-semibold tracking-[0.3em] uppercase">IVYTS 1998</p>
+          <p className="panel-eyebrow text-xs font-semibold tracking-[0.3em] uppercase">IVYTS</p>
           <h3 className="mt-4 text-3xl font-extrabold tracking-tight text-white">{t('footer.tagline')}</h3>
           <p className="panel-muted mt-4 max-w-xl text-sm leading-7">{t('footer.description')}</p>
         </div>

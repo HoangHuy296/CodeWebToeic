@@ -19,6 +19,10 @@
 .practice-text-link { display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; flex-shrink: 0; color: var(--color-brand); font-size: 0.8125rem; font-weight: 600; padding: 0.625rem 0; }
 .practice-text-link:hover { text-decoration: underline; text-underline-offset: 4px; }
 
+.practice-courses { display: grid; gap: 1.75rem; }
+.practice-course__head { display: flex; align-items: baseline; gap: 0.75rem; margin-bottom: 0.75rem; }
+.practice-course__head h2 { margin: 0; color: var(--color-ink); font-size: 1.0625rem; font-weight: 700; letter-spacing: -0.02em; }
+.practice-course__head span { color: var(--color-muted); font-size: 0.75rem; }
 .practice-set-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.75rem; }
 .practice-set { display: flex; align-items: center; gap: 0.875rem; min-width: 0; padding: 1.125rem; border: 1px solid var(--color-stroke); border-radius: 1rem; background: var(--color-card); text-align: left; transition: border-color 160ms, background-color 160ms, box-shadow 160ms; }
 .practice-set:hover:not(:disabled), .practice-set[data-selected] { border-color: var(--color-brand); background: var(--color-tile); box-shadow: var(--shadow-card); }

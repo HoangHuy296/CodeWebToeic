@@ -195,7 +195,7 @@ export function CourseLessonsManagePage() {
   useEffect(() => {
     document.title = course ? `Lesson List | ${course.title}` : 'Lesson List';
     return () => {
-      document.title = 'IVYTS 1998';
+      document.title = 'IVYTS';
     };
   }, [course]);
 

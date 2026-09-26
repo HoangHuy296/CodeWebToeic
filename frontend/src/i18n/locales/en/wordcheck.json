@@ -40,6 +40,12 @@
     "itemCount": "{{count}} phrases",
     "itemCount_one": "{{count}} phrase",
     "itemCount_other": "{{count}} phrases",
+    "chapterCount": "{{count}} chapters",
+    "chapterCount_one": "{{count}} chapter",
+    "chapterCount_other": "{{count}} chapters",
+    "sentenceCount": "{{count}} sentences",
+    "sentenceCount_one": "{{count}} sentence",
+    "sentenceCount_other": "{{count}} sentences",
     "guestName": "Guest"
   },
   "session": {

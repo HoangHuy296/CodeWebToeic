@@ -1,4 +1,4 @@
-# IVYTS 1998 E-Learning CRM
+# IVYTS E-Learning CRM
 
 This repo now runs on a single primary stack:
 

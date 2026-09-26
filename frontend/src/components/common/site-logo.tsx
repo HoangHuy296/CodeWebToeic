@@ -11,7 +11,7 @@ export function SiteLogo() {
           English CRM
         </span>
         <span className="text-lg font-extrabold tracking-tight text-slate-950 transition group-hover:text-teal-700">
-          IVYTS 1998
+          IVYTS
         </span>
       </span>
     </Link>

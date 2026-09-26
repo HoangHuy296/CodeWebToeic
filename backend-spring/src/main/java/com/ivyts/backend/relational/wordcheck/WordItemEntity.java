@@ -61,6 +61,21 @@ public class WordItemEntity {
     @Column(name = "sort_order", nullable = false)
     private int sortOrder;
 
+    /** Course this chapter belongs to, e.g. "toeic-starter" / "toeic-booster" / "toeic-winner". */
+    @Column(name = "course_slug", length = 64, nullable = false)
+    private String courseSlug = "";
+
+    @Column(name = "course_name", length = 191, nullable = false)
+    private String courseName = "";
+
+    /** Position of the course in the picker (Starter, Booster, Winner). */
+    @Column(name = "course_order", nullable = false)
+    private int courseOrder;
+
+    /** Position of the chapter/set inside its course. */
+    @Column(name = "set_order", nullable = false)
+    private int setOrder;
+
     @Column(name = "created_at")
     private Instant createdAt;
 
